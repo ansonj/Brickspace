@@ -89,7 +89,7 @@
 		A364229D194215A7000C3B92 /* BKPBrickSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BKPBrickSet.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A36422AA19421F50000C3B92 /* BKPGenericDesign.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPGenericDesign.h; sourceTree = "<group>"; };
 		A36422AC19422047000C3B92 /* BKP_GD_BasicTower.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKP_GD_BasicTower.h; sourceTree = "<group>"; };
-		A36422AD19422047000C3B92 /* BKP_GD_BasicTower.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKP_GD_BasicTower.m; sourceTree = "<group>"; };
+		A36422AD19422047000C3B92 /* BKP_GD_BasicTower.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BKP_GD_BasicTower.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A36422AF1942219E000C3B92 /* BKPRealizedModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPRealizedModel.h; sourceTree = "<group>"; };
 		A36422B01942219E000C3B92 /* BKPRealizedModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPRealizedModel.m; sourceTree = "<group>"; };
 		A36422B419422855000C3B92 /* BKPPlacedBrick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPPlacedBrick.h; sourceTree = "<group>"; };

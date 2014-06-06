@@ -63,7 +63,7 @@ using namespace cv;
 }
 
 - (BKPBrickSet *)countedSetOfBricks {
-	BKPBrickSet *setOfBricks = [[BKPBrickSet alloc] init];
+	BKPBrickSet *setOfBricks = [BKPBrickSet set];
 	for (int count = 0; count < [self numberOfBricksDetected]; count++)
 		[setOfBricks addBrick:[BKPBrick brickWithColor:BKPBrickColorRed height:BKPBrickHeightFull andSize:BKPBrickSize2x4]];
 	return setOfBricks;
