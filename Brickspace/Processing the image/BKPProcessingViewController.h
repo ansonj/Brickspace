@@ -1,5 +1,5 @@
 //
-//  BKPAppDelegate.h
+//  BKPProcessingViewController.h
 //  Brickspace Stage I
 //
 //  Created by Anson Jablinski on 6/2/14.
@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BKPAppDelegate : UIResponder <UIApplicationDelegate>
+@interface BKPProcessingViewController : UIViewController
 
-@property (strong, nonatomic) UIWindow *window;
+- (void)setUpModelWithImage:(UIImage *)incomingImage;
+
+- (void)updateUI;
 
 @end
