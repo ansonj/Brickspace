@@ -37,7 +37,7 @@
 	NSArray *availableDesigns = [BKP_GDManager availableDesigns];
 	for (id<BKPGenericDesign> design in availableDesigns) {
 		if ([design canBeBuiltFromBrickSet:completedBrickSet]) {
-			NSString *designName = [design name];
+			NSString *designName = [design designName];
 			float percentage = [design percentUtilizedIfBuiltWithSet:completedBrickSet];
 			summary = [summary stringByAppendingFormat:@"You can build a %@ with %.1f%% brick utilization!\n", designName, percentage];
 		}

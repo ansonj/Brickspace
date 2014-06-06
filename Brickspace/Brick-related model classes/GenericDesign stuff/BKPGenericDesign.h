@@ -14,7 +14,8 @@
 
 + (BOOL)shouldBeOfferedToUser;
 
-+ (NSString *)name;
++ (NSString *)designName;
++ (NSString *)designDescription;
 
 + (BOOL)canBeBuiltFromBrickSet:(BKPBrickSet *)inputBricks;
 
@@ -23,5 +24,7 @@
 @optional
 
 + (float)percentUtilizedIfBuiltWithSet:(BKPBrickSet *)inputBricks;
+
++ (BKPBrickSet *)bricksToBeUsedInModelFromSet:(BKPBrickSet *)inputBricks;
 
 @end
