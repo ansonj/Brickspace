@@ -16,6 +16,7 @@
 
 + (NSString *)designName;
 + (NSString *)designDescription;
++ (NSString *)description;
 
 + (BOOL)canBeBuiltFromBrickSet:(BKPBrickSet *)inputBricks;
 
