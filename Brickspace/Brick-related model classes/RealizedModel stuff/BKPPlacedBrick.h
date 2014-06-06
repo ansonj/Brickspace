@@ -16,10 +16,14 @@ typedef NS_ENUM(NSUInteger, BKPPlacedBrickOrientation) {
 	BKPPlacedBrickOrientatoinAlongYAxis
 };
 
-@property (nonatomic, readonly) BKPBrick *brick;
-@property (nonatomic, readonly) BKPPlacedBrickOrientation orientation;
-@property (nonatomic, readonly) float x;
-@property (nonatomic, readonly) float y;
-@property (nonatomic, readonly) float z;
+@property (nonatomic) BKPBrick *brick;
+@property (nonatomic) BKPPlacedBrickOrientation orientation;
+@property (nonatomic) float x;
+@property (nonatomic) float y;
+@property (nonatomic) float z;
+
+- (void)setX:(float)newX
+		   Y:(float)newY
+		andZ:(float)newZ;
 
 @end
