@@ -38,4 +38,14 @@
 	return [[self setOfBricks] count];
 }
 
+- (NSString *)description {
+	NSString *result = [NSString stringWithFormat:@"A BKPBrick Set with %lu bricks:\n", (unsigned long)[self.setOfBricks count]];
+	
+	for (BKPBrick *brick in self.setOfBricks) {
+		result = [result stringByAppendingFormat:@"%@\n",brick];
+	}
+	
+	return result;
+}
+
 @end
