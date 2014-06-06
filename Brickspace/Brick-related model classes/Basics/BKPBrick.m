@@ -37,7 +37,7 @@
 	result = [result stringByAppendingString:[BKPBrick stringForBrickHeight:height]];
 	result = [result stringByAppendingString:[BKPBrick stringForBrickSize:size]];
 	
-	return [result stringByAppendingString:@" brick"];
+	return [result stringByAppendingString:@"brick"];
 }
 
 #pragma mark - NS_ENUM to string converters
