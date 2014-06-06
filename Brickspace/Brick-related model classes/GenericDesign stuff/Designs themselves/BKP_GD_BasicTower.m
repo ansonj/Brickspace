@@ -22,6 +22,10 @@
 	return @"A tower of full-height 2x4s stacked atop one another.";
 }
 
++ (NSString *)description {
+	return [NSString stringWithFormat:@"GenericDesign %@: %@", [self designName], [self designDescription]];
+}
+
 + (BOOL)canBeBuiltFromBrickSet:(BKPBrickSet *)inputBricks {
 	return [[self bricksToBeUsedInModelFromSet:inputBricks] brickCount] >= 2;
 }
