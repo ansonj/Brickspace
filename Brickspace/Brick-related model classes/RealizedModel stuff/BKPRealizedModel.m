@@ -37,4 +37,14 @@
 	return [NSSet setWithSet:setOfPlacedBricks];
 }
 
+- (NSString *)description {
+	NSString *result = [NSString stringWithFormat:@"A RealizedModel with %lu bricks:\n", (unsigned long)[setOfPlacedBricks count]];
+	
+	for (BKPBrick *brick in setOfPlacedBricks) {
+		result = [result stringByAppendingFormat:@"%@\n",brick];
+	}
+	
+	return result;
+}
+
 @end
