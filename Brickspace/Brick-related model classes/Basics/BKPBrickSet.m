@@ -10,6 +10,10 @@
 
 @implementation BKPBrickSet
 
++ (BKPBrickSet *)set {
+	return [[BKPBrickSet alloc] init];
+}
+
 @synthesize setOfBricks = _setOfBricks;
 
 - (id)init {

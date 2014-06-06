@@ -11,6 +11,8 @@
 
 @interface BKPBrickSet : NSObject
 
++ (BKPBrickSet *)set;
+
 @property (nonatomic, readonly) NSMutableSet *setOfBricks;
 
 - (id)init;
