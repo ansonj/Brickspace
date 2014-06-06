@@ -287,6 +287,8 @@
 			<array>
 				<string>A364225B194210C9000C3B92</string>
 				<string>A364225C194210C9000C3B92</string>
+				<string>A3642261194210C9000C3B92</string>
+				<string>A3642262194210C9000C3B92</string>
 				<string>A364225E194210C9000C3B92</string>
 				<string>A3642286194215A7000C3B92</string>
 				<string>A364228D194215A7000C3B92</string>
@@ -471,6 +473,8 @@
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.h</string>
+			<key>name</key>
+			<string>BKPViewController.h</string>
 			<key>path</key>
 			<string>BKPViewController.h</string>
 			<key>sourceTree</key>
@@ -482,6 +486,8 @@
 			<string>PBXFileReference</string>
 			<key>lastKnownFileType</key>
 			<string>sourcecode.c.objc</string>
+			<key>name</key>
+			<string>BKPViewController.m</string>
 			<key>path</key>
 			<string>BKPViewController.m</string>
 			<key>sourceTree</key>
@@ -1103,8 +1109,6 @@
 		<dict>
 			<key>children</key>
 			<array>
-				<string>A3642261194210C9000C3B92</string>
-				<string>A3642262194210C9000C3B92</string>
 				<string>A3642287194215A7000C3B92</string>
 				<string>A3642288194215A7000C3B92</string>
 				<string>A3642289194215A7000C3B92</string>
@@ -1364,8 +1368,6 @@
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Brick-related model classes</string>
 			<key>path</key>
 			<string>Brick-related model classes</string>
 			<key>sourceTree</key>
@@ -1513,8 +1515,6 @@
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
-			<key>name</key>
-			<string>GenericDesign stuff</string>
 			<key>path</key>
 			<string>GenericDesign stuff</string>
 			<key>sourceTree</key>
@@ -1542,8 +1542,6 @@
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Designs themselves</string>
 			<key>path</key>
 			<string>Designs themselves</string>
 			<key>sourceTree</key>
@@ -1626,8 +1624,6 @@
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
-			<key>name</key>
-			<string>Basics</string>
 			<key>path</key>
 			<string>Basics</string>
 			<key>sourceTree</key>
@@ -1644,8 +1640,6 @@
 			</array>
 			<key>isa</key>
 			<string>PBXGroup</string>
-			<key>name</key>
-			<string>RealizedModel stuff</string>
 			<key>path</key>
 			<string>RealizedModel stuff</string>
 			<key>sourceTree</key>
