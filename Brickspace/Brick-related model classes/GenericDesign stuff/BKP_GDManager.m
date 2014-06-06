@@ -11,6 +11,7 @@
 
 // add individual designs to this
 #import "BKP_GD_BasicTower.h"
+#import "BKP_GD_FlatPyramid.h"
 
 @implementation BKP_GDManager
 
@@ -19,6 +20,7 @@
 	
 	// add individual designs to this, in desired presentation order
 	[allDesigns addObject:[BKP_GD_BasicTower class]];
+	[allDesigns addObject:[BKP_GD_FlatPyramid class]];
 	
 	// don't change the rest
 	NSMutableArray *availableDesigns = [NSMutableArray array];

@@ -18,4 +18,15 @@
 	return @"Basic Tower";
 }
 
++ (BOOL)canBeBuiltFromBrickSet:(BKPBrickSet *)inputBricks {
+	return [inputBricks brickCount] >= 2;
+}
+
+
++ (float)percentUtilizedIfBuiltWithSet:(BKPBrickSet *)inputBricks {
+	assert([self canBeBuiltFromBrickSet:inputBricks]);
+	
+	return 100;
+}
+
 @end

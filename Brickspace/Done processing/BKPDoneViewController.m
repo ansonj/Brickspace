@@ -8,6 +8,9 @@
 
 #import "BKPDoneViewController.h"
 
+#import "BKP_GDManager.h"
+#import "BKPGenericDesign.h"
+
 @interface BKPDoneViewController ()
 @property (weak, nonatomic) IBOutlet UITextView *summaryTextView;
 @end
@@ -29,11 +32,19 @@
 }
 
 - (void)updateUI {
-	NSString *summary = [NSString stringWithFormat:@"A BKPBrickSet was created with %lu bricks in it:\n",[completedBrickSet brickCount]];
+	NSString *summary = [NSString stringWithFormat:@"A BKPBrickSet was created with %lu bricks in it.\n\n",[completedBrickSet brickCount]];
 	
-	for (BKPBrick *brick in [completedBrickSet setOfBricks]) {
-		summary = [summary stringByAppendingFormat:@"\t%@\n",brick];
+	NSArray *availableDesigns = [BKP_GDManager availableDesigns];
+	for (id<BKPGenericDesign> design in availableDesigns) {
+		if ([design canBeBuiltFromBrickSet:completedBrickSet]) {
+			NSString *designName = [design name];
+			float percentage = [design percentUtilizedIfBuiltWithSet:completedBrickSet];
+			summary = [summary stringByAppendingFormat:@"You can build a %@ with %.1f%% brick utilization!\n", designName, percentage];
+		}
 	}
+	
+	
+	
 	
 	[summaryTextView setText:summary];
 }

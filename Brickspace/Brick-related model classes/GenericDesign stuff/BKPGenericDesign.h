@@ -20,4 +20,8 @@
 
 + (BKPRealizedModel *)createRealizedModelUsingBrickSet:(BKPBrickSet *)inputBricks;
 
+@optional
+
++ (float)percentUtilizedIfBuiltWithSet:(BKPBrickSet *)inputBricks;
+
 @end
