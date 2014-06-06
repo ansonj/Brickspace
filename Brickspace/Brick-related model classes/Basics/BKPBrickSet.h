@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "BKPBrick.h"
-#import "BKPBrickRequirement.h"
 
 @interface BKPBrickSet : NSObject
 
@@ -20,7 +19,5 @@
 - (void)removeBrick:(BKPBrick *)brick;
 
 - (unsigned long)brickCount;
-
-- (BOOL)meetsBrickRequirement:(BKPBrickRequirement *)requirement;
 
 @end

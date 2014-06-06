@@ -34,8 +34,4 @@
 	return [[self setOfBricks] count];
 }
 
-- (BOOL)meetsBrickRequirement:(BKPBrickRequirement *)requirement {
-	return YES;
-}
-
 @end

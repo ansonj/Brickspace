@@ -1,0 +1,15 @@
+//
+//  BKP_GDManager.h
+//  Brickspace
+//
+//  Created by Anson Jablinski on 6/6/14.
+//  Copyright (c) 2014 Anson Jablinski. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface BKP_GDManager : NSObject
+
++ (NSArray *)availableDesigns;
+
+@end
