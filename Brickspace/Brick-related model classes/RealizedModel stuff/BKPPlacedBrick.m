@@ -30,4 +30,17 @@
 	[self setZ:newZ];
 }
 
+- (NSString *)description {
+	NSString *result = [brick description];
+	
+	result = [result stringByAppendingFormat:@" at (%.4f, %.4f, %.4f) pointed in the ", x, y, z];
+	
+	if (orientation == BKPPlacedBrickOrientationAlongXAxis)
+		result = [result stringByAppendingString:@"x direction"];
+	else
+		result = [result stringByAppendingString:@"y direction"];
+	
+	return result;
+}
+
 @end
