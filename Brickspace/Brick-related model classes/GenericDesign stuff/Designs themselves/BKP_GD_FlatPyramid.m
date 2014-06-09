@@ -37,7 +37,7 @@
 	
 	// assign bricks (you have the perfect number) to the realized model
 	int bricksUsedSoFar = 0;
-	int totalBricksToUse = [bricksToUse count];
+	int totalBricksToUse = (int)[bricksToUse count];
 	int currentX = 3.0 - sqrtf(1 + 8 * totalBricksToUse);
 	int currentDirection = 1;
 	int currentZ = 0;
