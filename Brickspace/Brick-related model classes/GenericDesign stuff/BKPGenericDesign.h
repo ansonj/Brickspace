@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "BKPBrickSet.h"
 #import "BKPRealizedModel.h"
 
 @protocol BKPGenericDesign <NSObject>
@@ -18,14 +17,14 @@
 + (NSString *)designDescription;
 + (NSString *)description;
 
-+ (BOOL)canBeBuiltFromBrickSet:(BKPBrickSet *)inputBricks;
++ (BOOL)canBeBuiltFromBricks:(NSSet *)inputBricks;
 
-+ (BKPRealizedModel *)createRealizedModelUsingBrickSet:(BKPBrickSet *)inputBricks;
++ (BKPRealizedModel *)createRealizedModelUsingBricks:(NSSet *)inputBricks;
 
 @optional
 
-+ (float)percentUtilizedIfBuiltWithSet:(BKPBrickSet *)inputBricks;
++ (float)percentUtilizedIfBuiltWithSet:(NSSet *)inputBricks;
 
-+ (BKPBrickSet *)bricksToBeUsedInModelFromSet:(BKPBrickSet *)inputBricks;
++ (NSSet *)bricksToBeUsedInModelFromSet:(NSSet *)inputBricks;
 
 @end

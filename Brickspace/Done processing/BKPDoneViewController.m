@@ -16,12 +16,12 @@
 @end
 
 @implementation BKPDoneViewController {
-	BKPBrickSet *completedBrickSet;
+	NSSet *completedBrickSet;
 }
 
 @synthesize summaryTextView;
 
-- (void)setUpWithBrickSet:(BKPBrickSet *)newSet {
+- (void)setUpWithCountedBricks:(NSSet *)newSet {
 	completedBrickSet = newSet;
 	
 	[self updateUI];
@@ -32,11 +32,11 @@
 }
 
 - (void)updateUI {
-	NSString *summary = [NSString stringWithFormat:@"A BKPBrickSet was created with %lu bricks in it.\n\n",[completedBrickSet brickCount]];
+	NSString *summary = [NSString stringWithFormat:@"A BKPBrickSet was created with %lu bricks in it.\n\n",(unsigned long)[completedBrickSet count]];
 	
 	NSArray *availableDesigns = [BKP_GDManager availableDesigns];
 	for (id<BKPGenericDesign> design in availableDesigns) {
-		if ([design canBeBuiltFromBrickSet:completedBrickSet]) {
+		if ([design canBeBuiltFromBricks:completedBrickSet]) {
 			NSString *designName = [design designName];
 			float percentage = [design percentUtilizedIfBuiltWithSet:completedBrickSet];
 			summary = [summary stringByAppendingFormat:@"You can build a %@ with %.1f%% brick utilization!\n", designName, percentage];

@@ -7,6 +7,7 @@
 //
 
 #import "BKPBrickCounter.h"
+#import "BKPBrick.h"
 // OpenCV
 #import <opencv2/features2d/features2d.hpp>
 using namespace cv;
@@ -62,11 +63,11 @@ using namespace cv;
 	return processedImage;
 }
 
-- (BKPBrickSet *)countedSetOfBricks {
-	BKPBrickSet *setOfBricks = [BKPBrickSet set];
+- (NSSet *)countedSetOfBricks {
+	NSMutableSet *setOfBricks = [NSMutableSet set];
 	for (int count = 0; count < [self numberOfBricksDetected]; count++)
-		[setOfBricks addBrick:[BKPBrick brickWithColor:BKPBrickColorRed height:BKPBrickHeightFull andSize:BKPBrickSize2x4]];
-	return setOfBricks;
+		[setOfBricks addObject:[BKPBrick brickWithColor:BKPBrickColorRed height:BKPBrickHeightFull andSize:BKPBrickSize2x4]];
+	return [NSSet setWithSet:setOfBricks];
 }
 
 - (unsigned long)numberOfBricksDetected {

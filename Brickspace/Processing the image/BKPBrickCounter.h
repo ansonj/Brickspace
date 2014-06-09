@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "BKPBrickSet.h"
 
 @interface BKPBrickCounter : NSObject
 
@@ -22,7 +21,7 @@
 
 - (id)initWithSourceImage:(UIImage *)newSourceImage;
 
-- (BKPBrickSet *)countedSetOfBricks;
+- (NSSet *)countedSetOfBricks;
 - (unsigned long)numberOfBricksDetected;
 
 

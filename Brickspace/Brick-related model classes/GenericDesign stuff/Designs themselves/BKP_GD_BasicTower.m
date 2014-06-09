@@ -26,17 +26,17 @@
 	return [NSString stringWithFormat:@"GenericDesign %@: %@", [self designName], [self designDescription]];
 }
 
-+ (BOOL)canBeBuiltFromBrickSet:(BKPBrickSet *)inputBricks {
-	return [[self bricksToBeUsedInModelFromSet:inputBricks] brickCount] >= 2;
++ (BOOL)canBeBuiltFromBricks:(NSSet *)inputBricks {
+	return [[self bricksToBeUsedInModelFromSet:inputBricks] count] >= 2;
 }
 
-+ (BKPRealizedModel *)createRealizedModelUsingBrickSet:(BKPBrickSet *)inputBricks {
++ (BKPRealizedModel *)createRealizedModelUsingBricks:(NSSet *)inputBricks {
 	BKPRealizedModel *model = [[BKPRealizedModel alloc] initWithSourceDesignName:self.designName];
 	
-	BKPBrickSet *bricksToUse = [self bricksToBeUsedInModelFromSet:inputBricks];
+	NSSet *bricksToUse = [self bricksToBeUsedInModelFromSet:inputBricks];
 	
 	float zCoord = 0;
-	for (BKPBrick *brick in [bricksToUse setOfBricks]) {
+	for (BKPBrick *brick in bricksToUse) {
 		BKPPlacedBrick *placedBrick = [[BKPPlacedBrick alloc] init];
 		placedBrick.brick = brick;
 		placedBrick.orientation = BKPPlacedBrickOrientationAlongXAxis;
@@ -48,22 +48,22 @@
 	return model;
 }
 
-+ (float)percentUtilizedIfBuiltWithSet:(BKPBrickSet *)inputBricks {
-	assert([self canBeBuiltFromBrickSet:inputBricks]);
++ (float)percentUtilizedIfBuiltWithSet:(NSSet *)inputBricks {
+	assert([self canBeBuiltFromBricks:inputBricks]);
 	
 	return 100;
 }
 
-+ (BKPBrickSet *)bricksToBeUsedInModelFromSet:(BKPBrickSet *)inputBricks {
-	BKPBrickSet *bricksToBeUsed = [BKPBrickSet set];
++ (NSSet *)bricksToBeUsedInModelFromSet:(NSSet *)inputBricks {
+	NSMutableSet *bricksToBeUsed = [NSMutableSet set];
 	
-	for (BKPBrick *brick in [inputBricks setOfBricks]) {
+	for (BKPBrick *brick in inputBricks) {
 		if ([brick height] == BKPBrickHeightFull && [brick size] == BKPBrickSize2x4) {
-			[bricksToBeUsed addBrick:brick];
+			[bricksToBeUsed addObject:brick];
 		}
 	}
 	
-	return bricksToBeUsed;
+	return [NSSet setWithSet:bricksToBeUsed];
 }
 
 @end

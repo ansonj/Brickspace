@@ -26,25 +26,25 @@
 	return [NSString stringWithFormat:@"GenericDesign %@: %@", [self designName], [self designDescription]];
 }
 
-+ (BOOL)canBeBuiltFromBrickSet:(BKPBrickSet *)inputBricks {
-	return [[self bricksToBeUsedInModelFromSet:inputBricks] brickCount] > 0;
++ (BOOL)canBeBuiltFromBricks:(NSSet *)inputBricks {
+	return [[self bricksToBeUsedInModelFromSet:inputBricks] count] > 0;
 }
 
-+ (BKPRealizedModel *)createRealizedModelUsingBrickSet:(BKPBrickSet *)inputBricks {
++ (BKPRealizedModel *)createRealizedModelUsingBricks:(NSSet *)inputBricks {
 	BKPRealizedModel *model = [[BKPRealizedModel alloc] initWithSourceDesignName:[self designName]];
 	
-	BKPBrickSet *bricksToUse = [self bricksToBeUsedInModelFromSet:inputBricks];
+	NSMutableSet *bricksToUse = [NSMutableSet setWithSet:[self bricksToBeUsedInModelFromSet:inputBricks]];
 	
 	// assign bricks (you have the perfect number) to the realized model
 	int bricksUsedSoFar = 0;
-	int totalBricksToUse = [bricksToUse brickCount];
+	int totalBricksToUse = [bricksToUse count];
 	int currentX = 3.0 - sqrtf(1 + 8 * totalBricksToUse);
 	int currentDirection = 1;
 	int currentZ = 0;
 	int currentRowCount = 0;
 	int targetRowCount = (-1.0 + sqrtf(1 + 8 * totalBricksToUse)) / 2.0;
 	while (bricksUsedSoFar < totalBricksToUse) {
-		BKPBrick *currentBrick = [[bricksToUse setOfBricks] anyObject];
+		BKPBrick *currentBrick = [bricksToUse anyObject];
 		
 		BKPPlacedBrick *placedBrick = [[BKPPlacedBrick alloc] init];
 		placedBrick.brick = currentBrick;
@@ -52,7 +52,7 @@
 		[placedBrick setX:currentX Y:0 andZ:currentZ];
 		[model addPlacedBrick:placedBrick];
 		
-		[bricksToUse removeBrick:currentBrick];
+		[bricksToUse removeObject:currentBrick];
 		
 		bricksUsedSoFar++;
 		
@@ -72,26 +72,26 @@
 	return model;
 }
 
-+ (float)percentUtilizedIfBuiltWithSet:(BKPBrickSet *)inputBricks {
-	assert([self canBeBuiltFromBrickSet:inputBricks]);
++ (float)percentUtilizedIfBuiltWithSet:(NSSet *)inputBricks {
+	assert([self canBeBuiltFromBricks:inputBricks]);
 	
-	return 100.0 * [[self bricksToBeUsedInModelFromSet:inputBricks] brickCount] / [inputBricks brickCount];
+	return 100.0 * [[self bricksToBeUsedInModelFromSet:inputBricks] count] / [inputBricks count];
 }
 
-+ (BKPBrickSet *)bricksToBeUsedInModelFromSet:(BKPBrickSet *)inputBricks {
-	BKPBrickSet *bricksToBeUsed = [BKPBrickSet set];
++ (NSSet *)bricksToBeUsedInModelFromSet:(NSSet *)inputBricks {
+	NSMutableSet *bricksToBeUsed = [NSMutableSet set];
 		
-	for (BKPBrick *brick in [inputBricks setOfBricks]) {
+	for (BKPBrick *brick in inputBricks) {
 		if ([brick height] == BKPBrickHeightFull && [brick size] == BKPBrickSize2x4) {
-			[bricksToBeUsed addBrick:brick];
+			[bricksToBeUsed addObject:brick];
 		}
 	}
 	
-	int triangularIndex = (int)((-1.0 + sqrtf(1 + 8 * [bricksToBeUsed brickCount])) / 2.0);
+	int triangularIndex = (int)((-1.0 + sqrtf(1 + 8 * [bricksToBeUsed count])) / 2.0);
 	int numberOfBricksInPyramid = triangularIndex * (triangularIndex + 1) / 2.0;
 	
-	while ([bricksToBeUsed brickCount] > numberOfBricksInPyramid) {
-		[bricksToBeUsed removeBrick:[[bricksToBeUsed setOfBricks] anyObject]];
+	while ([bricksToBeUsed count] > numberOfBricksInPyramid) {
+		[bricksToBeUsed removeObject:[bricksToBeUsed  anyObject]];
 	}
 	
 	return bricksToBeUsed;

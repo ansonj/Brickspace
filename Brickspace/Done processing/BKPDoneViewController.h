@@ -7,11 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BKPBrickSet.h"
 
 @interface BKPDoneViewController : UIViewController
 
-- (void)setUpWithBrickSet:(BKPBrickSet *)newSet;
+- (void)setUpWithCountedBricks:(NSSet *)newSet;
 
 - (void)updateUI;
 

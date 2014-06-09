@@ -293,7 +293,7 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 	if ([[segue identifier] isEqualToString:@"showSummary"]) {
 		BKPDoneViewController *summaryViewController = (BKPDoneViewController *)[segue destinationViewController];
-		[summaryViewController setUpWithBrickSet:[brickCounter countedSetOfBricks]];
+		[summaryViewController setUpWithCountedBricks:[brickCounter countedSetOfBricks]];
 	}
 }
 

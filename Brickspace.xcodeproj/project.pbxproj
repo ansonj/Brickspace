@@ -32,7 +32,6 @@
 		A36422A4194215A7000C3B92 /* BKPDetectorParameterInitializer.m in Sources */ = {isa = PBXBuildFile; fileRef = A3642294194215A7000C3B92 /* BKPDetectorParameterInitializer.m */; };
 		A36422A5194215A7000C3B92 /* BKPMatrixUIImageConverter.mm in Sources */ = {isa = PBXBuildFile; fileRef = A3642296194215A7000C3B92 /* BKPMatrixUIImageConverter.mm */; };
 		A36422A6194215A7000C3B92 /* BKPBrick.m in Sources */ = {isa = PBXBuildFile; fileRef = A3642299194215A7000C3B92 /* BKPBrick.m */; };
-		A36422A8194215A7000C3B92 /* BKPBrickSet.m in Sources */ = {isa = PBXBuildFile; fileRef = A364229D194215A7000C3B92 /* BKPBrickSet.m */; };
 		A36422AE19422047000C3B92 /* BKP_GD_BasicTower.m in Sources */ = {isa = PBXBuildFile; fileRef = A36422AD19422047000C3B92 /* BKP_GD_BasicTower.m */; };
 		A36422B11942219E000C3B92 /* BKPRealizedModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A36422B01942219E000C3B92 /* BKPRealizedModel.m */; };
 		A36422B619422855000C3B92 /* BKPPlacedBrick.m in Sources */ = {isa = PBXBuildFile; fileRef = A36422B519422855000C3B92 /* BKPPlacedBrick.m */; };
@@ -91,9 +90,7 @@
 		A3642296194215A7000C3B92 /* BKPMatrixUIImageConverter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = BKPMatrixUIImageConverter.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A3642298194215A7000C3B92 /* BKPBrick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BKPBrick.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A3642299194215A7000C3B92 /* BKPBrick.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BKPBrick.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		A364229C194215A7000C3B92 /* BKPBrickSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BKPBrickSet.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		A364229D194215A7000C3B92 /* BKPBrickSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BKPBrickSet.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		A36422AA19421F50000C3B92 /* BKPGenericDesign.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPGenericDesign.h; sourceTree = "<group>"; };
+		A36422AA19421F50000C3B92 /* BKPGenericDesign.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BKPGenericDesign.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A36422AC19422047000C3B92 /* BKP_GD_BasicTower.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKP_GD_BasicTower.h; sourceTree = "<group>"; };
 		A36422AD19422047000C3B92 /* BKP_GD_BasicTower.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BKP_GD_BasicTower.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A36422AF1942219E000C3B92 /* BKPRealizedModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPRealizedModel.h; sourceTree = "<group>"; };
@@ -301,8 +298,6 @@
 			children = (
 				A3642298194215A7000C3B92 /* BKPBrick.h */,
 				A3642299194215A7000C3B92 /* BKPBrick.m */,
-				A364229C194215A7000C3B92 /* BKPBrickSet.h */,
-				A364229D194215A7000C3B92 /* BKPBrickSet.m */,
 			);
 			path = Basics;
 			sourceTree = "<group>";
@@ -425,7 +420,6 @@
 				A36422A4194215A7000C3B92 /* BKPDetectorParameterInitializer.m in Sources */,
 				A36422A2194215A7000C3B92 /* BKPBrickCounter.mm in Sources */,
 				A36422AE19422047000C3B92 /* BKP_GD_BasicTower.m in Sources */,
-				A36422A8194215A7000C3B92 /* BKPBrickSet.m in Sources */,
 				A36422A0194215A7000C3B92 /* BKPTempImageHolder.m in Sources */,
 				A30C83F7194617A6000639C3 /* BKPInstructionSet.m in Sources */,
 				A3642263194210C9000C3B92 /* BKPViewController.m in Sources */,
