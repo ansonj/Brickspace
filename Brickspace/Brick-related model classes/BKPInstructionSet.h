@@ -11,20 +11,26 @@
 
 @interface BKPInstructionSet : NSObject
 
+@property (nonatomic, readonly) NSString *sourceDesignName;
 @property (nonatomic, readonly) BKPInstructionGeneratorStyle style;
 
 #pragma mark - Setting up the instructions
 
-- (id)initWithStyle:(BKPInstructionGeneratorStyle)newStyle;
+- (id)initWithDesignName:(NSString *)newName
+				andStyle:(BKPInstructionGeneratorStyle)newStyle;
 
-- (void)addBricks:(NSMutableSet *)setOfBricks
-		   toStep:(NSUInteger)step;
+- (void)addBricksToNextStep:(NSSet *)bricks;
+
+// addBricksToNextStep is preferred.
+// Use addBricks:toStep: with caution!
+- (void)addBricks:(NSSet *)bricks
+		   toStep:(int)step;
 
 
 #pragma mark - Getting instruction information
 
-- (NSUInteger)stepCount;
+- (int)stepCount;
 
-- (NSSet *)bricksForStep:(NSUInteger)step;
+- (NSSet *)bricksForStep:(int)step;
 
 @end
