@@ -32,4 +32,8 @@
 	return [NSArray arrayWithArray:availableDesigns];
 }
 
+- (id)init {
+	return nil;
+}
+
 @end
