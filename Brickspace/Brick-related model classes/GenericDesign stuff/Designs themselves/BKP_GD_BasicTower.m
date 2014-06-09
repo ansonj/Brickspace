@@ -51,7 +51,15 @@
 + (float)percentUtilizedIfBuiltWithSet:(NSSet *)inputBricks {
 	assert([self canBeBuiltFromBricks:inputBricks]);
 	
-	return 100;
+	int totalCount = (int)[inputBricks count];
+	int availableCount = 0;
+	for (BKPBrick *brick in inputBricks) {
+		if (brick.height == BKPBrickHeightFull && brick.size == BKPBrickSize2x4) {
+			availableCount++;
+		}
+	}
+	
+	return 100.0 * availableCount / totalCount;
 }
 
 + (NSSet *)bricksToBeUsedInModelFromSet:(NSSet *)inputBricks {
