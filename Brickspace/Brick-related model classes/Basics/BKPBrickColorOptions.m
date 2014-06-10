@@ -42,4 +42,31 @@
 	}
 }
 
++ (NSString *)stringForColor:(BKPBrickColor)color {
+	switch (color) {
+		case BKPBrickColorRed:
+			return @"red";
+			break;
+		case BKPBrickColorOrange:
+			return @"orange";
+			break;
+		case BKPBrickColorYellow:
+			return @"yellow";
+			break;
+		case BKPBrickColorGreen:
+			return @"green";
+			break;
+		case BKPBrickColorBlue:
+			return @"blue";
+			break;
+		case BKPBrickColorBlack:
+			return @"black";
+			break;
+			
+		default:
+			return [NSString string];
+			break;
+	}
+}
+
 @end

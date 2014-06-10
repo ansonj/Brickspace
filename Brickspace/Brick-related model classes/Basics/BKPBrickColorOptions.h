@@ -21,4 +21,6 @@ typedef NS_ENUM(NSUInteger, BKPBrickColor) {
 
 + (UIColor *)colorForColor:(BKPBrickColor)color;
 
++ (NSString *)stringForColor:(BKPBrickColor)color;
+
 @end
