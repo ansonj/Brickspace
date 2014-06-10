@@ -8,22 +8,20 @@
 
 #import "BKPBrick.h"
 
-@interface BKPBrick ()
-+ (NSString *)stringForBrickHeight:(BKPBrickHeight)height;
-+ (NSString *)stringForBrickSize:(BKPBrickSize)size;
-@end
-
 @implementation BKPBrick
 
-@synthesize color, height, size;
+@synthesize color;
+@synthesize shortSideLength, longSideLength;
+@synthesize height;
 
-+ (BKPBrick *)brickWithColor:(BKPBrickColor)newColor height:(BKPBrickHeight)newHeight andSize:(BKPBrickSize)newSize {
++ (BKPBrick *)brickWithColor:(BKPBrickColor)newColor shortSide:(int)newShortSideLength longSide:(int)newLongSideLength andHeight:(int)newHeight {
 	BKPBrick *newBrick = [[BKPBrick alloc] init];
 	
 	if (newBrick) {
 		[newBrick setColor:newColor];
+		[newBrick setShortSideLength:newShortSideLength];
+		[newBrick setLongSideLength:newLongSideLength];
 		[newBrick setHeight:newHeight];
-		[newBrick setSize:newSize];
 	}
 	
 	return newBrick;
@@ -32,52 +30,24 @@
 - (NSString *)description {
 	NSString *result = [NSString string];
 	
-	result = [result stringByAppendingFormat:@"%@, ",[BKPBrickColorOptions stringForColor:color]];
-	result = [result stringByAppendingString:[BKPBrick stringForBrickHeight:height]];
-	result = [result stringByAppendingString:[BKPBrick stringForBrickSize:size]];
+	result = [result stringByAppendingFormat:@"%@ ",[BKPBrickColorOptions stringForColor:color]];
 	
-	return [result stringByAppendingString:@"brick"];
-}
-
-#pragma mark - NS_ENUM to string converters that are all about to vanish
-
-+ (NSString *)stringForBrickHeight:(BKPBrickHeight)height {
-	NSString *string;
+	result = [result stringByAppendingFormat:@"%dx%d ", shortSideLength, longSideLength];
 	
 	switch (height) {
-		case BKPBrickHeightOneThird:
-			string = @"one-third height, ";
+		case 1:
+			result = [result stringByAppendingString:@"flat "];
 			break;
-		case BKPBrickHeightFull:
-			string = @"full height, ";
-			break;
-			
-		default:
-			break;
-	}
-	
-	return string;
-}
-
-+ (NSString *)stringForBrickSize:(BKPBrickSize)size {
-	NSString *string;
-	
-	switch (size) {
-		case BKPBrickSize2x2:
-			string = @"2x2, ";
-			break;
-		case BKPBrickSize2x3:
-			string = @"2x3, ";
-			break;
-		case BKPBrickSize2x4:
-			string = @"2x4, ";
+		case 3:
+			result = [result stringByAppendingString:@"standard "];
 			break;
 			
 		default:
+			result = [result stringByAppendingFormat:@"%d-high ", height];
 			break;
 	}
-	
-	return string;
+		
+	return [result stringByAppendingString:@"brick"];
 }
 
 @end

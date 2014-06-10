@@ -54,7 +54,7 @@
 	int totalCount = (int)[inputBricks count];
 	int availableCount = 0;
 	for (BKPBrick *brick in inputBricks) {
-		if (brick.height == BKPBrickHeightFull && brick.size == BKPBrickSize2x4) {
+		if (brick.height == 3 && brick.shortSideLength == 2 && brick.longSideLength == 4) {
 			availableCount++;
 		}
 	}
@@ -66,7 +66,7 @@
 	NSMutableSet *bricksToBeUsed = [NSMutableSet set];
 	
 	for (BKPBrick *brick in inputBricks) {
-		if ([brick height] == BKPBrickHeightFull && [brick size] == BKPBrickSize2x4) {
+		if (brick.height == 3 && brick.shortSideLength == 2 && brick.longSideLength == 4) {
 			[bricksToBeUsed addObject:brick];
 		}
 	}

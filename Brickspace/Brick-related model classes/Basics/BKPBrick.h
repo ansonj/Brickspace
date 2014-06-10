@@ -12,23 +12,14 @@
 
 @interface BKPBrick : NSObject
 
-typedef NS_ENUM(NSInteger, BKPBrickHeight) {
-	BKPBrickHeightOneThird,
-	BKPBrickHeightFull
-};
-
-typedef NS_ENUM(NSInteger, BKPBrickSize) {
-	BKPBrickSize2x2,
-	BKPBrickSize2x3,
-	BKPBrickSize2x4
-};
-
 @property (nonatomic) BKPBrickColor color;
-@property (nonatomic) BKPBrickHeight height;
-@property (nonatomic) BKPBrickSize size;
+@property (nonatomic) int shortSideLength;
+@property (nonatomic) int longSideLength;
+@property (nonatomic) int height;
 
 + (BKPBrick *)brickWithColor:(BKPBrickColor)newColor
-			 height:(BKPBrickHeight)newHeight
-			andSize:(BKPBrickSize)newSize;
+				   shortSide:(int)newShortSideLength
+					longSide:(int)newLongSideLength
+				   andHeight:(int)newHeight;
 
 @end

@@ -65,8 +65,9 @@ using namespace cv;
 
 - (NSSet *)countedSetOfBricks {
 	NSMutableSet *setOfBricks = [NSMutableSet set];
+	//TODO: account for different scanned bricks
 	for (int count = 0; count < [self numberOfBricksDetected]; count++)
-		[setOfBricks addObject:[BKPBrick brickWithColor:BKPBrickColorRed height:BKPBrickHeightFull andSize:BKPBrickSize2x4]];
+		[setOfBricks addObject:[BKPBrick brickWithColor:BKPBrickColorRed shortSide:2 longSide:4 andHeight:3]];
 	return [NSSet setWithSet:setOfBricks];
 }
 
