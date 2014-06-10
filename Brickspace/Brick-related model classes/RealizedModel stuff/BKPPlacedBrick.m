@@ -11,7 +11,7 @@
 @implementation BKPPlacedBrick
 
 @synthesize brick;
-@synthesize orientation;
+@synthesize isRotated;
 @synthesize x, y, z;
 
 - (id)init {
@@ -19,6 +19,7 @@
 	
 	if (self) {
 		[self setBrick:[[BKPBrick alloc] init]];
+		isRotated = NO;
 	}
 	
 	return self;
@@ -35,7 +36,7 @@
 	
 	result = [result stringByAppendingFormat:@" at (%.4f, %.4f, %.4f) pointed in the ", x, y, z];
 	
-	if (orientation == BKPPlacedBrickOrientationAlongXAxis)
+	if (isRotated)
 		result = [result stringByAppendingString:@"x direction"];
 	else
 		result = [result stringByAppendingString:@"y direction"];

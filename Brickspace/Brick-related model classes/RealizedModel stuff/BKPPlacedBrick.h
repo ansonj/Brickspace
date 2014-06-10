@@ -11,13 +11,8 @@
 
 @interface BKPPlacedBrick : NSObject
 
-typedef NS_ENUM(NSUInteger, BKPPlacedBrickOrientation) {
-	BKPPlacedBrickOrientationAlongXAxis,
-	BKPPlacedBrickOrientatoinAlongYAxis
-};
-
 @property (nonatomic) BKPBrick *brick;
-@property (nonatomic) BKPPlacedBrickOrientation orientation;
+@property (nonatomic) BOOL isRotated;
 @property (nonatomic) float x;
 @property (nonatomic) float y;
 @property (nonatomic) float z;
