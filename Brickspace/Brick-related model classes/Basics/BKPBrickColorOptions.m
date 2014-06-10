@@ -8,7 +8,8 @@
 
 /* Color info from
  http://www.peeron.com/inv/colors
- Data taken from LDrawRGB column and converted to base 10.
+ Data taken from LDrawRGB column and converted to base 10,
+ except for Green, which was taken from RGB column.
 */
 
 #import "BKPBrickColorOptions.h"
@@ -27,7 +28,7 @@
 			return [UIColor colorWithRed:242.0/255 green:205.0/255 blue:55.0/255 alpha:1];
 			break;
 		case BKPBrickColorGreen:
-			return [UIColor colorWithRed:35.0/255 green:120.0/255 blue:65.0/255 alpha:1];
+			return [UIColor colorWithRed:40.0/255 green:127.0/255 blue:70.0/255 alpha:1];
 			break;
 		case BKPBrickColorBlue:
 			return [UIColor colorWithRed:0.0/255 green:85.0/255 blue:191.0/255 alpha:1];
