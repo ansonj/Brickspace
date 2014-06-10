@@ -39,7 +39,7 @@
 	for (BKPBrick *brick in bricksToUse) {
 		BKPPlacedBrick *placedBrick = [[BKPPlacedBrick alloc] init];
 		placedBrick.brick = brick;
-		placedBrick.orientation = BKPPlacedBrickOrientationAlongXAxis;
+		placedBrick.isRotated = NO;
 		[placedBrick setX:0 Y:0 andZ:zCoord];
 		zCoord++;
 		[model addPlacedBrick:placedBrick];

@@ -48,7 +48,7 @@
 		
 		BKPPlacedBrick *placedBrick = [[BKPPlacedBrick alloc] init];
 		placedBrick.brick = currentBrick;
-		placedBrick.orientation = BKPPlacedBrickOrientationAlongXAxis;
+		placedBrick.isRotated = NO;
 		[placedBrick setX:currentX Y:0 andZ:currentZ];
 		[model addPlacedBrick:placedBrick];
 		
