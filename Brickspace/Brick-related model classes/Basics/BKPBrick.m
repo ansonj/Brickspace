@@ -9,7 +9,6 @@
 #import "BKPBrick.h"
 
 @interface BKPBrick ()
-+ (NSString *)stringForBrickColor:(BKPBrickColor)color;
 + (NSString *)stringForBrickHeight:(BKPBrickHeight)height;
 + (NSString *)stringForBrickSize:(BKPBrickSize)size;
 @end
@@ -33,29 +32,14 @@
 - (NSString *)description {
 	NSString *result = [NSString string];
 	
-	result = [result stringByAppendingString:[BKPBrick stringForBrickColor:color]];
+	result = [result stringByAppendingFormat:@"%@, ",[BKPBrickColorOptions stringForColor:color]];
 	result = [result stringByAppendingString:[BKPBrick stringForBrickHeight:height]];
 	result = [result stringByAppendingString:[BKPBrick stringForBrickSize:size]];
 	
 	return [result stringByAppendingString:@"brick"];
 }
 
-#pragma mark - NS_ENUM to string converters
-
-+ (NSString *)stringForBrickColor:(BKPBrickColor)color {
-	NSString *string;
-	
-	switch (color) {
-		case BKPBrickColorRed:
-			string = @"red, ";
-			break;
-			
-		default:
-			break;
-	}
-	
-	return string;
-}
+#pragma mark - NS_ENUM to string converters that are all about to vanish
 
 + (NSString *)stringForBrickHeight:(BKPBrickHeight)height {
 	NSString *string;

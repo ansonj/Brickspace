@@ -8,11 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-@interface BKPBrick : NSObject
+#import "BKPBrickColorOptions.h"
 
-typedef NS_ENUM(NSInteger, BKPBrickColor) {
-	BKPBrickColorRed
-};
+@interface BKPBrick : NSObject
 
 typedef NS_ENUM(NSInteger, BKPBrickHeight) {
 	BKPBrickHeightOneThird,
