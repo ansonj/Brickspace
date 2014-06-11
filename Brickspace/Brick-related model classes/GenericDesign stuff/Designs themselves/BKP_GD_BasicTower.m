@@ -19,7 +19,7 @@
 }
 
 + (NSString *)designDescription {
-	return @"A tower of full-height 2x4s stacked atop one another.";
+	return @"a tower of full-height 2x4s stacked atop one another";
 }
 
 + (NSString *)description {

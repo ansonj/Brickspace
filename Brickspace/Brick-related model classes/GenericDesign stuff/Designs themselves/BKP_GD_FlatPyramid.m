@@ -19,7 +19,7 @@
 }
 
 + (NSString *)designDescription {
-	return @"A triangular pyramid, only one brick deep, of full-height 2x4s.";
+	return @"a triangular pyramid, only one brick deep, of full-height 2x4s";
 }
 
 + (NSString *)description {
