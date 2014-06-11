@@ -255,7 +255,7 @@
 	newX += y * -13;
 	newY += y * 15;
 	// Input z
-	newY += z * 34;
+	newY += z * 34.0 / 3; // because we are using 3 = full height, 1 = plate
 	
 	// Flip y
 	newY *= -1;
