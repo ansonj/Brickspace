@@ -55,7 +55,7 @@
 	counter.det_filterByColor = NO;
 	counter.det_blobColor = 0;
 	counter.det_filterByArea = YES;
-	counter.det_minArea = 500; // bum value
+	counter.det_minArea = 5000;
 	counter.det_maxArea = FLT_MAX;
 	counter.det_filterByCircularity = NO;
 	counter.det_minCircularity = 0; // bum value
