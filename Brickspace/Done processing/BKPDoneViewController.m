@@ -34,17 +34,18 @@
 - (void)updateUI {
 	NSString *summary = [NSString stringWithFormat:@"A BKPBrickSet was created with %lu bricks in it.\n\n",(unsigned long)[completedBrickSet count]];
 	
+	id<BKPGenericDesign> bestDesign;
 	NSArray *availableDesigns = [BKP_GDManager availableDesigns];
 	for (id<BKPGenericDesign> design in availableDesigns) {
 		if ([design canBeBuiltFromBricks:completedBrickSet]) {
+			bestDesign = design;
 			NSString *designName = [design designName];
 			float percentage = [design percentUtilizedIfBuiltWithSet:completedBrickSet];
 			summary = [summary stringByAppendingFormat:@"You can build a %@ with %.1f%% brick utilization!\n", designName, percentage];
 		}
 	}
 	
-	
-	
+	summary = [summary stringByAppendingFormat:@"\n\nToday, you'll be building a %@, which is a %@.", [bestDesign designName], [bestDesign designDescription]];
 	
 	[summaryTextView setText:summary];
 }

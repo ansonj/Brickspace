@@ -10,6 +10,8 @@
 		A30C83F419461743000639C3 /* BKPInstructionGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = A30C83F319461743000639C3 /* BKPInstructionGenerator.m */; };
 		A30C83F7194617A6000639C3 /* BKPInstructionSet.m in Sources */ = {isa = PBXBuildFile; fileRef = A30C83F6194617A6000639C3 /* BKPInstructionSet.m */; };
 		A348A3041948B7BD002D9FA3 /* BKPLegoView.m in Sources */ = {isa = PBXBuildFile; fileRef = A348A3031948B7BD002D9FA3 /* BKPLegoView.m */; };
+		A348A3081948E18F002D9FA3 /* BKPScanningViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A348A3071948E18F002D9FA3 /* BKPScanningViewController.m */; };
+		A348A30A1948E204002D9FA3 /* old tweaker.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A348A3091948E204002D9FA3 /* old tweaker.storyboard */; };
 		A35E2D9E19476C6200F34D8B /* BKPBrickColorOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = A35E2D9D19476C6200F34D8B /* BKPBrickColorOptions.m */; };
 		A364224D194210C9000C3B92 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A364224C194210C9000C3B92 /* Foundation.framework */; };
 		A364224F194210C9000C3B92 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A364224E194210C9000C3B92 /* CoreGraphics.framework */; };
@@ -58,6 +60,9 @@
 		A30C83F6194617A6000639C3 /* BKPInstructionSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPInstructionSet.m; sourceTree = "<group>"; };
 		A348A3021948B7BD002D9FA3 /* BKPLegoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPLegoView.h; sourceTree = "<group>"; };
 		A348A3031948B7BD002D9FA3 /* BKPLegoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPLegoView.m; sourceTree = "<group>"; };
+		A348A3061948E18F002D9FA3 /* BKPScanningViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPScanningViewController.h; sourceTree = "<group>"; };
+		A348A3071948E18F002D9FA3 /* BKPScanningViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPScanningViewController.m; sourceTree = "<group>"; };
+		A348A3091948E204002D9FA3 /* old tweaker.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = "old tweaker.storyboard"; path = "../old tweaker.storyboard"; sourceTree = "<group>"; };
 		A35E2D9C19476C6200F34D8B /* BKPBrickColorOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPBrickColorOptions.h; sourceTree = "<group>"; };
 		A35E2D9D19476C6200F34D8B /* BKPBrickColorOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPBrickColorOptions.m; sourceTree = "<group>"; };
 		A3642249194210C9000C3B92 /* Brickspace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Brickspace.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -71,8 +76,8 @@
 		A364225B194210C9000C3B92 /* BKPAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BKPAppDelegate.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A364225C194210C9000C3B92 /* BKPAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BKPAppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A364225F194210C9000C3B92 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		A3642261194210C9000C3B92 /* BKPViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BKPViewController.h; sourceTree = "<group>"; };
-		A3642262194210C9000C3B92 /* BKPViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BKPViewController.m; sourceTree = "<group>"; };
+		A3642261194210C9000C3B92 /* BKPViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BKPViewController.h; path = ../BKPViewController.h; sourceTree = "<group>"; };
+		A3642262194210C9000C3B92 /* BKPViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = BKPViewController.m; path = ../BKPViewController.m; sourceTree = "<group>"; };
 		A3642264194210C9000C3B92 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		A364226A194210C9000C3B92 /* BrickspaceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrickspaceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A364226B194210C9000C3B92 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -88,8 +93,8 @@
 		A364228A194215A7000C3B92 /* BKPTempImageHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BKPTempImageHolder.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A364228E194215A7000C3B92 /* BKPBrickCounter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BKPBrickCounter.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A364228F194215A7000C3B92 /* BKPBrickCounter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = BKPBrickCounter.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		A3642290194215A7000C3B92 /* BKPProcessingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BKPProcessingViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		A3642291194215A7000C3B92 /* BKPProcessingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BKPProcessingViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		A3642290194215A7000C3B92 /* BKPProcessingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = BKPProcessingViewController.h; path = "../Processing the image/BKPProcessingViewController.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		A3642291194215A7000C3B92 /* BKPProcessingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = BKPProcessingViewController.m; path = "../Processing the image/BKPProcessingViewController.m"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A3642293194215A7000C3B92 /* BKPDetectorParameterInitializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BKPDetectorParameterInitializer.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A3642294194215A7000C3B92 /* BKPDetectorParameterInitializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BKPDetectorParameterInitializer.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A3642295194215A7000C3B92 /* BKPMatrixUIImageConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BKPMatrixUIImageConverter.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -155,6 +160,19 @@
 			path = "Done processing";
 			sourceTree = "<group>";
 		};
+		A348A3051948E0BE002D9FA3 /* Old view controllers */ = {
+			isa = PBXGroup;
+			children = (
+				A348A3091948E204002D9FA3 /* old tweaker.storyboard */,
+				A3642287194215A7000C3B92 /* BKPImageChoiceViewController.h */,
+				A3642288194215A7000C3B92 /* BKPImageChoiceViewController.m */,
+				A3642290194215A7000C3B92 /* BKPProcessingViewController.h */,
+				A3642291194215A7000C3B92 /* BKPProcessingViewController.m */,
+			);
+			name = "Old view controllers";
+			path = "Getting the image";
+			sourceTree = "<group>";
+		};
 		A3642240194210C9000C3B92 = {
 			isa = PBXGroup;
 			children = (
@@ -191,9 +209,8 @@
 			children = (
 				A364225B194210C9000C3B92 /* BKPAppDelegate.h */,
 				A364225C194210C9000C3B92 /* BKPAppDelegate.m */,
-				A3642261194210C9000C3B92 /* BKPViewController.h */,
-				A3642262194210C9000C3B92 /* BKPViewController.m */,
 				A364225E194210C9000C3B92 /* Main.storyboard */,
+				A348A3051948E0BE002D9FA3 /* Old view controllers */,
 				A3642286194215A7000C3B92 /* Getting the image */,
 				A364228D194215A7000C3B92 /* Processing the image */,
 				A3642283194215A7000C3B92 /* Done processing */,
@@ -246,8 +263,8 @@
 		A3642286194215A7000C3B92 /* Getting the image */ = {
 			isa = PBXGroup;
 			children = (
-				A3642287194215A7000C3B92 /* BKPImageChoiceViewController.h */,
-				A3642288194215A7000C3B92 /* BKPImageChoiceViewController.m */,
+				A3642261194210C9000C3B92 /* BKPViewController.h */,
+				A3642262194210C9000C3B92 /* BKPViewController.m */,
 				A3642289194215A7000C3B92 /* BKPTempImageHolder.h */,
 				A364228A194215A7000C3B92 /* BKPTempImageHolder.m */,
 			);
@@ -257,8 +274,8 @@
 		A364228D194215A7000C3B92 /* Processing the image */ = {
 			isa = PBXGroup;
 			children = (
-				A3642290194215A7000C3B92 /* BKPProcessingViewController.h */,
-				A3642291194215A7000C3B92 /* BKPProcessingViewController.m */,
+				A348A3061948E18F002D9FA3 /* BKPScanningViewController.h */,
+				A348A3071948E18F002D9FA3 /* BKPScanningViewController.m */,
 				A364228E194215A7000C3B92 /* BKPBrickCounter.h */,
 				A364228F194215A7000C3B92 /* BKPBrickCounter.mm */,
 				A3642292194215A7000C3B92 /* Helpers */,
@@ -415,6 +432,7 @@
 				A3642265194210C9000C3B92 /* Images.xcassets in Resources */,
 				A3642257194210C9000C3B92 /* InfoPlist.strings in Resources */,
 				A3642260194210C9000C3B92 /* Main.storyboard in Resources */,
+				A348A30A1948E204002D9FA3 /* old tweaker.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -447,6 +465,7 @@
 				A36422A5194215A7000C3B92 /* BKPMatrixUIImageConverter.mm in Sources */,
 				A36422A3194215A7000C3B92 /* BKPProcessingViewController.m in Sources */,
 				A36422B619422855000C3B92 /* BKPPlacedBrick.m in Sources */,
+				A348A3081948E18F002D9FA3 /* BKPScanningViewController.m in Sources */,
 				A35E2D9E19476C6200F34D8B /* BKPBrickColorOptions.m in Sources */,
 				A36422BC194245B6000C3B92 /* BKP_GD_FlatPyramid.m in Sources */,
 				A36422B919423913000C3B92 /* BKP_GDManager.m in Sources */,
