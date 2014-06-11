@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A30C83F419461743000639C3 /* BKPInstructionGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = A30C83F319461743000639C3 /* BKPInstructionGenerator.m */; };
 		A30C83F7194617A6000639C3 /* BKPInstructionSet.m in Sources */ = {isa = PBXBuildFile; fileRef = A30C83F6194617A6000639C3 /* BKPInstructionSet.m */; };
+		A348A3041948B7BD002D9FA3 /* BKPLegoView.m in Sources */ = {isa = PBXBuildFile; fileRef = A348A3031948B7BD002D9FA3 /* BKPLegoView.m */; };
 		A35E2D9E19476C6200F34D8B /* BKPBrickColorOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = A35E2D9D19476C6200F34D8B /* BKPBrickColorOptions.m */; };
 		A364224D194210C9000C3B92 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A364224C194210C9000C3B92 /* Foundation.framework */; };
 		A364224F194210C9000C3B92 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A364224E194210C9000C3B92 /* CoreGraphics.framework */; };
@@ -55,6 +56,8 @@
 		A30C83F319461743000639C3 /* BKPInstructionGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPInstructionGenerator.m; sourceTree = "<group>"; };
 		A30C83F5194617A6000639C3 /* BKPInstructionSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPInstructionSet.h; sourceTree = "<group>"; };
 		A30C83F6194617A6000639C3 /* BKPInstructionSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPInstructionSet.m; sourceTree = "<group>"; };
+		A348A3021948B7BD002D9FA3 /* BKPLegoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPLegoView.h; sourceTree = "<group>"; };
+		A348A3031948B7BD002D9FA3 /* BKPLegoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPLegoView.m; sourceTree = "<group>"; };
 		A35E2D9C19476C6200F34D8B /* BKPBrickColorOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPBrickColorOptions.h; sourceTree = "<group>"; };
 		A35E2D9D19476C6200F34D8B /* BKPBrickColorOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPBrickColorOptions.m; sourceTree = "<group>"; };
 		A3642249194210C9000C3B92 /* Brickspace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Brickspace.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -142,6 +145,16 @@
 			path = "Instruction sets and creation";
 			sourceTree = "<group>";
 		};
+		A348A3011948B79B002D9FA3 /* Instruction display */ = {
+			isa = PBXGroup;
+			children = (
+				A348A3021948B7BD002D9FA3 /* BKPLegoView.h */,
+				A348A3031948B7BD002D9FA3 /* BKPLegoView.m */,
+			);
+			name = "Instruction display";
+			path = "Done processing";
+			sourceTree = "<group>";
+		};
 		A3642240194210C9000C3B92 = {
 			isa = PBXGroup;
 			children = (
@@ -184,6 +197,7 @@
 				A3642286194215A7000C3B92 /* Getting the image */,
 				A364228D194215A7000C3B92 /* Processing the image */,
 				A3642283194215A7000C3B92 /* Done processing */,
+				A348A3011948B79B002D9FA3 /* Instruction display */,
 				A3642297194215A7000C3B92 /* Brick-related model classes */,
 				A3642264194210C9000C3B92 /* Images.xcassets */,
 				A3642253194210C9000C3B92 /* Supporting Files */,
@@ -422,6 +436,7 @@
 				A364229E194215A7000C3B92 /* BKPDoneViewController.m in Sources */,
 				A36422B11942219E000C3B92 /* BKPRealizedModel.m in Sources */,
 				A30C83F419461743000639C3 /* BKPInstructionGenerator.m in Sources */,
+				A348A3041948B7BD002D9FA3 /* BKPLegoView.m in Sources */,
 				A36422A4194215A7000C3B92 /* BKPDetectorParameterInitializer.m in Sources */,
 				A36422A2194215A7000C3B92 /* BKPBrickCounter.mm in Sources */,
 				A36422AE19422047000C3B92 /* BKP_GD_BasicTower.m in Sources */,
