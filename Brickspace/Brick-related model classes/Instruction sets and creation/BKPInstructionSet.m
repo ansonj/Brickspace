@@ -58,10 +58,24 @@
 }
 
 - (NSSet *)bricksForStep:(int)step {
-	if (step < [instructionArray count])
-		return instructionArray[step];
+	// THIS is the method that undoes the zero-indexing.
+	// bricksForStepOneThrough uses THIS
+	// BOTH take one-indexed step numbers as arguments
+	if (step <= [instructionArray count] && step > 0)
+		return instructionArray[step-1];
 	else
 		return [NSSet set];
+}
+
+- (NSSet *)bricksForStepsOneThrough:(int)step {
+	NSMutableSet *bricks = [NSMutableSet set];
+	for (int currentStep = 1; currentStep <= step; currentStep++) {
+		NSSet *currentStepBricks = [self bricksForStep:currentStep];
+		for (id brick in currentStepBricks) {
+			[bricks addObject:brick];
+		}
+	}
+	return bricks;
 }
 
 - (NSString *)description {

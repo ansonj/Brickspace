@@ -32,5 +32,6 @@
 - (int)stepCount;
 
 - (NSSet *)bricksForStep:(int)step;
+- (NSSet *)bricksForStepsOneThrough:(int)step;
 
 @end
