@@ -255,7 +255,7 @@
 	newX += y * -13;
 	newY += y * 15;
 	// Input z
-	newY += z * 34.0 / 3; // because we are using 3 = full height, 1 = plate
+	newY += z * 34.0 / 3; // because we are using 3 = full height, 1 = plate, AND the number 34 comes from a full-height brick
 	
 	// Flip y
 	newY *= -1;

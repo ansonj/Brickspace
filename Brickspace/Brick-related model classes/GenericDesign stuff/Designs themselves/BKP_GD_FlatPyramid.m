@@ -60,7 +60,7 @@
 		if (currentRowCount == targetRowCount) {
 			currentDirection *= -1;
 			currentX += currentDirection * 2;
-			currentZ++;
+			currentZ += 3; // remember, a full-height brick is 3 units high
 			currentRowCount = 0;
 			targetRowCount--;
 		} else {

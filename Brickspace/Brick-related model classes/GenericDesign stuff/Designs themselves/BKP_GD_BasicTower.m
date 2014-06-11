@@ -41,7 +41,7 @@
 		placedBrick.brick = brick;
 		placedBrick.isRotated = NO;
 		[placedBrick setX:0 Y:0 andZ:zCoord];
-		zCoord++;
+		zCoord += 3; // a full-height brick is 3 units high
 		[model addPlacedBrick:placedBrick];
 	}
 	
