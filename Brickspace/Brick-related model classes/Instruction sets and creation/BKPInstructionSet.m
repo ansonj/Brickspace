@@ -7,7 +7,7 @@
 //
 
 // This class is just a holder for a mutable array, each item of which is a set of bricks that correspond to that step.
-// Steps are zero-indexed, for parity with the array. It should be the UI's job to add one to the step number.
+// Steps are zero-indexed here, because of the array, but stepCount and both bricksForStep(s) "undo" the zero-index, so the outside world can perceive the steps as starting at 1.
 
 #import "BKPInstructionSet.h"
 
