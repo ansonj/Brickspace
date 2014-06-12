@@ -18,7 +18,7 @@ using namespace cv;
 
 /*
  prepareProcessedImage -- examine the input image. run opencv's detector. draw circles. save to processedImage. This will be called many times during tweaking.
- countedSetOfBricks -- given the keypoints, create a BKPBrickSet that has the counted and colored bricks in it. This will be called ONCE when the user moves to the next stage.
+ countedSetOfBricks -- given the keypoints, create an NSSet that has the counted and colored bricks in it. This will be called ONCE when the user moves to the next stage.
  In future versions, the set of bricks will have to exist earlier, and we'll just add to it with each scan / capture from video, and then return it at the end when the user moves on.
 */
 

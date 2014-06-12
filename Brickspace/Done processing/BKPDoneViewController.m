@@ -41,7 +41,7 @@
 	countedBrickSet = newSet;
 	
 	// figure out which is the best
-	summaryText = [NSString stringWithFormat:@"A BKPBrickSet was created with %lu bricks in it.\n\n",(unsigned long)[countedBrickSet count]];
+	summaryText = [NSString stringWithFormat:@"An NSSet was created with %lu bricks in it.\n\n",(unsigned long)[countedBrickSet count]];
 	
 	NSArray *availableDesigns = [BKP_GDManager availableDesigns];
 	for (id<BKPGenericDesign> design in availableDesigns) {
