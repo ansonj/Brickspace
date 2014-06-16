@@ -6,6 +6,8 @@
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
 //
 
+// This implementation is a pile of hacks and should be rewritten at some point
+
 #import "BKPLegoView.h"
 
 #import "BKPPlacedBrick.h"
@@ -127,12 +129,16 @@
 }
 
 - (BOOL)drawPlacedBrick:(BKPPlacedBrick *)brick {
+	UIColor *strokeColor, *fillColor;
 	if (brick.brick.color == BKPBrickColorBlack)
-		[[UIColor grayColor] setStroke];
+		strokeColor = [UIColor grayColor];
 	else
-		[[UIColor blackColor] setStroke];
+		strokeColor = [UIColor blackColor];
 	
-	[[BKPBrickColorOptions colorForColor:brick.brick.color] setFill];
+	fillColor = [BKPBrickColorOptions colorForColor:brick.brick.color];
+	
+	[strokeColor setStroke];
+	[fillColor setFill];
 	
 	// By default, the long side of a brick is the xLength in our PlacedBrick coordinate system.
 	// If the brick is rotated, we want to swap the short and long side lengths.
@@ -191,15 +197,42 @@
 	for (int xStud = 0; xStud < xLength; xStud++) {
 		for (int yStud = 0; yStud < yLength; yStud++) {
 			// Currently drawing studs as ovals inside rectangle with corners at center of brick top edges
-			CGRect studRect;
+			CGRect studRect = CGRectZero;
 			
+			/*
 			CGPoint offsetForOrigin = [self pointFrom3Dx:xStud y:0.5+yStud andZ:0];
 			studRect.origin = CGPointMake(topFront.x + offsetForOrigin.x, topFront.y + offsetForOrigin.y);
 
 			CGPoint offsetForSize = [self pointFrom3Dx:1 y:0 andZ:0];
 			studRect.size = CGSizeMake(offsetForSize.x, offsetForSize.y);
+			*/
+			
+			double studSpacing = 1.5/7.8;
+			double studDiameter = 4.8/7.8;
+			
+			CGPoint studOriginOffset = [self pointFrom3Dx:(xStud + 2.0*studSpacing) y:(yStud + 1 - studSpacing) andZ:0];
+			studRect.origin = CGPointMake(topFront.x + studOriginOffset.x, topFront.y + studOriginOffset.y);
+			
+			CGPoint studSize = [self pointFrom3Dx:studDiameter y:studDiameter andZ:0];
+//			NSLog(@"studSize is %f, %f", studSize.x, studSize.y);
+			studRect.size = CGSizeMake(-studSize.y, studSize.x);
+			
+//			[[UIBezierPath bezierPathWithArcCenter:studRect.origin radius:1 startAngle:0 endAngle:2*M_PI clockwise:YES] stroke];
+			
+			[strokeColor setFill];
 
 			[[UIBezierPath bezierPathWithOvalInRect:studRect] stroke];
+			[[UIBezierPath bezierPathWithOvalInRect:studRect] fill];
+			
+			studRect.origin.y -= studRect.size.height / 2.0;
+			[[UIBezierPath bezierPathWithRect:studRect] stroke];
+			[[UIBezierPath bezierPathWithRect:studRect] fill];
+			
+			[fillColor setFill];
+			
+			studRect.origin.y -= studRect.size.height / 2.0;
+			[[UIBezierPath bezierPathWithOvalInRect:studRect] stroke];
+			[[UIBezierPath bezierPathWithOvalInRect:studRect] fill];
 		}
 	}
 	
