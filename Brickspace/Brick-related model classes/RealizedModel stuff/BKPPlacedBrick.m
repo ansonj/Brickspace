@@ -37,9 +37,9 @@
 	result = [result stringByAppendingFormat:@" at (%.4f, %.4f, %.4f) pointed in the ", x, y, z];
 	
 	if (isRotated)
-		result = [result stringByAppendingString:@"x direction"];
-	else
 		result = [result stringByAppendingString:@"y direction"];
+	else
+		result = [result stringByAppendingString:@"x direction"];
 	
 	return result;
 }
