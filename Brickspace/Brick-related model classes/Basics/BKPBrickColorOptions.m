@@ -16,6 +16,10 @@
 
 @implementation BKPBrickColorOptions
 
++ (BKPBrickColor)randomColor {
+	return arc4random_uniform(6);
+}
+
 + (UIColor *)colorForColor:(BKPBrickColor)color {
 	switch (color) {
 		case BKPBrickColorRed:
