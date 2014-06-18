@@ -33,6 +33,9 @@
 		_drawBaseplate = NO;
 		baseplateColor = BKPBrickColorGreen;
 		baseplateSize = 32;
+		
+		[self setOpaque:NO];
+		[self setBackgroundColor:[UIColor whiteColor]];
 	}
 	
 	return self;
@@ -62,45 +65,65 @@
 - (void)drawRect:(CGRect)rect {
 	// Save current context into instance variable for easy access
 	context = UIGraphicsGetCurrentContext();
-	
-	CGContextSaveGState(context);
-	
-	// Center the origin of the drawing context
-	CGContextTranslateCTM(context, rect.size.width / 2.0, rect.size.height / 2.0);
 
-	// Attempt to draw the content as large as possible.
-	// tryToDrawInRect will return true if all the calls to drawPlacedBrick return true.
-	// If any drawPlacedBrick returns false, then something is out of bounds,
-	//		and we'll shrink everything a bit
-	CGContextScaleCTM(context, 3, 3);
-	while (![self tryToDrawInRect:rect]) {
-		CGContextScaleCTM(context, 0.8, 0.8);
+	// Scale the context once, based on the size of the things you're trying to draw in it
+	{
+		// Find the largest 3D bounding box for all the bricks
+		float minX = FLT_MAX, minY = FLT_MAX, maxX = FLT_MIN, maxY = FLT_MIN;
+		for (BKPPlacedBrick *brick in bricksToDisplay) {
+			int xLength = (brick.isRotated?brick.brick.shortSideLength:brick.brick.longSideLength);
+			int yLength = (brick.isRotated?brick.brick.longSideLength:brick.brick.shortSideLength);
+			int height = brick.brick.height;
+			float x = brick.x;
+			float y = brick.y;
+			float z = brick.z;
+			
+			float brickMinX = [self pointFrom3Dx:(x - xLength / 2.0) y:(y + yLength / 2.0) andZ:(z)].x;
+			float brickMaxX = [self pointFrom3Dx:(x + xLength / 2.0) y:(y - yLength / 2.0) andZ:(z)].x;
+			
+			// Y coordinates grow from the top of the screen, not the bottom or center...
+			// This is still a bit of voodoo going on right here.
+			float brickMinY = [self pointFrom3Dx:(x + xLength / 2.0) y:(y + yLength / 2.0) andZ:(z + height)].y;
+			float brickMaxY = [self pointFrom3Dx:(x - xLength / 2.0) y:(y - yLength / 2.0) andZ:(z)].y;
+			
+			minX = MIN(minX, brickMinX);
+			minY = MIN(minY, brickMinY);
+			maxX = MAX(maxX, brickMaxX);
+			maxY = MAX(maxY, brickMaxY);
+		}
+
+		// Compare with the visible self.bounds to determine the best scale factor
+		float desiredFillPercentage = 0.95;
+		
+		float scaleFromMinX = desiredFillPercentage * self.bounds.size.width / (2.0 * ABS(minX));
+		float scaleFromMinY = desiredFillPercentage * self.bounds.size.height / (2.0 * ABS(minY));
+		float scaleFromMaxX = desiredFillPercentage * self.bounds.size.width / (2.0 * ABS(maxX));
+		float scaleFromMaxY = desiredFillPercentage * self.bounds.size.height / (2.0 * ABS(maxY));
+		
+		float finalScale = MIN(MIN(scaleFromMinX, scaleFromMinY), MIN(scaleFromMaxX, scaleFromMaxY));
+		
+		// Center the origin
+		CGContextTranslateCTM(context, self.bounds.size.width / 2.0, self.bounds.size.height / 2.0);
+		// Scale by the determined factor
+		CGContextScaleCTM(context, finalScale, finalScale);
 	}
-	
-	CGContextRestoreGState(context);
-}
 
-
-#pragma mark - All methods below this should be invoked via drawRect ONLY
-
-- (BOOL)tryToDrawInRect:(CGRect)rect {
-	// Erase any previous drawing attempts
-	[[UIColor whiteColor] setFill];
-	CGContextFillRect(context, CGRectInfinite);
+	// Draw baseplate and axes, if requested
+	if (_drawBaseplate)
+		[self drawTheBaseplate];
 	
-	if (_drawBaseplate && ![self drawTheBaseplate])
-		return NO;
-	
-	// We don't care if the axes go out of bounds.
 	if (_drawAxes)
 		[self drawTheAxes];
 	
-	// If there are no bricks to display, we're done
+	// Got any bricks to draw?
 	if (!bricksToDisplay || [bricksToDisplay count] == 0)
-		return YES;
+		return;
 	
-	// Put the bricks into drawing order:
-	//		lowest z coordinate is first; if z==z then highest sum of x and y is first
+	
+	// Draw all the bricks in bricksToDisplay
+	
+	// First, put them into drawing order
+		// Lowest z coordinate is first; if z==z then highest sum of x and y is first (b/c it's furthest)
 	NSMutableArray *drawingOrder = [NSMutableArray arrayWithCapacity:[bricksToDisplay count]];
 	for (BKPPlacedBrick *brick in bricksToDisplay) {
 		[drawingOrder addObject:brick];
@@ -118,27 +141,29 @@
 			return NSOrderedSame;
 	}];
 	
-	// Draw the placed bricks one at a time
+	// Draw bricks one at a time
 	for (BKPPlacedBrick *brick in drawingOrder) {
-		// If any one brick fails, this whole method fails
-		if (![self drawPlacedBrick:brick])
-			return NO;
+		[self drawPlacedBrick:brick];
 	}
 	
-	return YES;
+	// Done!
+	
 }
 
-- (BOOL)drawPlacedBrick:(BKPPlacedBrick *)brick {
-	UIColor *strokeColor, *fillColor;
+
+#pragma mark - Drawing helpers
+
+- (void)drawPlacedBrick:(BKPPlacedBrick *)brick {
+	UIColor *brickLineColor, *brickColor;
 	if (brick.brick.color == BKPBrickColorBlack)
-		strokeColor = [UIColor grayColor];
+		brickLineColor = [UIColor grayColor];
 	else
-		strokeColor = [UIColor blackColor];
+		brickLineColor = [UIColor blackColor];
 	
-	fillColor = [BKPBrickColorOptions colorForColor:brick.brick.color];
+	brickColor = [BKPBrickColorOptions colorForColor:brick.brick.color];
 	
-	[strokeColor setStroke];
-	[fillColor setFill];
+	[brickLineColor setStroke];
+	[brickColor setFill];
 	
 	// By default, the long side of a brick is the xLength in our PlacedBrick coordinate system.
 	// If the brick is rotated, we want to swap the short and long side lengths.
@@ -167,9 +192,6 @@
 	CGPoint bottomRight = [self	pointFrom3Dx:xOfRightAndBack y:yOfRightAndFront andZ:zOfBottom];
 	CGPoint bottomFront = [self	pointFrom3Dx:xOfLeftAndFront y:yOfRightAndFront andZ:zOfBottom];
 	CGPoint bottomLeft = [self	pointFrom3Dx:xOfLeftAndFront y:yOfLeftAndBack	andZ:zOfBottom];
-	// These points represent the bounding box.
-	CGPoint boundingBottomLeft = CGPointMake(bottomLeft.x, bottomFront.y);
-	CGPoint boundingTopRight = CGPointMake(topRight.x, topBack.y);
 	
 	UIBezierPath *path = [UIBezierPath bezierPath];
 	// Draw outline first
@@ -196,16 +218,7 @@
 	// Studs
 	for (int xStud = 0; xStud < xLength; xStud++) {
 		for (int yStud = 0; yStud < yLength; yStud++) {
-			// Currently drawing studs as ovals inside rectangle with corners at center of brick top edges
 			CGRect studRect = CGRectZero;
-			
-			/*
-			CGPoint offsetForOrigin = [self pointFrom3Dx:xStud y:0.5+yStud andZ:0];
-			studRect.origin = CGPointMake(topFront.x + offsetForOrigin.x, topFront.y + offsetForOrigin.y);
-
-			CGPoint offsetForSize = [self pointFrom3Dx:1 y:0 andZ:0];
-			studRect.size = CGSizeMake(offsetForSize.x, offsetForSize.y);
-			*/
 			
 			double studSpacing = 1.5/7.8;
 			double studDiameter = 4.8/7.8;
@@ -214,12 +227,9 @@
 			studRect.origin = CGPointMake(topFront.x + studOriginOffset.x, topFront.y + studOriginOffset.y);
 			
 			CGPoint studSize = [self pointFrom3Dx:studDiameter y:studDiameter andZ:0];
-//			NSLog(@"studSize is %f, %f", studSize.x, studSize.y);
 			studRect.size = CGSizeMake(-studSize.y, studSize.x);
-			
-//			[[UIBezierPath bezierPathWithArcCenter:studRect.origin radius:1 startAngle:0 endAngle:2*M_PI clockwise:YES] stroke];
-			
-			[strokeColor setFill];
+						
+			[brickLineColor setFill];
 
 			[[UIBezierPath bezierPathWithOvalInRect:studRect] stroke];
 			[[UIBezierPath bezierPathWithOvalInRect:studRect] fill];
@@ -228,36 +238,24 @@
 			[[UIBezierPath bezierPathWithRect:studRect] stroke];
 			[[UIBezierPath bezierPathWithRect:studRect] fill];
 			
-			[fillColor setFill];
+			[brickColor setFill];
 			
 			studRect.origin.y -= studRect.size.height / 2.0;
 			[[UIBezierPath bezierPathWithOvalInRect:studRect] stroke];
 			[[UIBezierPath bezierPathWithOvalInRect:studRect] fill];
 		}
 	}
-	
-	
-	BOOL (^pointIsOutOfBounds)(CGPoint) = ^BOOL(CGPoint point) {
-		return !CGRectContainsPoint(self.bounds, CGContextConvertPointToDeviceSpace(context, point));
-	};
-	
-	if (pointIsOutOfBounds(boundingBottomLeft) || pointIsOutOfBounds(boundingTopRight)) {
-		return NO;
-	}
-		
-	return YES;
 }
 
-- (BOOL)drawTheBaseplate {
+- (void)drawTheBaseplate {
 	// The baseplate is just a big brick with zero height.
 	BKPPlacedBrick *baseplate = [[BKPPlacedBrick alloc] init];
 	baseplate.brick = [BKPBrick brickWithColor:baseplateColor shortSide:baseplateSize longSide:baseplateSize andHeight:0];
 	[baseplate setX:0 Y:0 andZ:0];
-	return [self drawPlacedBrick:baseplate];
+	[self drawPlacedBrick:baseplate];
 }
 
 - (void)drawTheAxes {
-	// We don't care if these go out of bounds, so no worries.
 	UIBezierPath *path = [UIBezierPath bezierPath];
 	
 	[path moveToPoint:CGPointMake(0, 0)];
