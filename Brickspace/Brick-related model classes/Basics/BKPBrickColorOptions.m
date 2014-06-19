@@ -17,7 +17,11 @@
 @implementation BKPBrickColorOptions
 
 + (BKPBrickColor)randomColor {
-	return arc4random_uniform(6);
+	return arc4random_uniform([self colorCount]);
+}
+
++ (int)colorCount {
+	return 6;
 }
 
 + (UIColor *)colorForColor:(BKPBrickColor)color {
