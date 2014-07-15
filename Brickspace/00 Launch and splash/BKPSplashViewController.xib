@@ -21,6 +21,9 @@
                     <state key="normal" title="To the camera!">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="startButtonPressed:" destination="-1" eventType="touchUpInside" id="7bO-nd-hFj"/>
+                    </connections>
                 </button>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Set up some bricks against a white surface." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V6a-kO-WDQ">
                     <rect key="frame" x="344" y="212" width="335" height="21"/>
@@ -43,6 +46,9 @@
                     <state key="normal" title="📷">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="startButtonPressed:" destination="-1" eventType="touchUpInside" id="QNa-Tt-5Pz"/>
+                    </connections>
                 </button>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nkw-hh-oFo" customClass="BKPLegoView">
                     <rect key="frame" x="361" y="258" width="301" height="234"/>
