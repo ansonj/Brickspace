@@ -11,6 +11,9 @@
 #import "BKPLegoView.h"
 #import "BKPScannedImageAndBricks.h"
 
+// For the next VC
+#import "BKPInstructionsViewController.h"
+
 @interface BKPReviewBricksViewController ()
 // Two image views, one temporary since UITableView is not in use yet
 @property (weak, nonatomic) IBOutlet UIImageView *thumbImageView;
@@ -137,6 +140,12 @@
 	[self updateUI];
 }
 
+- (IBAction)buildButtonPressed:(id)sender {
+	BKPInstructionsViewController *instructionsVC = [[BKPInstructionsViewController alloc] init];
+	[instructionsVC setUpWithCountedBricks:[imageCollection allBricksFromAllImages]];
+	[[[UIApplication sharedApplication] keyWindow] setRootViewController:instructionsVC];
+}
+
 #pragma mark - What image are we currently looking at?
 
 - (BKPScannedImageAndBricks *)currentlyActiveImage {
@@ -156,19 +165,19 @@
 	[editingImageView setImage:[currentImage processedImage]];
 	
 	if (currentBrick) {
-	// update the brick display
-	[currentBrickView displayBricks:[NSSet setWithObject:currentBrick]];
-	
-	// update the short, long side lengths, and color
-	[brickSizeLabel setText:[NSString stringWithFormat:@"%d x %d", currentBrick.shortSideLength, currentBrick.longSideLength]];
-	[brickColorLabel setText:[BKPBrickColorOptions stringForColor:currentBrick.color]];
-	
-	// you also have to update the steppers
-	[shortSideStepper setValue:currentBrick.shortSideLength];
-	[longSideStepper setValue:currentBrick.longSideLength];
-	[colorStepper setValue:currentBrick.color];
-	}
+		// update the brick display
+		[currentBrickView displayBricks:[NSSet setWithObject:currentBrick]];
 		
+		// update the short, long side lengths, and color
+		[brickSizeLabel setText:[NSString stringWithFormat:@"%d x %d", currentBrick.shortSideLength, currentBrick.longSideLength]];
+		[brickColorLabel setText:[BKPBrickColorOptions stringForColor:currentBrick.color]];
+		
+		// you also have to update the steppers
+		[shortSideStepper setValue:currentBrick.shortSideLength];
+		[longSideStepper setValue:currentBrick.longSideLength];
+		[colorStepper setValue:currentBrick.color];
+	}
+	
 	// update the current image summary
 	[thisImageSummary setText:[NSString stringWithFormat:@"%@", [currentImage bricksFromImage]]];
 	
