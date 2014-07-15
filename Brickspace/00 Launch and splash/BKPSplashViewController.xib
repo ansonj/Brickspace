@@ -6,7 +6,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BKPSplashViewController">
             <connections>
-                <outlet property="legoView" destination="Nkw-hh-oFo" id="QrE-ft-EQO"/>
+                <outlet property="legoView" destination="Nkw-hh-oFo" id="why-Rq-HTC"/>
+                <outlet property="view" destination="iN0-l3-epB" id="Ob6-0v-sk1"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>

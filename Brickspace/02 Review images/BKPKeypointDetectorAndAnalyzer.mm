@@ -209,7 +209,7 @@
 		int colorCount = [BKPBrickColorOptions colorCount];
 		for (int ccIndex = 0; ccIndex < colorCount; ccIndex++) {
 			UIColor *colorToCompare = [BKPBrickColorOptions colorForColor:(BKPBrickColor)ccIndex];
-			float compareRed, compareGreen, compareBlue;
+			CGFloat compareRed, compareGreen, compareBlue;
 			[colorToCompare getRed:&compareRed green:&compareGreen blue:&compareBlue alpha:nil];
 			
 			double distanceToColor = sqrt(pow(detectedRed-compareRed,2) + pow(detectedGreen-compareGreen,2) + pow(detectedBlue-compareBlue,2));
@@ -230,7 +230,7 @@
 				closestColor = currentIndex;
 		}
 	}
-	NSLog(@"%p: A winrar is %d", keypoint, closestColor);
+	NSLog(@"%p: A winrar is %lu", keypoint, (unsigned long)closestColor);
 	[[keypoint brick] setColor:(BKPBrickColor)closestColor];
 }
 
