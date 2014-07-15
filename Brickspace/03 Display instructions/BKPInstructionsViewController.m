@@ -50,6 +50,8 @@
 			NSString *designName = [design designName];
 			float percentage = [design percentUtilizedIfBuiltWithSet:countedBrickSet];
 			summaryText = [summaryText stringByAppendingFormat:@"You can build a %@ with %.1f%% brick utilization!\n", designName, percentage];
+		} else {
+			summaryText = [summaryText stringByAppendingFormat:@"Sorry, but you cannot build a %@ today.\n", [design designName]];
 		}
 	}
 	

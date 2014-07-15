@@ -10,6 +10,7 @@
                 <outlet property="stepLabel" destination="U5S-Bo-cKA" id="TgX-28-bhQ"/>
                 <outlet property="stepSlider" destination="5Rv-bG-dSZ" id="qv7-jo-buu"/>
                 <outlet property="summaryTextView" destination="UHW-vm-Kob" id="L76-Ph-k3G"/>
+                <outlet property="view" destination="iN0-l3-epB" id="1eR-kM-6lX"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
