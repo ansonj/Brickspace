@@ -93,7 +93,8 @@
 {
 	// Create empty bricks, so we can have something to concurrently modify
 	for (BKPKeypointBrickPair *pair in keypoints) {
-		BKPBrick *plainBrick = [BKPBrick brickWithColor:BKPBrickColorBlack shortSide:1 longSide:1 andHeight:1];
+		BKPBrick *plainBrick = [BKPBrick brickWithColor:BKPBrickColorBlack shortSide:2 longSide:4 andHeight:3];
+		//!!!: This is where the default brick size comes from
 		[pair setBrick:plainBrick];
 	}
 	
