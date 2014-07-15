@@ -11,7 +11,6 @@
 		A30C83F7194617A6000639C3 /* BKPInstructionSet.m in Sources */ = {isa = PBXBuildFile; fileRef = A30C83F6194617A6000639C3 /* BKPInstructionSet.m */; };
 		A348A3041948B7BD002D9FA3 /* BKPLegoView.m in Sources */ = {isa = PBXBuildFile; fileRef = A348A3031948B7BD002D9FA3 /* BKPLegoView.m */; };
 		A348A3081948E18F002D9FA3 /* BKPScanningViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A348A3071948E18F002D9FA3 /* BKPScanningViewController.m */; };
-		A348A30A1948E204002D9FA3 /* old tweaker.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A348A3091948E204002D9FA3 /* old tweaker.storyboard */; };
 		A35E2D9E19476C6200F34D8B /* BKPBrickColorOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = A35E2D9D19476C6200F34D8B /* BKPBrickColorOptions.m */; };
 		A364224D194210C9000C3B92 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A364224C194210C9000C3B92 /* Foundation.framework */; };
 		A364224F194210C9000C3B92 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A364224E194210C9000C3B92 /* CoreGraphics.framework */; };
@@ -28,8 +27,6 @@
 		A3642276194210C9000C3B92 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A3642274194210C9000C3B92 /* InfoPlist.strings */; };
 		A3642278194210C9000C3B92 /* BrickspaceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A3642277194210C9000C3B92 /* BrickspaceTests.m */; };
 		A364229E194215A7000C3B92 /* BKPDoneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3642285194215A7000C3B92 /* BKPDoneViewController.m */; };
-		A364229F194215A7000C3B92 /* BKPImageChoiceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3642288194215A7000C3B92 /* BKPImageChoiceViewController.m */; };
-		A36422A3194215A7000C3B92 /* BKPProcessingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3642291194215A7000C3B92 /* BKPProcessingViewController.m */; };
 		A36422A4194215A7000C3B92 /* BKPDetectorParameterInitializer.m in Sources */ = {isa = PBXBuildFile; fileRef = A3642294194215A7000C3B92 /* BKPDetectorParameterInitializer.m */; };
 		A36422A5194215A7000C3B92 /* BKPMatrixUIImageConverter.mm in Sources */ = {isa = PBXBuildFile; fileRef = A3642296194215A7000C3B92 /* BKPMatrixUIImageConverter.mm */; };
 		A36422A6194215A7000C3B92 /* BKPBrick.m in Sources */ = {isa = PBXBuildFile; fileRef = A3642299194215A7000C3B92 /* BKPBrick.m */; };
@@ -70,7 +67,6 @@
 		A348A3031948B7BD002D9FA3 /* BKPLegoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPLegoView.m; sourceTree = "<group>"; };
 		A348A3061948E18F002D9FA3 /* BKPScanningViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPScanningViewController.h; sourceTree = "<group>"; };
 		A348A3071948E18F002D9FA3 /* BKPScanningViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPScanningViewController.m; sourceTree = "<group>"; };
-		A348A3091948E204002D9FA3 /* old tweaker.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "old tweaker.storyboard"; sourceTree = "<group>"; };
 		A35E2D9C19476C6200F34D8B /* BKPBrickColorOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPBrickColorOptions.h; sourceTree = "<group>"; };
 		A35E2D9D19476C6200F34D8B /* BKPBrickColorOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPBrickColorOptions.m; sourceTree = "<group>"; };
 		A3642249194210C9000C3B92 /* Brickspace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Brickspace.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -95,10 +91,6 @@
 		A3642281194213E0000C3B92 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = ../../OpenCV/opencv2.framework; sourceTree = "<group>"; };
 		A3642284194215A7000C3B92 /* BKPDoneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BKPDoneViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A3642285194215A7000C3B92 /* BKPDoneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BKPDoneViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		A3642287194215A7000C3B92 /* BKPImageChoiceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BKPImageChoiceViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		A3642288194215A7000C3B92 /* BKPImageChoiceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BKPImageChoiceViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		A3642290194215A7000C3B92 /* BKPProcessingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BKPProcessingViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		A3642291194215A7000C3B92 /* BKPProcessingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BKPProcessingViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A3642293194215A7000C3B92 /* BKPDetectorParameterInitializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BKPDetectorParameterInitializer.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A3642294194215A7000C3B92 /* BKPDetectorParameterInitializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BKPDetectorParameterInitializer.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A3642295194215A7000C3B92 /* BKPMatrixUIImageConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BKPMatrixUIImageConverter.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -182,18 +174,6 @@
 			path = "Instruction display";
 			sourceTree = "<group>";
 		};
-		A348A3051948E0BE002D9FA3 /* Old view controllers */ = {
-			isa = PBXGroup;
-			children = (
-				A348A3091948E204002D9FA3 /* old tweaker.storyboard */,
-				A3642287194215A7000C3B92 /* BKPImageChoiceViewController.h */,
-				A3642288194215A7000C3B92 /* BKPImageChoiceViewController.m */,
-				A3642290194215A7000C3B92 /* BKPProcessingViewController.h */,
-				A3642291194215A7000C3B92 /* BKPProcessingViewController.m */,
-			);
-			path = "Old view controllers";
-			sourceTree = "<group>";
-		};
 		A3642240194210C9000C3B92 = {
 			isa = PBXGroup;
 			children = (
@@ -233,7 +213,6 @@
 				A364225B194210C9000C3B92 /* BKPAppDelegate.h */,
 				A364225C194210C9000C3B92 /* BKPAppDelegate.m */,
 				A364225E194210C9000C3B92 /* Main.storyboard */,
-				A348A3051948E0BE002D9FA3 /* Old view controllers */,
 				A3642286194215A7000C3B92 /* Getting the image */,
 				A364228D194215A7000C3B92 /* Processing the image */,
 				A3642283194215A7000C3B92 /* Done processing */,
@@ -478,7 +457,6 @@
 				A3642260194210C9000C3B92 /* Main.storyboard in Resources */,
 				A36512A11975B8C700340095 /* BKPCapturingViewController.xib in Resources */,
 				A36512A61975B8D900340095 /* BKPReviewBricksViewController.xib in Resources */,
-				A348A30A1948E204002D9FA3 /* old tweaker.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -512,7 +490,6 @@
 				A365129F1975B8C700340095 /* BKPCaptureMaster.m in Sources */,
 				A364225D194210C9000C3B92 /* BKPAppDelegate.m in Sources */,
 				A36422A5194215A7000C3B92 /* BKPMatrixUIImageConverter.mm in Sources */,
-				A36422A3194215A7000C3B92 /* BKPProcessingViewController.m in Sources */,
 				A36422B619422855000C3B92 /* BKPPlacedBrick.m in Sources */,
 				A36512A51975B8D900340095 /* BKPReviewBricksViewController.m in Sources */,
 				A348A3081948E18F002D9FA3 /* BKPScanningViewController.m in Sources */,
@@ -522,7 +499,6 @@
 				A36422B919423913000C3B92 /* BKP_GDManager.m in Sources */,
 				A36512981975B8B300340095 /* BKPKeypointDetectorAndAnalyzer.mm in Sources */,
 				A36422A6194215A7000C3B92 /* BKPBrick.m in Sources */,
-				A364229F194215A7000C3B92 /* BKPImageChoiceViewController.m in Sources */,
 				A3642259194210C9000C3B92 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
