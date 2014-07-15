@@ -14,6 +14,7 @@
  This implementation code is adapted from http://docs.opencv.org/doc/tutorials/ios/image_manipulation/image_manipulation.html
  This is a basic image processing tutorial that shows how to convert from cv::Mat to UIImage and back using OpenCV.
  The tutorial was written by Charu Hans.
+ The code is also provided as a sample in the OpenCV docs (where????)
  */
 
 + (Mat)cvMatFromUIImage:(UIImage *)image {

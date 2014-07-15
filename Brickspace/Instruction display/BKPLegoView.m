@@ -58,7 +58,25 @@
 }
 
 - (void)displayBricks:(NSSet *)bricks {
-	bricksToDisplay = bricks;
+	// We need to go through the set. If they're PlacedBricks, just add them.
+	// If they're only Bricks, then we can wrap them in a dummy PlacedBrick.
+	NSMutableSet *placedBricksReadyForDisplay = [NSMutableSet set];
+	
+	for (id brickObject in bricks) {
+		if ([brickObject isMemberOfClass:[BKPPlacedBrick class]]) {
+			[placedBricksReadyForDisplay addObject:brickObject];
+		} else if ([brickObject isMemberOfClass:[BKPBrick class]]) {
+			BKPPlacedBrick *newPlacedBrick = [[BKPPlacedBrick alloc] init];
+			[newPlacedBrick setBrick:brickObject];
+			[newPlacedBrick setX:0 Y:0 andZ:0];
+			[newPlacedBrick setIsRotated:NO];
+			
+			[placedBricksReadyForDisplay addObject:newPlacedBrick];
+		}
+		// This also makes sure we don't try to draw anything except bricks!
+	}
+		
+	bricksToDisplay = [NSSet setWithSet:placedBricksReadyForDisplay];
 	[self setNeedsDisplay];
 }
 
