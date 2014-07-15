@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BKPViewController : UIViewController
+@interface BKPSplashViewController : UIViewController
 
 @end

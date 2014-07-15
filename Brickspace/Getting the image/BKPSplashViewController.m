@@ -6,16 +6,16 @@
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
 //
 
-#import "BKPViewController.h"
+#import "BKPSplashViewController.h"
 
 #import "BKPLegoView.h"
 #import "BKPPlacedBrick.h"
 
-@interface BKPViewController ()
+@interface BKPSplashViewController ()
 @property (weak, nonatomic) IBOutlet BKPLegoView *legoView;
 @end
 
-@implementation BKPViewController
+@implementation BKPSplashViewController
 
 @synthesize legoView;
 

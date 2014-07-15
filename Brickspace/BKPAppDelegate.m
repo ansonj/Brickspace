@@ -8,24 +8,23 @@
 
 #import "BKPAppDelegate.h"
 
+#import "BKPSplashViewController.h"
+
 @implementation BKPAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-	// trash the storyboard, clear the "main interface" thing in the project settings,
-	// then uncomment this line
-//     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     
-    // instantiate a VC
-    // [[self window] setRootViewController:newVC];
+	BKPSplashViewController *splashVC = [[BKPSplashViewController alloc] init];
+	[[self window] setRootViewController:splashVC];
     
     // this is optional; you need to import structure if yes
 //   	[STWirelessLog broadcastLogsToWirelessConsoleAtAddress:@"172.25.221.46" usingPort:4999 error:nil];
 
-	// also uncomment these lines
-//	self.window.backgroundColor = [UIColor whiteColor];
-//	[self.window makeKeyAndVisible];
+	self.window.backgroundColor = [UIColor whiteColor];
+	[self.window makeKeyAndVisible];
     return YES;
 }
 							

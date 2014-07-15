@@ -6,14 +6,14 @@
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
 //
 
-#import "BKPDoneViewController.h"
+#import "BKPInstructionsViewController.h"
 
 #import "BKPLegoView.h"
 #import "BKP_GDManager.h"
 #import "BKPGenericDesign.h"
 #import "BKPInstructionSet.h"
 
-@interface BKPDoneViewController ()
+@interface BKPInstructionsViewController ()
 @property (weak, nonatomic) IBOutlet UITextView *summaryTextView;
 @property (nonatomic) NSString *summaryText;
 @property (weak, nonatomic) IBOutlet BKPLegoView *legoView;
@@ -26,7 +26,7 @@
 @property (nonatomic) int currentStepNumber;
 @end
 
-@implementation BKPDoneViewController
+@implementation BKPInstructionsViewController
 
 @synthesize summaryTextView, summaryText;
 @synthesize legoView;

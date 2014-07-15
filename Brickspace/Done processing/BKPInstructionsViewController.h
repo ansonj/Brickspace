@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BKPDoneViewController : UIViewController
+@interface BKPInstructionsViewController : UIViewController
 
 - (void)setUpWithCountedBricks:(NSSet *)newSet;
 
