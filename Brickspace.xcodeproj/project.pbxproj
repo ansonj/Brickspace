@@ -85,7 +85,7 @@
 		A3642258194210C9000C3B92 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = main.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A364225A194210C9000C3B92 /* Brickspace-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Brickspace-Prefix.pch"; sourceTree = "<group>"; };
 		A364225B194210C9000C3B92 /* BKPAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BKPAppDelegate.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		A364225C194210C9000C3B92 /* BKPAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BKPAppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		A364225C194210C9000C3B92 /* BKPAppDelegate.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = BKPAppDelegate.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A3642261194210C9000C3B92 /* BKPSplashViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BKPSplashViewController.h; sourceTree = "<group>"; };
 		A3642262194210C9000C3B92 /* BKPSplashViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BKPSplashViewController.m; sourceTree = "<group>"; };
 		A3642264194210C9000C3B92 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };

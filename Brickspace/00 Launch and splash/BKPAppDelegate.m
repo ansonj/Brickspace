@@ -10,6 +10,9 @@
 
 #import "BKPSplashViewController.h"
 
+// For STWirelessLog
+#import <Structure/Structure.h>
+
 @implementation BKPAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -21,7 +24,10 @@
 	[[self window] setRootViewController:splashVC];
     
     // this is optional; you need to import structure if yes
-//   	[STWirelessLog broadcastLogsToWirelessConsoleAtAddress:@"172.25.221.46" usingPort:4999 error:nil];
+	if (true) {
+		[STWirelessLog broadcastLogsToWirelessConsoleAtAddress:@"172.25.104.74" usingPort:4999 error:nil];
+		NSLog(@"\n\nGood morning.\nBroadcasting logs from run starting at %@.", [NSDate date]);
+	}
 
 	self.window.backgroundColor = [UIColor whiteColor];
 	[self.window makeKeyAndVisible];
