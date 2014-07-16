@@ -278,6 +278,7 @@
 		double fontScale = 2;
 		cv::Scalar fontColor = Scalar(255, 255, 255);
 		
+		NSLog(@"Outputting keypoint / depth frame info:");
 		for (int k = 0; k < [_keypointBrickPairs count]; k++) {
 			cv::KeyPoint keypoint = [_keypointBrickPairs[k] keypoint];
 			
@@ -298,6 +299,7 @@
 
 			cv::putText(imageWithKeypointsDrawn, depthText, keypoint.pt, fontFace, fontScale, fontColor);
 		}
+		NSLog(@"Done outputting keypoint / depth frame info.");
 		
 		/*
 		// dump that depth frame, plz

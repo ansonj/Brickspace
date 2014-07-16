@@ -26,7 +26,7 @@
     // this is optional; you need to import structure if yes
 	if (true) {
 		[STWirelessLog broadcastLogsToWirelessConsoleAtAddress:@"172.25.104.74" usingPort:4999 error:nil];
-		NSLog(@"\n\nGood morning.\nBroadcasting logs from run starting at %@.", [NSDate date]);
+		NSLog(@"\n\n\nGood morning.\nBroadcasting logs from run starting at %@.", [NSDate date]);
 	}
 
 	self.window.backgroundColor = [UIColor whiteColor];
