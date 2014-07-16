@@ -13,6 +13,9 @@
 #import "BKPGenericDesign.h"
 #import "BKPInstructionSet.h"
 
+// For resetting the app back to the beginning
+#import "BKPSplashViewController.h"
+
 @interface BKPInstructionsViewController ()
 @property (weak, nonatomic) IBOutlet UITextView *summaryTextView;
 @property (nonatomic) NSString *summaryText;
@@ -110,6 +113,11 @@
 	if (currentStepNumber > [instructions stepCount])
 		currentStepNumber = [instructions stepCount];
 	[self updateUI];
+}
+
+- (IBAction)resetButtonPressed:(id)sender {
+	BKPSplashViewController *splashVC = [[BKPSplashViewController alloc] init];
+	[[[UIApplication sharedApplication] keyWindow] setRootViewController:splashVC];
 }
 
 - (void)didReceiveMemoryWarning
