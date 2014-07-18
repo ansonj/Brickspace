@@ -260,7 +260,7 @@
 		circle(imageWithKeypointsDrawn, keypoint.pt, keypoint.size, plainKeypointColor, 3);
 		
 		if (k == self.currentlyHighlightedKeypointIndex)
-			circle(imageWithKeypointsDrawn, keypoint.pt, keypoint.size*1.1, highlightedKeypointColor, 3);
+			circle(imageWithKeypointsDrawn, keypoint.pt, keypoint.size + 4, highlightedKeypointColor, 3);
 	}
 	
 //	circle(imageWithKeypointsDrawn, cv::Point(0,0), 15, Scalar(255,0,255), 4);
