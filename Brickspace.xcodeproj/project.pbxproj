@@ -55,6 +55,7 @@
 		A36512CD1975D0DD00340095 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36512C61975D0DD00340095 /* ExternalAccessory.framework */; };
 		A36512CE1975D0DD00340095 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36512C71975D0DD00340095 /* ImageIO.framework */; };
 		A36512CF1975D0DD00340095 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36512C81975D0DD00340095 /* OpenGLES.framework */; };
+		A3E688D11977266B00FFC463 /* BKPDetectorParameterInitializer.mm in Sources */ = {isa = PBXBuildFile; fileRef = A3642294194215A7000C3B92 /* BKPDetectorParameterInitializer.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -97,8 +98,8 @@
 		A3642281194213E0000C3B92 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = ../../OpenCV/opencv2.framework; sourceTree = "<group>"; };
 		A3642284194215A7000C3B92 /* BKPInstructionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BKPInstructionsViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A3642285194215A7000C3B92 /* BKPInstructionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BKPInstructionsViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		A3642293194215A7000C3B92 /* BKPDetectorParameterInitializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BKPDetectorParameterInitializer.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		A3642294194215A7000C3B92 /* BKPDetectorParameterInitializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BKPDetectorParameterInitializer.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		A3642293194215A7000C3B92 /* BKPDetectorParameterInitializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = BKPDetectorParameterInitializer.h; path = "../Fate uncertain/BKPDetectorParameterInitializer.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		A3642294194215A7000C3B92 /* BKPDetectorParameterInitializer.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; lineEnding = 0; name = BKPDetectorParameterInitializer.mm; path = "../Fate uncertain/BKPDetectorParameterInitializer.mm"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A3642295194215A7000C3B92 /* BKPMatrixUIImageConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BKPMatrixUIImageConverter.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A3642296194215A7000C3B92 /* BKPMatrixUIImageConverter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = BKPMatrixUIImageConverter.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A3642298194215A7000C3B92 /* BKPBrick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BKPBrick.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -327,6 +328,8 @@
 				A36512A31975B8D900340095 /* BKPReviewBricksViewController.m */,
 				A36512931975B8B300340095 /* BKPKeypointDetectorAndAnalyzer.h */,
 				A36512941975B8B300340095 /* BKPKeypointDetectorAndAnalyzer.mm */,
+				A3642293194215A7000C3B92 /* BKPDetectorParameterInitializer.h */,
+				A3642294194215A7000C3B92 /* BKPDetectorParameterInitializer.mm */,
 			);
 			path = "02 Review images";
 			sourceTree = "<group>";
@@ -401,8 +404,6 @@
 		A36512BA1975CAA000340095 /* Fate uncertain (not in target) */ = {
 			isa = PBXGroup;
 			children = (
-				A3642293194215A7000C3B92 /* BKPDetectorParameterInitializer.h */,
-				A3642294194215A7000C3B92 /* BKPDetectorParameterInitializer.m */,
 			);
 			name = "Fate uncertain (not in target)";
 			path = "Fate uncertain";
@@ -525,6 +526,7 @@
 			files = (
 				A36512A01975B8C700340095 /* BKPCapturingViewController.m in Sources */,
 				A364229E194215A7000C3B92 /* BKPInstructionsViewController.m in Sources */,
+				A3E688D11977266B00FFC463 /* BKPDetectorParameterInitializer.mm in Sources */,
 				A36512991975B8B300340095 /* BKPScannedImageAndBricks.mm in Sources */,
 				A36512971975B8B300340095 /* BKPKeypointBrickPair.mm in Sources */,
 				A36422B11942219E000C3B92 /* BKPRealizedModel.m in Sources */,

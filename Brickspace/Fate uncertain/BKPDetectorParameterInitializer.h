@@ -7,16 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "BKPBrickCounter.h"
 
 @interface BKPDetectorParameterInitializer : NSObject
 
-typedef NS_ENUM(NSUInteger, BKPDPIParameterSet) {
-	BKPDPIParameterSetDefault,
-	BKPDPIParameterSetLego1
-};
++ (NSArray *)getDefaultParameters;
 
-+ (void)setParameters:(BKPDPIParameterSet)parameters
-		   forCounter:(BKPBrickCounter *)counter;
++ (NSArray *)getParametersForLegoUpClose;
+
++ (NSArray *)getParametersForLegoAfarWithStructure;
 
 @end

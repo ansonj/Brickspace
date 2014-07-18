@@ -13,12 +13,21 @@
 
 #import "BKPKeypointBrickPair.h"
 
+// For parameter sets for the detector
+#import "BKPDetectorParameterInitializer.h"
+
+static BOOL printKeypointSearchDebug = YES;
+static BOOL printColorDebug = NO;
+static BOOL addDuplicatesIntentionally = NO;
+static BOOL addBunchOfRandomKeypoints = NO;
+static int addThisManyRandomKeypoints = 100;
+
 @implementation BKPKeypointDetectorAndAnalyzer
 
 + (void)detectKeypoints:(NSMutableArray *)keypoints inImage:(UIImage *)image {
 	[keypoints removeAllObjects];
 	
-	// run the blob detector, as per usual
+	// convert the image to how we need it
 	cv::Mat imageForDetector;
 	{
 		cv::Mat sourceImage = [BKPMatrixUIImageConverter cvMatFromUIImage:image];
@@ -27,38 +36,82 @@
 		imageGray.convertTo(imageForDetector, CV_8UC1);
 	}
 	
-	cv::SimpleBlobDetector::Params params;
-	params.thresholdStep = 5;
-	params.minThreshold = 0;
-	params.maxThreshold = 220;
-	params.minRepeatability = 4;
-	params.minDistBetweenBlobs = 0;
-	params.filterByColor = NO;
-	params.blobColor = 0;
-	params.filterByArea = YES;
-	params.minArea =  5000;
-	params.maxArea = 10000; // used to be FLT_MAX
-	params.filterByCircularity = NO;
-	params.minCircularity = 0; // bum value
-	params.maxCircularity = FLT_MAX;
-	params.filterByInertia = NO;
-	params.minInertiaRatio = 0; // bum value
-	params.maxInertiaRatio = 1; // bum value
-	params.filterByConvexity = NO;
-	params.minConvexity = 0; // bum value
-	params.maxConvexity = FLT_MAX;
+	// put together the list of parameter sets we want to use
+	NSArray *allParameterSetsToUse = [NSArray array];
+	{
+		NSMutableArray *buildingParameterList = [NSMutableArray array];
+		
+		[buildingParameterList addObjectsFromArray:[BKPDetectorParameterInitializer getParametersForLegoUpClose]];
+
+		[buildingParameterList addObjectsFromArray:[BKPDetectorParameterInitializer getParametersForLegoAfarWithStructure]];
+		
+		allParameterSetsToUse = [NSArray arrayWithArray:buildingParameterList];
+	}
 	
-	SimpleBlobDetector *blobDetector = new SimpleBlobDetector(params);
+	if (printKeypointSearchDebug)
+		NSLog(@"\n\nBeginning keypoint search.");
 	
-	vector<cv::KeyPoint> cvKeypoints;
+	// run the detection for each parameter set
+	for (NSValue *parameterSet in allParameterSetsToUse) {
+		cv::SimpleBlobDetector::Params parameters;
+		[parameterSet getValue:&parameters];
+		
+		SimpleBlobDetector *blobDetector = new SimpleBlobDetector(parameters);
+		
+		vector<cv::KeyPoint> cvKeypoints;
+		
+		blobDetector->detect(imageForDetector, cvKeypoints);
+		
+		// stick all the keypoints into the array you were passed
+		unsigned long keypointCount = cvKeypoints.size();
+		for (int k = 0; k < keypointCount; k++) {
+			BKPKeypointBrickPair *newKpBPair = [[BKPKeypointBrickPair alloc] initWithKeypoint:cvKeypoints[k]];
+			[keypoints addObject:newKpBPair];
+		}
+		
+		if (printKeypointSearchDebug)
+			NSLog(@"Found %lu more keypoints for a total of %lu.", keypointCount, (unsigned long)[keypoints count]);
+	}
 	
-	blobDetector->detect(imageForDetector, cvKeypoints);
+	if (addDuplicatesIntentionally) {
+		// Create some keypoints that are right on top, to test the duplicate remover
+		
+		cv::KeyPoint dupe1, dupe2;
+		
+		dupe1.pt.x = 0;
+		dupe1.pt.y = 0;
+		dupe1.size = 5;
+		
+		dupe2.pt.x = dupe1.pt.x;
+		dupe2.pt.y = dupe1.pt.y;
+		dupe2.size = dupe1.size * 2;
+		
+		BKPKeypointBrickPair *pair1, *pair2;
+		pair1 = [[BKPKeypointBrickPair alloc] initWithKeypoint:dupe1];
+		pair2 = [[BKPKeypointBrickPair alloc] initWithKeypoint:dupe2];
+		
+		[keypoints insertObject:pair1 atIndex:0];
+		[keypoints addObject:pair2];
+		
+		if (printKeypointSearchDebug)
+			NSLog(@"Added some intentional duplicates, so now we have %lu keypoints.", [keypoints count]);
+	}
 	
-	// stick all the keypoints into the array you were passed
-	unsigned long keypointCount = cvKeypoints.size();
-	for (int k = 0; k < keypointCount; k++) {
-		BKPKeypointBrickPair *newKpBPair = [[BKPKeypointBrickPair alloc] initWithKeypoint:cvKeypoints[k]];
-		[keypoints addObject:newKpBPair];
+	if (addBunchOfRandomKeypoints) {
+		// Create a bunch of random keypoints, to have things to build
+		for (int count = 0; count < addThisManyRandomKeypoints; count++) {
+			cv::KeyPoint randomKp;
+			randomKp.pt.x = arc4random_uniform(image.size.width);
+			randomKp.pt.y = arc4random_uniform(image.size.height);
+			
+			int sizeLowerBound = 20, sizeUpperBound = 40;
+			randomKp.size = arc4random_uniform(sizeUpperBound) + sizeLowerBound;
+			
+			[keypoints addObject:[[BKPKeypointBrickPair alloc] initWithKeypoint:randomKp]];
+		}
+		
+		if (printKeypointSearchDebug)
+			NSLog(@"Added %d random keypoints, so now we have %lu keypoints.", addThisManyRandomKeypoints, [keypoints count]);
 	}
 	
 	// go ahead and sort the keypoints so you can scroll through them in a sensible order
@@ -78,7 +131,38 @@
 			return NSOrderedSame;
 	}];
 	
-	NSLog(@"Hello! I found %lu keypoints for a total of %lu.", keypointCount, (unsigned long)[keypoints count]);
+	// Remove any keypoints that are right on top of each other
+	{
+		int minimumDistanceBetweenKeypoints = 5;
+		float (^distanceBetweenKeypoints)(BKPKeypointBrickPair*,BKPKeypointBrickPair*) = ^float(BKPKeypointBrickPair *kpbp1, BKPKeypointBrickPair *kpbp2) {
+			cv::Point2f p1 = [kpbp1 keypoint].pt;
+			cv::Point2f p2 = [kpbp2 keypoint].pt;
+			
+			return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2));
+		};
+		NSMutableSet *keypointsToRemove = [NSMutableSet set];
+		
+		for (int startingIndex = 0; startingIndex < [keypoints count] - 1; startingIndex++) {
+			BKPKeypointBrickPair *startingKeypoint = keypoints[startingIndex];
+			
+			for (int compareIndex = startingIndex + 1; compareIndex < [keypoints count]; compareIndex++) {
+				BKPKeypointBrickPair *compareKeypoint = keypoints[compareIndex];
+				
+				if (distanceBetweenKeypoints(startingKeypoint, compareKeypoint) < minimumDistanceBetweenKeypoints)
+					[keypointsToRemove addObject:compareKeypoint];
+			}
+		}
+		
+		if (printKeypointSearchDebug && [keypointsToRemove count] > 0)
+			NSLog(@"Removing %lu keypoints (of %lu) because they were too close to others.", [keypointsToRemove count], [keypoints count]);
+
+		for (BKPKeypointBrickPair *keypoint in keypointsToRemove) {
+			[keypoints removeObject:keypoint];
+		}
+		
+		if (printKeypointSearchDebug && [keypointsToRemove count] > 0)
+			NSLog(@"We are left with %lu keypoints.", [keypoints count]);
+	}
 }
 
 + (void)assignBricksToKeypoints:(NSMutableArray *)keypoints
@@ -189,15 +273,17 @@
 	double averageGreen = sumOfGreen / numberOfPixels;
 	double averageBlue = sumOfBlue / numberOfPixels;
 	
-	////// DEBUG
-//	NSLog(@"After adding up %d pixels,", numberOfPixels);
-//	NSLog(@"I found a brick with (R %f) (G %f) (B %f)", averageRed, averageGreen, averageBlue);
-	NSLog(@"%p: That's a rounded color of [%3d %3d %3d]", keypoint, (int)averageRed, (int)averageGreen, (int)averageBlue);
-	NSLog(@"%p: That's a hex color of # %X %X %X", keypoint, (unsigned int)averageRed, (unsigned int)averageGreen, (unsigned int)averageBlue);
-	
-//	cv::Vec4b centerIntensity = matrix.at<Vec4b>(kp.pt.y, kp.pt.x);
-//	NSLog(@"The center of the keypoint is %@", colorFromVec(centerIntensity));
-	////// END DEBUG
+	if (printColorDebug) {
+		////// DEBUG
+		//	NSLog(@"After adding up %d pixels,", numberOfPixels);
+		//	NSLog(@"I found a brick with (R %f) (G %f) (B %f)", averageRed, averageGreen, averageBlue);
+		NSLog(@"%p: That's a rounded color of [%3d %3d %3d]", keypoint, (int)averageRed, (int)averageGreen, (int)averageBlue);
+		NSLog(@"%p: That's a hex color of # %X %X %X", keypoint, (unsigned int)averageRed, (unsigned int)averageGreen, (unsigned int)averageBlue);
+		
+		//	cv::Vec4b centerIntensity = matrix.at<Vec4b>(kp.pt.y, kp.pt.x);
+		//	NSLog(@"The center of the keypoint is %@", colorFromVec(centerIntensity));
+		////// END DEBUG
+	}
 	
 	
 	// compute distance from this avg vector to each color vector, as programmatically generated from the available color options
@@ -219,7 +305,8 @@
 		}
 	}
 	
-	NSLog(@"%p: %@", keypoint, colorDistances);
+	if (printColorDebug)
+		NSLog(@"%p: %@", keypoint, colorDistances);
 	
 	// assign the color with the shortest distance
 	NSUInteger closestColor = 0;
@@ -231,7 +318,8 @@
 				closestColor = currentIndex;
 		}
 	}
-	NSLog(@"%p: A winrar is %lu", keypoint, (unsigned long)closestColor);
+	if (printColorDebug)
+		NSLog(@"%p: A winrar is %lu", keypoint, (unsigned long)closestColor);
 	[[keypoint brick] setColor:(BKPBrickColor)closestColor];
 }
 
@@ -239,6 +327,15 @@
 							inImageMatrix:(cv::Mat)matrix
 						   withDepthFrame:(STFloatDepthFrame *)depthFrame
 {
+	// This method is only entered if we have a depth frame.
+	// If there is no depth frame, the default brick sizes from assignBricksToKeypoints are used.
+	
+	
+	
+	
+	
+	
+	
 	//TODO: depth frame is VGA; image is larger; grab the proper coordinates (this time, it counts)
 	
 	// random brick sizes for now
