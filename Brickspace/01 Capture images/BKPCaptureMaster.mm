@@ -16,11 +16,11 @@
 @implementation BKPCaptureMaster {
 	BOOL _isPreviewing;
 	
-	STSensorController *sensorController;
-	BOOL delegateIsWaitingForCapture;
+	STSensorController *_sensorController;
+	BOOL _delegateIsWaitingForCapture;
 	
-	AVCaptureSession *avSession;
-	AVCaptureStillImageOutput *stillImageOutput;
+	AVCaptureSession *_avSession;
+	AVCaptureStillImageOutput *_stillImageOutput;
 }
 
 @synthesize delegate;
@@ -38,11 +38,11 @@
 	if (self) {
 		[self setCameraPreviewView:view];
 		
-		delegateIsWaitingForCapture = NO;
+		_delegateIsWaitingForCapture = NO;
 		
-		sensorController = [STSensorController sharedController];
-		[sensorController setDelegate:self];
-		[sensorController setFrameSyncConfig:FRAME_SYNC_DEPTH_AND_RGB]; //???: where should this be?
+		_sensorController = [STSensorController sharedController];
+		[_sensorController setDelegate:self];
+		[_sensorController setFrameSyncConfig:FRAME_SYNC_DEPTH_AND_RGB]; //???: where should this be?
 	}
 	
 	return self;
@@ -69,7 +69,7 @@
 - (void)performCapture {
 	assert(_isPreviewing);
 	
-	if ([sensorController isConnected]) {
+	if ([_sensorController isConnected]) {
 		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 			[self async_initiateDepthAndColorImageCapture];
 		});
@@ -85,13 +85,13 @@
 #pragma mark - AVSession configuration
 
 - (void)async_startPreviewing {
-	avSession = [[AVCaptureSession alloc] init];
+	_avSession = [[AVCaptureSession alloc] init];
 	
-	[(AVCaptureVideoPreviewLayer *)[cameraPreviewView layer] setSession:avSession];
+	[(AVCaptureVideoPreviewLayer *)[cameraPreviewView layer] setSession:_avSession];
 	
-	[avSession beginConfiguration];
+	[_avSession beginConfiguration];
 	
-	[avSession setSessionPreset:AVCaptureSessionPreset640x480];
+	[_avSession setSessionPreset:AVCaptureSessionPreset640x480];
 	
 	
 	////////// VIDEO INPUT
@@ -126,15 +126,15 @@
 		return;
 	}
 	
-	[avSession addInput:videoInput];
+	[_avSession addInput:videoInput];
 	
 	[[(AVCaptureVideoPreviewLayer *)[[self cameraPreviewView] layer] connection] setVideoOrientation:[delegate getInterfaceOrientation]];
 	
 	////////// STILL IMAGE OUTPUT
-	stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
-	if ([avSession canAddOutput:stillImageOutput]) {
-		[stillImageOutput setOutputSettings:@{AVVideoCodecKey: AVVideoCodecJPEG}];
-		[avSession addOutput:stillImageOutput];
+	_stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
+	if ([_avSession canAddOutput:_stillImageOutput]) {
+		[_stillImageOutput setOutputSettings:@{AVVideoCodecKey: AVVideoCodecJPEG}];
+		[_avSession addOutput:_stillImageOutput];
 	}
 	
 	////////// SET SELF AS DELEGATE TO RECEIVE VIDEO FRAMES
@@ -143,15 +143,15 @@
 	[frameOutput setAlwaysDiscardsLateVideoFrames:YES];
 	[frameOutput setVideoSettings:@{(id)kCVPixelBufferPixelFormatTypeKey: [NSNumber numberWithInt:kCVPixelFormatType_32BGRA]}];
 	[frameOutput setSampleBufferDelegate:self queue:dispatch_get_main_queue()];
-	[avSession addOutput:frameOutput];
+	[_avSession addOutput:frameOutput];
 	
-	[avSession commitConfiguration];
+	[_avSession commitConfiguration];
 	
-	[avSession startRunning];
+	[_avSession startRunning];
 	
 	
 	// just in case...
-	if ([sensorController isConnected])
+	if ([_sensorController isConnected])
 		[self structureGoodThingHappened];
 	
 	
@@ -162,7 +162,7 @@
 - (void)async_stopPreviewing {
 	_isPreviewing = NO;
 
-	[avSession stopRunning];
+	[_avSession stopRunning];
 	
 	[delegate previewingDidStop];
 	// We have to tell the delegate LAST, or else some calls to zombies might take place.
@@ -173,9 +173,9 @@
 
 - (void)async_initiateColorImageCapture {
 	AVCaptureVideoOrientation orientation = [[(AVCaptureVideoPreviewLayer *)[cameraPreviewView layer] connection] videoOrientation];
-	[[stillImageOutput connectionWithMediaType:AVMediaTypeVideo] setVideoOrientation:orientation];
+	[[_stillImageOutput connectionWithMediaType:AVMediaTypeVideo] setVideoOrientation:orientation];
 	
-	[stillImageOutput captureStillImageAsynchronouslyFromConnection:[stillImageOutput connectionWithMediaType:AVMediaTypeVideo] completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
+	[_stillImageOutput captureStillImageAsynchronouslyFromConnection:[_stillImageOutput connectionWithMediaType:AVMediaTypeVideo] completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
 		[self async__finishedColorImageCapture:imageDataSampleBuffer withError:error];
 	}];
 }
@@ -190,18 +190,18 @@
 #pragma mark - Structure Sensor - Starting streaming and capturing delegate methods
 
 - (void)async_initiateDepthAndColorImageCapture {
-	delegateIsWaitingForCapture = YES;
+	_delegateIsWaitingForCapture = YES;
 }
 
 - (void)structureGoodThingHappened {
-	STSensorControllerInitStatus result = [sensorController initializeSensorConnection];
+	STSensorControllerInitStatus result = [_sensorController initializeSensorConnection];
 	BOOL connectionEstablished = (result == STSensorControllerInitStatusSuccess || result == STSensorControllerInitStatusAlreadyInitialized);
 	
-	[sensorController setFrameSyncConfig:FRAME_SYNC_DEPTH_AND_RGB];
+	[_sensorController setFrameSyncConfig:FRAME_SYNC_DEPTH_AND_RGB];
 	
 	if (connectionEstablished) {
 		NSLog(@"✅ Stream says it was a success.");
-		[sensorController startStreamingWithConfig:CONFIG_VGA_DEPTH];
+		[_sensorController startStreamingWithConfig:CONFIG_VGA_DEPTH];
 	} else {
 		NSLog(@"❌❌ Stream appears to have failed.");
 		switch (result) {
@@ -223,15 +223,15 @@
 }
 
 - (void)structureBadThingHappened {
-	[sensorController stopStreaming];
+	[_sensorController stopStreaming];
 }
 
 - (void)sensorDidOutputSynchronizedDepthFrame:(STDepthFrame *)depthFrame
 								andColorFrame:(CMSampleBufferRef)sampleBuffer
 {
-	if (delegateIsWaitingForCapture) {
+	if (_delegateIsWaitingForCapture) {
 		[delegate captureMasterDidOutputSTColorBuffer:sampleBuffer andDepthFrame:depthFrame];
-		delegateIsWaitingForCapture = NO;
+		_delegateIsWaitingForCapture = NO;
 	}
 }
 
@@ -239,8 +239,8 @@
 didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 	   fromConnection:(AVCaptureConnection *)connection
 {
-	if ([sensorController isConnected])
-		[sensorController frameSyncNewColorImage:sampleBuffer];
+	if ([_sensorController isConnected])
+		[_sensorController frameSyncNewColorImage:sampleBuffer];
 }
 
 #pragma mark - Structure Sensor - Six required delegate methods
