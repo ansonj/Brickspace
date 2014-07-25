@@ -91,7 +91,7 @@
 	
 	[avSession beginConfiguration];
 	
-	[avSession setSessionPreset:AVCaptureSessionPresetMedium];
+	[avSession setSessionPreset:AVCaptureSessionPreset640x480];
 	
 	
 	////////// VIDEO INPUT
