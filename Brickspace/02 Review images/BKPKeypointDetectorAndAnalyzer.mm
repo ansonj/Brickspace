@@ -22,6 +22,10 @@ static BOOL addDuplicatesIntentionally = NO;
 static BOOL addBunchOfRandomKeypoints = NO;
 static int addThisManyRandomKeypoints = 100;
 
+// Which parameters to use?
+static BOOL includeUpCloseParams = NO;
+static BOOL includeAfarParams = YES;
+
 @implementation BKPKeypointDetectorAndAnalyzer
 
 + (void)detectKeypoints:(NSMutableArray *)keypoints inImage:(UIImage *)image {
@@ -41,9 +45,11 @@ static int addThisManyRandomKeypoints = 100;
 	{
 		NSMutableArray *buildingParameterList = [NSMutableArray array];
 		
-		[buildingParameterList addObjectsFromArray:[BKPDetectorParameterInitializer getParametersForLegoUpClose]];
+		if (includeUpCloseParams)
+			[buildingParameterList addObjectsFromArray:[BKPDetectorParameterInitializer getParametersForLegoUpClose]];
 
-		[buildingParameterList addObjectsFromArray:[BKPDetectorParameterInitializer getParametersForLegoAfarWithStructure]];
+		if (includeAfarParams)
+			[buildingParameterList addObjectsFromArray:[BKPDetectorParameterInitializer getParametersForLegoAfarWithStructure]];
 		
 		allParameterSetsToUse = [NSArray arrayWithArray:buildingParameterList];
 	}
@@ -94,7 +100,7 @@ static int addThisManyRandomKeypoints = 100;
 		[keypoints addObject:pair2];
 		
 		if (printKeypointSearchDebug)
-			NSLog(@"Added some intentional duplicates, so now we have %lu keypoints.", [keypoints count]);
+			NSLog(@"Added some intentional duplicates, so now we have %lu keypoints.", (unsigned long)[keypoints count]);
 	}
 	
 	if (addBunchOfRandomKeypoints) {
@@ -111,7 +117,7 @@ static int addThisManyRandomKeypoints = 100;
 		}
 		
 		if (printKeypointSearchDebug)
-			NSLog(@"Added %d random keypoints, so now we have %lu keypoints.", addThisManyRandomKeypoints, [keypoints count]);
+			NSLog(@"Added %d random keypoints, so now we have %lu keypoints.", addThisManyRandomKeypoints, (unsigned long)[keypoints count]);
 	}
 	
 	// go ahead and sort the keypoints so you can scroll through them in a sensible order
@@ -154,14 +160,14 @@ static int addThisManyRandomKeypoints = 100;
 		}
 		
 		if (printKeypointSearchDebug && [keypointsToRemove count] > 0)
-			NSLog(@"Removing %lu keypoints (of %lu) because they were too close to others.", [keypointsToRemove count], [keypoints count]);
+			NSLog(@"Removing %lu keypoints (of %lu) because they were too close to others.", (unsigned long)[keypointsToRemove count], (unsigned long)[keypoints count]);
 
 		for (BKPKeypointBrickPair *keypoint in keypointsToRemove) {
 			[keypoints removeObject:keypoint];
 		}
 		
 		if (printKeypointSearchDebug && [keypointsToRemove count] > 0)
-			NSLog(@"We are left with %lu keypoints.", [keypoints count]);
+			NSLog(@"We are left with %lu keypoints.", (unsigned long)[keypoints count]);
 	}
 }
 
