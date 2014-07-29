@@ -129,8 +129,6 @@
 }
 
 - (IBAction)stepperPressed:(id)sender {
-	//TODO: need some logic that prevents you from screwing with the short/long order
-	
 	BKPBrick *currentBrick = [[[self currentlyActiveImage] getCurrentlyHighlightedKeypointPair] brick];
 	
 	[currentBrick setShortSideLength:[shortSideStepper value]];
@@ -141,8 +139,22 @@
 }
 
 - (IBAction)buildButtonPressed:(id)sender {
+	NSSet *allBricks = [imageCollection allBricksFromAllImages];
+	
+	// make sure each brick's short and long sides are short and long
+	for (BKPBrick *brick in allBricks) {
+		if ([brick shortSideLength] > [brick longSideLength]) {
+			int tempSideLength = brick.shortSideLength;
+			brick.shortSideLength = brick.longSideLength;
+			brick.longSideLength = tempSideLength;
+		}
+	}
+	
+	// now create the new VC
 	BKPInstructionsViewController *instructionsVC = [[BKPInstructionsViewController alloc] init];
-	[instructionsVC setUpWithCountedBricks:[imageCollection allBricksFromAllImages]];
+	[instructionsVC setUpWithCountedBricks:allBricks];
+	
+	// and display it
 	[[[UIApplication sharedApplication] keyWindow] setRootViewController:instructionsVC];
 }
 
