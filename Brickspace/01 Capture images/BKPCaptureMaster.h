@@ -17,8 +17,7 @@
 - (void)previewingDidStart;
 - (void)previewingDidStop;
 
-// For the love of all that is green and good,
-// do NOT try to performCapture before you receive previewingDidStart.
+- (void)captureMasterStatusChanged;
 
 - (AVCaptureVideoOrientation)getInterfaceOrientation;
 
@@ -39,6 +38,10 @@
 - (void)startPreviewing;
 - (void)stopPreviewing;
 - (BOOL)isPreviewing;
+@property (nonatomic) BOOL structureSensorEnabled;
+
+- (NSString *)structureStatusString;
+- (NSString *)captureMasterStatusString;
 
 - (void)performCapture;
 

@@ -16,28 +16,29 @@
 
 @interface BKPCapturingViewController () <CaptureMasterResultsDelegate>
 @property (weak, nonatomic) IBOutlet AppleVideoPreviewView *cameraPreviewView;
-@property (weak, nonatomic) IBOutlet UIView *pleaseWaitView;
 @property (weak, nonatomic) IBOutlet UIImageView *imagePreviewView;
 
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *cameraLoadingSpinner;
+@property (strong, nonatomic) IBOutletCollection(id) NSArray *structureConnectCollection;
+@property (weak, nonatomic) IBOutlet UISwitch *structureSwitch;
+@property (weak, nonatomic) IBOutlet UILabel *structureStatusLabel;
+
+@property (weak, nonatomic) IBOutlet UILabel *statusLabel;
 
 @property (weak, nonatomic) IBOutlet UIButton *captureButton;
 @property (weak, nonatomic) IBOutlet UIButton *forwardButton;
-
 @end
 
 @implementation BKPCapturingViewController {
-	BKPCaptureMaster *captureMaster;
+	BKPCaptureMaster *_captureMaster;
 	
-	NSMutableArray *capturedImages;
-	
-	BOOL capturingVCisWaitingToMoveToReviewVC;
+	NSMutableArray *_capturedImages;
 }
 
 #pragma mark - View synthesizers
 
-@synthesize cameraPreviewView, pleaseWaitView, imagePreviewView;
-@synthesize cameraLoadingSpinner;
+@synthesize cameraPreviewView,imagePreviewView;
+@synthesize structureConnectCollection, structureSwitch, structureStatusLabel;
+@synthesize statusLabel;
 @synthesize captureButton, forwardButton;
 
 #pragma mark - Inits and viewDidThings
@@ -47,30 +48,25 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
-		capturedImages = [NSMutableArray array];
-		
-		capturingVCisWaitingToMoveToReviewVC = NO;
+		_capturedImages = [NSMutableArray array];
     }
 	
     return self;
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-	captureMaster = [[BKPCaptureMaster alloc] initWithCameraPreviewView:cameraPreviewView];
-	[captureMaster setDelegate:self];
-	
-	[captureButton setTitle:@"Capturing..." forState:UIControlStateDisabled];
-}
-
 - (void)viewDidAppear:(BOOL)animated {
-	[cameraLoadingSpinner startAnimating];
+	[self updateUI];
 	
-	[captureMaster startPreviewing];
+	_captureMaster = [[BKPCaptureMaster alloc] initWithCameraPreviewView:cameraPreviewView];
+	[_captureMaster setDelegate:self];
+	[_captureMaster startPreviewing];
 	
 	//TODO: maybe rm notification for proc image update?
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(displayLastCapturedImage) name:@"ProcessedImageUpdated" object:nil];
+		// I don't get this comment -- remove it from where? What did I mean?
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUIFromNotification:) name:@"ProcessedImageUpdated" object:nil];
+	
+	// For resuming the stream
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackgroundNotificationReceived) name:UIApplicationDidEnterBackgroundNotification object:nil];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -83,46 +79,104 @@
 	NSLog(@"%@ got a memory warning.", self);
 }
 
-#pragma mark - Button handlers
+- (void)appDidEnterBackgroundNotificationReceived {
+	[structureSwitch setOn:NO];
+	[self structureSwitchChanged:nil];
+}
+
+#pragma mark - Button and switch handlers
 
 - (IBAction)captureButtonPressed:(id)sender {
-	if (cameraLoadingSpinner.isAnimating || captureButton.hidden || !captureButton.enabled || !captureMaster.isPreviewing)
+	if (![captureButton isEnabled])
 		return;
 	
-	[captureButton setEnabled:NO];
-	[pleaseWaitView setHidden:NO];
-	[imagePreviewView setHidden:YES];
-	[captureMaster performCapture];
+	[_captureMaster performCapture];
+	[self updateUI];
 }
 
 - (IBAction)forwardButtonPressed:(id)sender {
-//	NSLog(@"Capture View says: 🎶 So long; farewell. 🎶");
-	
-	while ([captureMaster isPreviewing]) {
-		
+	[_captureMaster stopPreviewing];
+
+	unsigned long busyWaitIterations = 0;
+	while ([_captureMaster isPreviewing]) {
+		// perform h4x
+		busyWaitIterations++;
 	}
+	NSLog(@"Busy wait for capturing to finish took %lu iterations.", busyWaitIterations);
 		
 	BKPReviewBricksViewController *newVC = [[BKPReviewBricksViewController alloc] init];
 	
-	[newVC loadCapturedImages:capturedImages];
+	[newVC loadCapturedImages:_capturedImages];
 		
 	UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-	
 	[window setRootViewController:newVC];
-	
-	
+}
+
+- (IBAction)structureSwitchChanged:(id)sender {
+	[_captureMaster setStructureSensorEnabled:[structureSwitch isOn]];
+}
+
+#pragma mark - Update that UI!
+
+- (void)updateUI {
+	dispatch_async(dispatch_get_main_queue(), ^{
+		/// gotta do it on the main thread
+		if ([_capturedImages count] > 0) {
+			[imagePreviewView setImage:[[_capturedImages lastObject] processedImage]];
+			[forwardButton setEnabled:YES];
+		} else {
+			[imagePreviewView setImage:nil];
+			[forwardButton setEnabled:NO];
+		}
+		
+		if ([_captureMaster isPreviewing]) {
+			[captureButton setEnabled:YES];
+			
+			for (id view in structureConnectCollection) {
+				[view setHidden:NO];
+			}
+			[structureSwitch setEnabled:YES];
+		} else {
+			[captureButton setEnabled:NO];
+			
+			
+			for (id view in structureConnectCollection) {
+				[view setHidden:YES];
+			}
+			[structureSwitch setEnabled:NO];
+			// Turn off connecting to the Structure if the view is not previewing.
+			[structureSwitch setOn:NO];
+			[self structureSwitchChanged:structureSwitch];
+		}
+		
+		if ([structureSwitch isOn]) {
+			[structureStatusLabel setHidden:NO];
+			[structureStatusLabel setText:[_captureMaster structureStatusString]];
+		} else {
+			[structureStatusLabel setHidden:YES];
+			[structureStatusLabel setText:@""];
+		}
+		
+		[statusLabel setText:[_captureMaster captureMasterStatusString]];
+	});
+}
+
+- (void)updateUIFromNotification:(NSNotification *)notification {
+	[self updateUI];
 }
 
 #pragma mark - CaptureMaster delegate methods
 
 - (void)previewingDidStart {
-	[cameraLoadingSpinner stopAnimating];
-	[captureButton setHidden:NO];
-	[captureButton setEnabled:YES];
+	[self updateUI];
 }
 
 - (void)previewingDidStop {
-	[captureButton setHidden:YES];
+	[self updateUI];
+}
+
+- (void)captureMasterStatusChanged {
+	[self updateUI];
 }
 
 - (AVCaptureVideoOrientation)getInterfaceOrientation {
@@ -142,23 +196,11 @@
 }
 
 - (void)addAndDisplayCapturedImage:(BKPScannedImageAndBricks *)image {
-	[pleaseWaitView setHidden:YES];
+	// Custom override point when you are capturing multiple images. This is the end of the line.
+	if (image)
+		[_capturedImages addObject:image];
 	
-	[captureMaster stopPreviewing];
-
-	assert(image);
-	[capturedImages addObject:image];
-	
-	[self displayLastCapturedImage];
-	
-//	[captureButton setEnabled:YES];
-	
-	[forwardButton setEnabled:YES];
-}
-
-- (void)displayLastCapturedImage {
-	[imagePreviewView setImage:[[capturedImages lastObject] processedImage]];
-	[imagePreviewView setHidden:NO];
+	[self updateUI];
 }
 
 @end
