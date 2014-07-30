@@ -12,6 +12,10 @@
 
 // For STWirelessLog
 #import <Structure/Structure.h>
+static BOOL useWirelessLogging = YES;
+static NSString *loggingIP = @"172.25.104.74";
+static int loggingPort = 4999;
+/////////
 
 @implementation BKPAppDelegate
 
@@ -23,15 +27,28 @@
 	BKPSplashViewController *splashVC = [[BKPSplashViewController alloc] init];
 	[[self window] setRootViewController:splashVC];
     
-    // this is optional; you need to import structure if yes
-	if (true) {
-		[STWirelessLog broadcastLogsToWirelessConsoleAtAddress:@"172.25.104.74" usingPort:4999 error:nil];
-		NSLog(@"\n\n\nGood morning.\nBroadcasting logs from run starting at %@.", [NSDate date]);
-	}
-
+	[self startWirelessLogging];
+	NSLog(@"\n\n\nGood morning.\nThese are the captain's logs from run starting at %@.", [NSDate date]);
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWirelessLogging) name:UIApplicationDidBecomeActiveNotification object:nil];
+	
 	self.window.backgroundColor = [UIColor whiteColor];
 	[self.window makeKeyAndVisible];
     return YES;
+}
+
+- (void)startWirelessLogging {
+	if (!useWirelessLogging)
+		return;
+	
+	NSError *error;
+	
+	[STWirelessLog broadcastLogsToWirelessConsoleAtAddress:loggingIP usingPort:loggingPort error:&error];
+	
+	if (error)
+		NSLog(@"Error starting STWirelessLog: %@", error);
+	else
+		NSLog(@"STWirelessLog to %@:%d began.", loggingIP, loggingPort);
 }
 							
 - (void)applicationWillResignActive:(UIApplication *)application
