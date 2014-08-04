@@ -21,6 +21,7 @@
 @property (strong, nonatomic) IBOutletCollection(id) NSArray *structureConnectCollection;
 @property (weak, nonatomic) IBOutlet UISwitch *structureSwitch;
 @property (weak, nonatomic) IBOutlet UILabel *structureStatusLabel;
+@property (weak, nonatomic) IBOutlet UIView *structureAlignmentView;
 
 @property (weak, nonatomic) IBOutlet UILabel *statusLabel;
 
@@ -37,7 +38,7 @@
 #pragma mark - View synthesizers
 
 @synthesize cameraPreviewView,imagePreviewView;
-@synthesize structureConnectCollection, structureSwitch, structureStatusLabel;
+@synthesize structureConnectCollection, structureSwitch, structureStatusLabel, structureAlignmentView;
 @synthesize statusLabel;
 @synthesize captureButton, forwardButton;
 
@@ -102,7 +103,8 @@
 		// perform h4x
 		busyWaitIterations++;
 	}
-	NSLog(@"Busy wait for capturing to finish took %lu iterations.", busyWaitIterations);
+	if (busyWaitIterations > 0)
+		NSLog(@"⚠️ Busy wait for capturing to finish took %lu iterations.", busyWaitIterations);
 		
 	BKPReviewBricksViewController *newVC = [[BKPReviewBricksViewController alloc] init];
 	
@@ -152,9 +154,11 @@
 		if ([structureSwitch isOn]) {
 			[structureStatusLabel setHidden:NO];
 			[structureStatusLabel setText:[_captureMaster structureStatusString]];
+			[structureAlignmentView setHidden:NO];
 		} else {
 			[structureStatusLabel setHidden:YES];
 			[structureStatusLabel setText:@""];
+			[structureAlignmentView setHidden:YES];
 		}
 		
 		[statusLabel setText:[_captureMaster captureMasterStatusString]];

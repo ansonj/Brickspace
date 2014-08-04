@@ -16,6 +16,12 @@
 // For parameter sets for the detector
 #import "BKPDetectorParameterInitializer.h"
 
+// For accessing depth data
+#import <Structure/Structure.h>
+
+// For estimating brick size
+#import "BKPBrickSizeGuesser.h"
+
 static BOOL printKeypointSearchDebug = YES;
 static BOOL printColorDebug = NO;
 static BOOL addDuplicatesIntentionally = NO;
@@ -138,7 +144,7 @@ static BOOL includeAfarParams = YES;
 	}];
 	
 	// Remove any keypoints that are right on top of each other
-	{
+	if ([keypoints count] > 0) {
 		int minimumDistanceBetweenKeypoints = 5;
 		float (^distanceBetweenKeypoints)(BKPKeypointBrickPair*,BKPKeypointBrickPair*) = ^float(BKPKeypointBrickPair *kpbp1, BKPKeypointBrickPair *kpbp2) {
 			cv::Point2f p1 = [kpbp1 keypoint].pt;
@@ -334,20 +340,254 @@ static BOOL includeAfarParams = YES;
 						   withDepthFrame:(STFloatDepthFrame *)depthFrame
 {
 	// This method is only entered if we have a depth frame.
-	// If there is no depth frame, the default brick sizes from assignBricksToKeypoints are used.
+	// If there is no depth frame, the default brick sizes, set in assignBricksToKeypoints, are unchanged.
+	
+	// Prepare to grab depth data
+	const float *depthData = [depthFrame depthAsMillimeters];
+	float (^depthFromFrameAt)(int,int) = ^float(int x, int y) {
+		return depthData[x + depthFrame.width * y];
+	};
+	int (^depthXfromImageX)(float) = ^int(float imageX) {
+		//!!!: here are the hard-coded offsets
+		// they are in these two blocks because we need to use them for the camera intrinsics math
+		return ((int)imageX) + -62;
+		// don't need this anymore b/c the image and df are same size (VGA)
+//		return imageX * depthFrame.width / matrix.size().width;
+	};
+	int (^depthYfromImageY)(float) = ^int(float imageY) {
+		return ((int)imageY) + -11;
+//		return imageY * depthFrame.height / matrix.size().height;
+	};
+	float (^depthAtImageCoords)(float,float) = ^float(float x, float y) {
+		int depthFrameX = depthXfromImageX(x);
+		int depthFrameY = depthYfromImageY(y);
+		
+		return depthFromFrameAt(depthFrameX, depthFrameY);
+	};
 	
 	
+	BOOL debugLots = NO;
+	BOOL debugSummary = YES;
+	BOOL debugFrameData = NO;
+		
+	// Get the basic info from the keypoint
+	float kp_x = keypoint.keypoint.pt.x;
+	float kp_y = keypoint.keypoint.pt.y;
+	float kp_size = keypoint.keypoint.size;
 	
+	// Pick the bounds for the area of interest around the brick
+	int df_xMin, df_xMax, df_yMin, df_yMax;
+	{
+		int areaOfInterestPadding = 25;
+		df_xMin = depthXfromImageX(kp_x - kp_size) - areaOfInterestPadding;
+		df_xMax = depthXfromImageX(kp_x + kp_size) + areaOfInterestPadding;
+		df_yMin = depthYfromImageY(kp_y - kp_size) - areaOfInterestPadding;
+		df_yMax = depthYfromImageY(kp_y + kp_size) + areaOfInterestPadding;
+		
+		// Don't try to go out of bounds
+		df_xMin = MAX(df_xMin, 0);
+		df_xMax = MIN(df_xMax, depthFrame.width - 1); // minus 1 just in case
+		df_yMin = MAX(df_yMin, 0);
+		df_yMax = MIN(df_yMax, depthFrame.height - 1);
+	}
+	if (debugLots) {
+		NSLog(@"\nI'm examining the depth frame from X(%d - %d) Y(%d - %d).", df_xMin, df_xMax, df_yMin, df_yMax);
+		NSLog(@"The center of the depth frame is at (%d, %d).", (df_xMin+df_xMax)/2, (df_yMin+df_yMax)/2);
+	}
 	
+	// Find the threshold, between the table depths and the brick depths
+	float thresholdDepth;
+	{
+		// Find the min and max
+		float minDepth = FLT_MAX;
+		float maxDepth = FLT_MIN;
+		for (int current_df_x = df_xMin; current_df_x <= df_xMax; current_df_x++) {
+			for (int current_df_y = df_yMin; current_df_y <= df_yMax; current_df_y++) {
+				float depth = depthFromFrameAt(current_df_x, current_df_y);
+				if (!isnan(depth)) {
+					minDepth = MIN(minDepth, depth);
+					maxDepth = MAX(maxDepth, depth);
+				}
+			}
+		}
+		
+		// The threshold is the midpoint between the min and max, or the average if you like.
+		thresholdDepth = (minDepth + maxDepth) / 2.;
+	}
+	if (debugLots)
+		NSLog(@"The threshold sits at %.2f mm.", thresholdDepth);
 	
+	// Find the height of the brick, in millimeters
+	float brickHeight;
+	{
+		double sumOfTableDepths = 0;
+		double sumOfBrickDepths = 0;
+		int countOfTableDepths = 0;
+		int countOfBrickDepths = 0;
+		
+		// Fill in the above values
+		for (int current_df_x = df_xMin; current_df_x <= df_xMax; current_df_x++) {
+			for (int current_df_y = df_yMin; current_df_y <= df_yMax; current_df_y++) {
+				
+				float depth = depthFromFrameAt(current_df_x, current_df_y);
+				
+				if (!isnan(depth)) {
+					if (depth > thresholdDepth) {
+						sumOfTableDepths += depth;
+						countOfTableDepths++;
+					} else {
+						sumOfBrickDepths += depth;
+						countOfBrickDepths++;
+					}
+				}
+			}
+		}
+		
+		// Compute the averages
+		double averageTableDepth = sumOfTableDepths / countOfTableDepths;
+		double averageBrickDepth = sumOfBrickDepths / countOfBrickDepths;
+		
+		// The brick height is the difference
+		brickHeight = averageTableDepth - averageBrickDepth;
+		
+		if (false) {
+			NSLog(@"Brick height calculation:");
+			NSLog(@"\tI counted %d points in the table for a sum of %f.", countOfTableDepths, sumOfTableDepths);
+			NSLog(@"\tI counted %d points in the brick for a sum of %f.", countOfBrickDepths, sumOfBrickDepths);
+			NSLog(@"\tThe average table depth is thus %f mm.", averageTableDepth);
+			NSLog(@"\tThe average brick depth is thus %f mm.", averageBrickDepth);
+			NSLog(@"\tThe difference of these two is %f mm.", brickHeight);
+		}
+	}
+	if (debugLots)
+		NSLog(@"Looks like the brick is %.2f mm high.", brickHeight);
 	
+	// Figure out how far apart each depth pixel is in the real world
+	// Or, figure out the real-world volume that each depth pixel represents
+	float rw_xDist, rw_yDist;
+	{
+		// This stuff comes from ScanDepthRender
+		float QVGA_COLS = 320;
+		float QVGA_ROWS = 240;
+		float QVGA_F_X = 305.73;
+		float QVGA_F_Y = 305.62;
+		float QVGA_C_X = 159.69;
+		float QVGA_C_Y = 119.86;
+		float cols = 640;
+		float rows = 480;
+		float _fx = QVGA_F_X/QVGA_COLS*cols;
+		float _fy = QVGA_F_Y/QVGA_ROWS*rows;
+		float _cx = QVGA_C_X/QVGA_COLS*cols;
+		float _cy = QVGA_C_Y/QVGA_ROWS*rows;
+		
+		// Middle of keypoint, in depth frame
+		// This is where we are going to calculate the depth pixel area
+		int df_x0 = (df_xMin + df_xMax) / 2.;
+		int df_y0 = (df_yMin + df_yMax) / 2.;
+		int df_x1 = df_x0 + 1;
+		int df_y1 = df_y0 + 1;
+		// Get the depths for (0,0) (1,0) and (0,1)
+		float depth_0_0 = depthFromFrameAt(df_x0, df_y0);
+		float depth_1_0 = depthFromFrameAt(df_x1, df_y0);
+		float depth_0_1 = depthFromFrameAt(df_x0, df_y1);
+		// If any of these depths are NaN, we need to try a different spot.
+		while (isnan(depth_0_0) || isnan(depth_0_1) || isnan(depth_1_0)) {
+			// Hopefully, we won't be moving too far away from the center of the brick.
+			df_x0++;
+			df_y0++;
+			df_x1++;
+			df_y1++;
+			depth_0_0 = depthFromFrameAt(df_x0, df_y0);
+			depth_1_0 = depthFromFrameAt(df_x1, df_y0);
+			depth_0_1 = depthFromFrameAt(df_x0, df_y1);
+		}
+				
+		// Calculate some real-world coordinates
+		// This is some of my stuff plus some of his stuff
+		float rw_x0 = depth_0_0 * (df_x0	- _cx	) / _fx;
+		float rw_x1 = depth_1_0 * (df_x1	- _cx	) / _fx;
+		float rw_y0 = depth_0_0 * (_cy		- df_y0	) / _fy;
+		float rw_y1 = depth_0_1 * (_cy		- df_y1	) / _fy;
+		
+		/*
+		// FIX THIS:
+		// you need to pull 0,0 and 1,0 and 0,1
+		// right now you are testing against the diagonal, which is probably inflating sizes!!!!!!
+		// also NaN lol
+		float x0 = centerDepth0 * (df_x0		- _cx) / _fx;
+		float x1 = centerDepth1 * (df_x0 + 1	- _cx) / _fx;
+		float y0 = centerDepth0 * (_cy - df_y0		) / _fy;
+		float y1 = centerDepth1 * (_cy - df_y0 + 1	) / _fy;
+		 */
+		
+		rw_xDist = ABS(rw_x1 - rw_x0);
+		rw_yDist = ABS(rw_y1 - rw_y0);
+	}
+	if (debugLots)
+		NSLog(@"Each depth pixel spans %.2f x %.2f mm, or %.2f mm^2.", rw_xDist, rw_yDist, rw_xDist*rw_yDist);
 	
-	//TODO: depth frame is VGA; image is larger; grab the proper coordinates (this time, it counts)
+	// Count the number of depth frame pixels that are below the threshold (in the brick)
+	int countOfBrickDepthPixels = 0;
+	{
+		for (int current_df_x = df_xMin; current_df_x <= df_xMax; current_df_x++) {
+			for (int current_df_y = df_yMin; current_df_y <= df_yMax; current_df_y++) {
+				float depth = depthFromFrameAt(current_df_x, current_df_y);
+				
+				if (!isnan(depth) && depth < thresholdDepth)
+					countOfBrickDepthPixels++;
+			}
+		}
+	}
+	if (debugLots)
+		NSLog(@"There are %d depth pixels below the threshold (in the brick).", countOfBrickDepthPixels);
+	
+	// Calculate the volume of the brick
+	float brickVolume = brickHeight * rw_xDist * rw_yDist * countOfBrickDepthPixels;
+	if (debugLots)
+		NSLog(@"The brick volume is approximately %f mm^3.", brickVolume);
+	
+//	NSLog(@"Wikipedia says it should be %f mm^3.", (9.6*7.8*7.8*2*4));
+		
+	if (debugSummary) {
+		NSLog(@"%.2f mm high, %.2f x %.2f mm, %d pixels in depth = %.2f mm^3 volume", brickHeight, rw_xDist, rw_yDist, countOfBrickDepthPixels, brickVolume);
+	}
+	
+	if (debugFrameData) {
+		int resultXmin = INT_MAX;
+		int resultXmax = INT_MIN;
+		int resultYmin = resultXmin;
+		int resultYmax = resultXmax;
+		float resultZmin = FLT_MAX;
+		float resultZmax = FLT_MIN;
+		
+		for (int x = df_xMin; x <= df_xMax; x++) {
+			for (int y = df_yMin; y <= df_yMax; y++) {
+				float depthVal = depthFromFrameAt(x, y);
+
+				if (isnan(depthVal))
+					continue;
+				
+				NSLog(@"(x, y, depth): %d\t%d\t%f", x, y, depthVal);
+				
+				// update min, max
+				{
+					resultXmin = MIN(resultXmin, x);
+					resultXmax = MAX(resultXmax, x);
+					resultYmin = MIN(resultYmin, y);
+					resultYmax = MAX(resultYmax, y);
+					resultZmin = MIN(resultZmin, depthVal);
+					resultZmax = MAX(resultZmax, depthVal);
+				}
+			}
+		}
+		NSLog(@"X(%d - %d) Y(%d - %d) Z(%.1f - %.1f)", resultXmin, resultXmax, resultYmin, resultYmax, resultZmin, resultZmax);
+		
+	}
 	
 	// random brick sizes for now
 	BKPBrick *brick = [keypoint brick];
-	[brick setShortSideLength:3];
-	[brick setLongSideLength:3];
+	[brick setShortSideLength:2];
+	[brick setLongSideLength:[BKPBrickSizeGuesser brickLongSideLengthIfShortSideIs2AndVolumeIs:brickVolume]];
 	[brick setHeight:3];
 }
 

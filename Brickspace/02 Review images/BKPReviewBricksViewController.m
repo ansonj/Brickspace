@@ -112,10 +112,8 @@
 
 - (IBAction)resetScanningForThisImageButtonPressed:(id)sender {
 	//TODO: use an UIAlertView later
-	//TODO: implement this, there is some error
-	NSLog(@"✖️ I don't know how to reset processing yet.");
-//	[[self currentlyActiveImage] resetProcessedImage];
-//	[self updateUI];
+	[[self currentlyActiveImage] resetProcessedImage];
+	[self updateUI];
 }
 
 - (IBAction)editPreviousBrickButtonPressed:(id)sender {
@@ -167,34 +165,36 @@
 #pragma mark - Update UI
 
 - (void)updateUI {
-	BKPScannedImageAndBricks *currentImage = [self currentlyActiveImage];
-	BKPBrick *currentBrick = [[currentImage getCurrentlyHighlightedKeypointPair] brick];
-	
-//	NSLog(@"I'm in \n%@\n looking at \n%@\n", currentImage, currentBrick);
-	
-	// update both image views
-	[thumbImageView setImage:[currentImage thumbnailImage]];
-	[editingImageView setImage:[currentImage processedImage]];
-	
-	if (currentBrick) {
-		// update the brick display
-		[currentBrickView displayBricks:[NSSet setWithObject:currentBrick]];
+	dispatch_async(dispatch_get_main_queue(), ^{
+		BKPScannedImageAndBricks *currentImage = [self currentlyActiveImage];
+		BKPBrick *currentBrick = [[currentImage getCurrentlyHighlightedKeypointPair] brick];
 		
-		// update the short, long side lengths, and color
-		[brickSizeLabel setText:[NSString stringWithFormat:@"%d x %d", currentBrick.shortSideLength, currentBrick.longSideLength]];
-		[brickColorLabel setText:[BKPBrickColorOptions stringForColor:currentBrick.color]];
+		//	NSLog(@"I'm in \n%@\n looking at \n%@\n", currentImage, currentBrick);
 		
-		// you also have to update the steppers
-		[shortSideStepper setValue:currentBrick.shortSideLength];
-		[longSideStepper setValue:currentBrick.longSideLength];
-		[colorStepper setValue:currentBrick.color];
-	}
-	
-	// update the current image summary
-	[thisImageSummary setText:[NSString stringWithFormat:@"%@", [currentImage bricksFromImage]]];
-	
-	// update the all images summary
-	[allImagesSummary setText:[NSString stringWithFormat:@"%@", [imageCollection allBricksFromAllImages]]];
+		// update both image views
+		[thumbImageView setImage:[currentImage thumbnailImage]];
+		[editingImageView setImage:[currentImage processedImage]];
+		
+		if (currentBrick) {
+			// update the brick display
+			[currentBrickView displayBricks:[NSSet setWithObject:currentBrick]];
+			
+			// update the short, long side lengths, and color
+			[brickSizeLabel setText:[NSString stringWithFormat:@"%d x %d", currentBrick.shortSideLength, currentBrick.longSideLength]];
+			[brickColorLabel setText:[BKPBrickColorOptions stringForColor:currentBrick.color]];
+			
+			// you also have to update the steppers
+			[shortSideStepper setValue:currentBrick.shortSideLength];
+			[longSideStepper setValue:currentBrick.longSideLength];
+			[colorStepper setValue:currentBrick.color];
+		}
+		
+		// update the current image summary
+		[thisImageSummary setText:[NSString stringWithFormat:@"%@", [currentImage bricksFromImage]]];
+		
+		// update the all images summary
+		[allImagesSummary setText:[NSString stringWithFormat:@"%@", [imageCollection allBricksFromAllImages]]];
+	});
 }
 
 @end

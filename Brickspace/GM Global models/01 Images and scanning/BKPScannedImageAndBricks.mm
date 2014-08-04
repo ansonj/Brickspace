@@ -144,6 +144,7 @@
 
 // ADDING and REMOVING
 // if there's a keypoint nearby, you can toggle it. if not, create a new one
+	// ^^^^^ this is bunk; i don't think you should do it anymore
 // changes to the keypoints dispatch updateprocessedimage, async, to concurrent Q
 
 - (void)addKeypointAtX:(float)x andY:(float)y {
@@ -261,60 +262,6 @@
 		
 		if (k == self.currentlyHighlightedKeypointIndex)
 			circle(imageWithKeypointsDrawn, keypoint.pt, keypoint.size + 4, highlightedKeypointColor, 3);
-	}
-	
-//	circle(imageWithKeypointsDrawn, cv::Point(0,0), 15, Scalar(255,0,255), 4);
-	
-	// If depth is availaable, add the depth of the center point of each keypoint
-		//TODO: depth frame is VGA; image is larger; grab the proper coordinates
-	// note that this is just for fun now. do you want to include depth in the final UI? I'm not convinced.
-	// Eventually, this whole block right here will be trashed.
-	if (_depthFrame) {
-		const float *depthData = [_depthFrame depthAsMillimeters];
-		float (^depthAt)(int,int) = ^float(int x, int y) {
-			return depthData[x + _depthFrame.width * y];
-		};
-		int fontFace = cv::FONT_HERSHEY_PLAIN;
-		double fontScale = 2;
-		cv::Scalar fontColor = Scalar(255, 255, 255);
-		
-		NSLog(@"Outputting keypoint / depth frame info:");
-		for (int k = 0; k < [_keypointBrickPairs count]; k++) {
-			cv::KeyPoint keypoint = [_keypointBrickPairs[k] keypoint];
-			
-			NSString *explanation = [NSString stringWithFormat:@"The keypoint is at (%f, %f). ", keypoint.pt.x, keypoint.pt.y];
-			CGSize imageSize = [_sourceImage size];
-			explanation = [explanation stringByAppendingFormat:@"The image is %f x %f. ", imageSize.width, imageSize.height];
-			int desiredX = keypoint.pt.x * _depthFrame.width / imageSize.width;
-			int desiredY = keypoint.pt.y * _depthFrame.height / imageSize.height;
-			explanation = [explanation stringByAppendingFormat:@"We want the depth at (%d, %d), ", desiredX, desiredY];
-			
-			float depthAtPoint = depthAt(desiredX, desiredY);
-			
-			explanation = [explanation stringByAppendingFormat:@"which is %f.", depthAtPoint];
-			NSLog(@"%@", explanation);
-			
-			NSString *depthNSString = [NSString stringWithFormat:@"%f cm", depthAtPoint / 10.0];
-			string depthText = [depthNSString cStringUsingEncoding:NSASCIIStringEncoding];
-
-			cv::putText(imageWithKeypointsDrawn, depthText, keypoint.pt, fontFace, fontScale, fontColor);
-		}
-		NSLog(@"Done outputting keypoint / depth frame info.");
-		
-		/*
-		// dump that depth frame, plz
-		int speedfactor = 40;
-		for (int row = 0; row < 800; row += speedfactor) {
-			for (int col = 0; col < 800; col += speedfactor) {
-				NSLog(@"\t%f", depthAt(col, row));
-			}
-			NSLog(@"\txxx");
-		}
-		int stopAt = 800 * 800;
-		for (int index = 0; index < stopAt; index += speedfactor) {
-			NSLog(@"%f", depthData[index]);
-		}
-		NSLog(@"doneskies");*/
 	}
 	
 	_processedImage = [BKPMatrixUIImageConverter UIImageFromCVMat:imageWithKeypointsDrawn];

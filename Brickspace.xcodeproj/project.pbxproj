@@ -55,6 +55,7 @@
 		A36512CD1975D0DD00340095 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36512C61975D0DD00340095 /* ExternalAccessory.framework */; };
 		A36512CE1975D0DD00340095 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36512C71975D0DD00340095 /* ImageIO.framework */; };
 		A36512CF1975D0DD00340095 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36512C81975D0DD00340095 /* OpenGLES.framework */; };
+		A3D8F8D91990213700A5BE14 /* BKPBrickSizeGuesser.m in Sources */ = {isa = PBXBuildFile; fileRef = A3D8F8D81990213700A5BE14 /* BKPBrickSizeGuesser.m */; };
 		A3E688D11977266B00FFC463 /* BKPDetectorParameterInitializer.mm in Sources */ = {isa = PBXBuildFile; fileRef = A3642294194215A7000C3B92 /* BKPDetectorParameterInitializer.mm */; };
 /* End PBXBuildFile section */
 
@@ -147,6 +148,8 @@
 		A36512C61975D0DD00340095 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 		A36512C71975D0DD00340095 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		A36512C81975D0DD00340095 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		A3D8F8D71990213700A5BE14 /* BKPBrickSizeGuesser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPBrickSizeGuesser.h; sourceTree = "<group>"; };
+		A3D8F8D81990213700A5BE14 /* BKPBrickSizeGuesser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPBrickSizeGuesser.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -328,6 +331,8 @@
 				A36512A31975B8D900340095 /* BKPReviewBricksViewController.m */,
 				A36512931975B8B300340095 /* BKPKeypointDetectorAndAnalyzer.h */,
 				A36512941975B8B300340095 /* BKPKeypointDetectorAndAnalyzer.mm */,
+				A3D8F8D71990213700A5BE14 /* BKPBrickSizeGuesser.h */,
+				A3D8F8D81990213700A5BE14 /* BKPBrickSizeGuesser.m */,
 				A3642293194215A7000C3B92 /* BKPDetectorParameterInitializer.h */,
 				A3642294194215A7000C3B92 /* BKPDetectorParameterInitializer.mm */,
 			);
@@ -549,6 +554,7 @@
 				A36512981975B8B300340095 /* BKPKeypointDetectorAndAnalyzer.mm in Sources */,
 				A36422A6194215A7000C3B92 /* BKPBrick.m in Sources */,
 				A3642259194210C9000C3B92 /* main.m in Sources */,
+				A3D8F8D91990213700A5BE14 /* BKPBrickSizeGuesser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -107,12 +107,8 @@ typedef NS_ENUM(NSUInteger, BKPCMStructureStatus) {
 	if (_structureSensorEnabled == structureSensorEnabled)
 		return;
 	
-	assert(_structureSensorEnabled != structureSensorEnabled);
 	_structureSensorEnabled = structureSensorEnabled;
-	assert(_structureSensorEnabled == structureSensorEnabled);
-	
-	[self debug_printValues];
-	
+
 	if (_structureSensorEnabled && self.structureStatus == BKPCMStructureStatusUnknown) {
 		[self setStructureStatus:BKPCMStructureStatusLookingForSensor];
 		
@@ -127,8 +123,6 @@ typedef NS_ENUM(NSUInteger, BKPCMStructureStatus) {
 		
 		_structureConnectionTimer = nil;
 	}
-	
-	[self debug_printValues];
 }
 
 - (NSString *)structureStatusString {
@@ -265,7 +259,6 @@ typedef NS_ENUM(NSUInteger, BKPCMStructureStatus) {
 		
 		if ([videoDevice isExposureModeSupported:desiredExposureMode]) {
 			[videoDevice setExposureMode:desiredExposureMode];
-//			NSLog(@"Yes, I've set the exposure to %d", desiredExposureMode);
 		}
 		
 		if ([videoDevice isFlashModeSupported:desiredFlashMode])
@@ -278,7 +271,6 @@ typedef NS_ENUM(NSUInteger, BKPCMStructureStatus) {
 	} else {
 		NSLog(@"Had error when trying to set autoexposure for iPad camera: %@", error);
 	}
-//	NSLog(@"The exposure is now %d", videoDevice.exposureMode);
 	
 	AVCaptureDeviceInput *videoInput = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:&error];
 	
@@ -313,7 +305,6 @@ typedef NS_ENUM(NSUInteger, BKPCMStructureStatus) {
 	[_avSession startRunning];
 	
 	
-	NSLog(@"The camera is running by now.");
 	////////// DONE
 	[self setCameraStatus:BKPCMCameraStatusPreviewing];
 	
@@ -357,9 +348,7 @@ typedef NS_ENUM(NSUInteger, BKPCMStructureStatus) {
 }
 
 - (void)structureConnectionTimerFired:(NSTimer *)timer {
-	NSLog(@"Timer fired (%@).", timer);
 	// if looking, spawn connection attempt
-	[self debug_printValues];
 	if (self.structureSensorEnabled) {
 		if (self.structureStatus == BKPCMStructureStatusLookingForSensor ||
 			self.structureStatus == BKPCMStructureStatusUnknown) {
@@ -423,13 +412,8 @@ typedef NS_ENUM(NSUInteger, BKPCMStructureStatus) {
 }
 
 - (void)tryToConnectToStructure {
-	NSLog(@"Can I try to connect to Structure?");
-	[self debug_printValues];
-	
 	if (!self.structureSensorEnabled || self.structureStatus == BKPCMStructureStatusStreaming)
 		return;
-	
-	NSLog(@"Yes. Attempting to connect to sensor.");
 	
 	STSensorControllerInitStatus result = [_sensorController initializeSensorConnection];
 	BOOL connectionEstablished = (result == STSensorControllerInitStatusSuccess || result == STSensorControllerInitStatusAlreadyInitialized);
@@ -441,26 +425,23 @@ typedef NS_ENUM(NSUInteger, BKPCMStructureStatus) {
 		[_sensorController startStreamingWithConfig:CONFIG_VGA_DEPTH];
 		[self setStructureStatus:BKPCMStructureStatusStreaming];
 	} else {
-		NSLog(@"❌❌ Stream appears to have failed.");
+		NSString *badResult = @"❌ Stream appears to have failed: ";
 		switch (result) {
 			case STSensorControllerInitStatusSensorNotFound:
-				NSLog(@"\t❌ Sensor not found.");
+				badResult = [badResult stringByAppendingString:@"Sensor not found."];
 				break;
 			case STSensorControllerInitStatusOpenFailed:
-				NSLog(@"\t❌ Sensor open failed.");
+				badResult = [badResult stringByAppendingString:@"Sensor open failed."];
 				break;
 			case STSensorControllerInitStatusSensorIsWakingUp:
-				NSLog(@"\t❌ Sensor is slowly awakening.");
+				badResult = [badResult stringByAppendingString:@"Sensor is slowly awakening."];
 				break;
-				
 			default:
-				NSLog(@"\t❌ Unknown err-or (%d).", (int)result);
+				badResult = [badResult stringByAppendingFormat:@"Unknown err-or (%d).", (int)result];
 				break;
 		}
+		NSLog(@"%@", badResult);
 	}
-	
-	NSLog(@"I just tried to connect to the sensor.");
-	[self debug_printValues];
 }
 
 - (void)structureBadThingHappened {
