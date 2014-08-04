@@ -13,7 +13,7 @@
 // For STWirelessLog
 #import <Structure/Structure.h>
 static BOOL useWirelessLogging = YES;
-static NSString *loggingIP = @"172.25.104.74";
+static NSString *loggingIP = @"172.25.235.22";
 static int loggingPort = 4999;
 /////////
 
@@ -30,11 +30,10 @@ static int loggingPort = 4999;
 	[self startWirelessLogging];
 	NSLog(@"\n\n\nGood morning.\nThese are the captain's logs from run starting at %@.", [NSDate date]);
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startWirelessLogging) name:UIApplicationDidBecomeActiveNotification object:nil];
-	
 	self.window.backgroundColor = [UIColor whiteColor];
 	[self.window makeKeyAndVisible];
-    return YES;
+	
+	return YES;
 }
 
 - (void)startWirelessLogging {
@@ -50,7 +49,7 @@ static int loggingPort = 4999;
 	else
 		NSLog(@"STWirelessLog to %@:%d began.", loggingIP, loggingPort);
 }
-							
+
 - (void)applicationWillResignActive:(UIApplication *)application
 {
 	// Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
