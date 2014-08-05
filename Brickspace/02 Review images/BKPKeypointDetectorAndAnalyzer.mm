@@ -22,7 +22,7 @@
 // For estimating brick size
 #import "BKPBrickSizeGuesser.h"
 
-static BOOL printKeypointSearchDebug = YES;
+static BOOL printKeypointSearchDebug = NO;
 static BOOL printColorDebug = NO;
 static BOOL addDuplicatesIntentionally = NO;
 static BOOL addBunchOfRandomKeypoints = NO;
