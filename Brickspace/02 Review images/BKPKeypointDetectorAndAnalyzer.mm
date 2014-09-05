@@ -584,10 +584,12 @@ static BOOL includeAfarParams = YES;
 		
 	}
 	
-	// random brick sizes for now
+//	NSLog(@"df pix count = %d", countOfBrickDepthPixels);
+	
 	BKPBrick *brick = [keypoint brick];
 	[brick setShortSideLength:2];
-	[brick setLongSideLength:[BKPBrickSizeGuesser brickLongSideLengthIfShortSideIs2AndVolumeIs:brickVolume]];
+//	[brick setLongSideLength:[BKPBrickSizeGuesser brickLongSideLengthIfShortSideIs2AndVolumeIs:brickVolume]];
+	[brick setLongSideLength:[BKPBrickSizeGuesser brickLongSideLengthIfShortSideIs2AndDepthFrameContainsThisManyPixels:countOfBrickDepthPixels]];
 	[brick setHeight:3];
 }
 

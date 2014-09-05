@@ -10,6 +10,8 @@
 
 @interface BKPBrickSizeGuesser : NSObject
 
++ (int)brickLongSideLengthIfShortSideIs2AndDepthFrameContainsThisManyPixels:(int)pixelCount;
+
 + (int)brickLongSideLengthIfShortSideIs2AndVolumeIs:(float)volume;
 
 @end
