@@ -27,7 +27,7 @@
 }
 
 + (BOOL)canBeBuiltFromBricks:(NSSet *)inputBricks {
-	return [[self bricksToBeUsedInModelFromSet:inputBricks] count] > 0;
+	return [[self bricksToBeUsedInModelFromSet:inputBricks] count] > 1;
 }
 
 + (BKPRealizedModel *)createRealizedModelUsingBricks:(NSSet *)inputBricks {
