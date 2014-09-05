@@ -6,6 +6,9 @@
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
 //
 
+// This class is based on AVCamPreviewView,
+// from Apple's AVCam sample project.
+
 #import <Foundation/Foundation.h>
 
 @class AVCaptureSession;
