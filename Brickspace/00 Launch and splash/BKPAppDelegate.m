@@ -12,7 +12,7 @@
 
 // For STWirelessLog
 #import <Structure/Structure.h>
-static BOOL useWirelessLogging = YES;
+static BOOL useWirelessLogging = NO;
 static NSString *loggingIP = @"172.25.235.22";
 static int loggingPort = 4999;
 /////////
