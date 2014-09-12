@@ -16,6 +16,8 @@
 
 @interface BKPCapturingViewController () <CaptureMasterResultsDelegate>
 @property (weak, nonatomic) IBOutlet AppleVideoPreviewView *cameraPreviewView;
+
+@property (weak, nonatomic) IBOutlet UILabel *imagePreviewLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *imagePreviewView;
 
 @property (strong, nonatomic) IBOutletCollection(id) NSArray *structureConnectCollection;
@@ -37,7 +39,8 @@
 
 #pragma mark - View synthesizers
 
-@synthesize cameraPreviewView,imagePreviewView;
+@synthesize cameraPreviewView;
+@synthesize imagePreviewLabel, imagePreviewView;
 @synthesize structureConnectCollection, structureSwitch, structureStatusLabel, structureAlignmentView;
 @synthesize statusLabel;
 @synthesize captureButton, forwardButton;
@@ -124,9 +127,11 @@
 	dispatch_async(dispatch_get_main_queue(), ^{
 		/// gotta do it on the main thread
 		if ([_capturedImages count] > 0) {
+			[imagePreviewLabel setHidden:NO];
 			[imagePreviewView setImage:[[_capturedImages lastObject] processedImage]];
 			[forwardButton setEnabled:YES];
 		} else {
+			[imagePreviewLabel setHidden:YES];
 			[imagePreviewView setImage:nil];
 			[forwardButton setEnabled:NO];
 		}
@@ -201,8 +206,14 @@
 
 - (void)addAndDisplayCapturedImage:(BKPScannedImageAndBricks *)image {
 	// Custom override point when you are capturing multiple images. This is the end of the line.
-	if (image)
+//	if (image)
+//		[_capturedImages addObject:image];
+	
+	// For now, we are just going to hold on to the last image captured.
+	if (image) {
+		[_capturedImages removeAllObjects];
 		[_capturedImages addObject:image];
+	}
 	
 	[self updateUI];
 }
