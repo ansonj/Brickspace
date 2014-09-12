@@ -10,7 +10,7 @@
 
 #import "BKPBrickColorOptions.h"
 
-@interface BKPBrick : NSObject
+@interface BKPBrick : NSObject <NSCopying>
 
 @property (nonatomic) BKPBrickColor color;
 @property (nonatomic) int shortSideLength;

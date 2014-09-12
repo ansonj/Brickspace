@@ -10,6 +10,7 @@
 #import "BKPScannedImageCollection.h"
 #import "BKPLegoView.h"
 #import "BKPScannedImageAndBricks.h"
+#import "BKPBrickSetSummarizer.h"
 
 // For the next VC
 #import "BKPInstructionsViewController.h"
@@ -190,10 +191,10 @@
 		}
 		
 		// update the current image summary
-		[thisImageSummary setText:[NSString stringWithFormat:@"%@", [currentImage bricksFromImage]]];
+		[thisImageSummary setText:[BKPBrickSetSummarizer niceDescriptionOfBricksInSet:[currentImage bricksFromImage]]];
 		
 		// update the all images summary
-		[allImagesSummary setText:[NSString stringWithFormat:@"%@", [imageCollection allBricksFromAllImages]]];
+		[allImagesSummary setText:[BKPBrickSetSummarizer niceDescriptionOfBricksInSet:[imageCollection allBricksFromAllImages]]];
 	});
 }
 

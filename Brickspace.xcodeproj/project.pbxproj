@@ -57,6 +57,7 @@
 		A36512CF1975D0DD00340095 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36512C81975D0DD00340095 /* OpenGLES.framework */; };
 		A3D8F8D91990213700A5BE14 /* BKPBrickSizeGuesser.m in Sources */ = {isa = PBXBuildFile; fileRef = A3D8F8D81990213700A5BE14 /* BKPBrickSizeGuesser.m */; };
 		A3E688D11977266B00FFC463 /* BKPDetectorParameterInitializer.mm in Sources */ = {isa = PBXBuildFile; fileRef = A3642294194215A7000C3B92 /* BKPDetectorParameterInitializer.mm */; };
+		A3FA38CA19C395A4002B2F34 /* BKPBrickSetSummarizer.m in Sources */ = {isa = PBXBuildFile; fileRef = A3FA38C919C395A4002B2F34 /* BKPBrickSetSummarizer.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,7 +97,6 @@
 		A3642273194210C9000C3B92 /* BrickspaceTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BrickspaceTests-Info.plist"; sourceTree = "<group>"; };
 		A3642275194210C9000C3B92 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A3642277194210C9000C3B92 /* BrickspaceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BrickspaceTests.m; sourceTree = "<group>"; };
-		A3642281194213E0000C3B92 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = ../../OpenCV/opencv2.framework; sourceTree = "<group>"; };
 		A3642284194215A7000C3B92 /* BKPInstructionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BKPInstructionsViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A3642285194215A7000C3B92 /* BKPInstructionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BKPInstructionsViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A3642293194215A7000C3B92 /* BKPDetectorParameterInitializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = BKPDetectorParameterInitializer.h; path = "../Fate uncertain/BKPDetectorParameterInitializer.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -150,6 +150,8 @@
 		A36512C81975D0DD00340095 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		A3D8F8D71990213700A5BE14 /* BKPBrickSizeGuesser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPBrickSizeGuesser.h; sourceTree = "<group>"; };
 		A3D8F8D81990213700A5BE14 /* BKPBrickSizeGuesser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPBrickSizeGuesser.m; sourceTree = "<group>"; };
+		A3FA38C819C395A4002B2F34 /* BKPBrickSetSummarizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPBrickSetSummarizer.h; sourceTree = "<group>"; };
+		A3FA38C919C395A4002B2F34 /* BKPBrickSetSummarizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPBrickSetSummarizer.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -218,7 +220,6 @@
 				A36512C01975D0C100340095 /* Accelerate.framework */,
 				A36512BE1975D0BB00340095 /* Structure.framework */,
 				A365128B1975B77B00340095 /* opencv2.framework */,
-				A3642281194213E0000C3B92 /* opencv2.framework */,
 				A364224C194210C9000C3B92 /* Foundation.framework */,
 				A364224E194210C9000C3B92 /* CoreGraphics.framework */,
 				A3642250194210C9000C3B92 /* UIKit.framework */,
@@ -369,6 +370,8 @@
 			children = (
 				A3642295194215A7000C3B92 /* BKPMatrixUIImageConverter.h */,
 				A3642296194215A7000C3B92 /* BKPMatrixUIImageConverter.mm */,
+				A3FA38C819C395A4002B2F34 /* BKPBrickSetSummarizer.h */,
+				A3FA38C919C395A4002B2F34 /* BKPBrickSetSummarizer.m */,
 			);
 			path = "GH Global helpers";
 			sourceTree = "<group>";
@@ -541,6 +544,7 @@
 				A30C83F7194617A6000639C3 /* BKPInstructionSet.m in Sources */,
 				A36512A91975B8F000340095 /* BKPScannedImageCollection.mm in Sources */,
 				A3642263194210C9000C3B92 /* BKPSplashViewController.m in Sources */,
+				A3FA38CA19C395A4002B2F34 /* BKPBrickSetSummarizer.m in Sources */,
 				A365129F1975B8C700340095 /* BKPCaptureMaster.mm in Sources */,
 				A364225D194210C9000C3B92 /* BKPAppDelegate.m in Sources */,
 				A36422A5194215A7000C3B92 /* BKPMatrixUIImageConverter.mm in Sources */,
@@ -674,6 +678,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/ansonjablinski/Dropbox/School/SURF/Frameworks/OpenCV,
@@ -683,6 +688,7 @@
 				GCC_PREFIX_HEADER = "Brickspace/Supporting Files/Brickspace-Prefix.pch";
 				INFOPLIST_FILE = "Brickspace/Supporting Files/Brickspace-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -693,6 +699,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/ansonjablinski/Dropbox/School/SURF/Frameworks/OpenCV,
@@ -702,6 +709,7 @@
 				GCC_PREFIX_HEADER = "Brickspace/Supporting Files/Brickspace-Prefix.pch";
 				INFOPLIST_FILE = "Brickspace/Supporting Files/Brickspace-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

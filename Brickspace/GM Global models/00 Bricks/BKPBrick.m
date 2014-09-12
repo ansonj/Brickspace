@@ -27,6 +27,17 @@
 	return newBrick;
 }
 
+- (id)copyWithZone:(NSZone *)zone {
+	BKPBrick *newBrick = [[BKPBrick allocWithZone:zone] init];
+	
+	[newBrick setColor:[self color]];
+	[newBrick setShortSideLength:[self shortSideLength]];
+	[newBrick setLongSideLength:[self longSideLength]];
+	[newBrick setHeight:[self height]];
+	
+	return newBrick;
+}
+
 - (NSString *)description {
 	NSString *result = [NSString string];
 	
