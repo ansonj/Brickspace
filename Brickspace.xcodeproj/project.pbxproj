@@ -240,7 +240,6 @@
 				A36512B21975C90B00340095 /* GM Global models */,
 				A36512B31975C92800340095 /* GH Global helpers */,
 				A36512B41975C92F00340095 /* GV Global views */,
-				A36512BA1975CAA000340095 /* Fate uncertain (not in target) */,
 				A3642264194210C9000C3B92 /* Images.xcassets */,
 				A3642253194210C9000C3B92 /* Supporting Files */,
 			);
@@ -410,14 +409,6 @@
 				A36422AB19421FEA000C3B92 /* Designs themselves */,
 			);
 			path = "02 Designs";
-			sourceTree = "<group>";
-		};
-		A36512BA1975CAA000340095 /* Fate uncertain (not in target) */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "Fate uncertain (not in target)";
-			path = "Fate uncertain";
 			sourceTree = "<group>";
 		};
 		A36512BB1975CB4C00340095 /* 03 Models */ = {
