@@ -12,7 +12,8 @@
 
 @implementation BKPBrickSetSummarizer
 
-+ (NSString *)niceDescriptionOfBricksInSet:(NSSet *)bricks {
++ (NSString *)niceDescriptionOfBricksInSet:(NSSet *)bricks
+							 withTotalLine:(BOOL)includeTotal {
 	/*
 	 I tried making a dictionary of brick keys, with objects being the number of instances of that brick in the set.
 	 But once you define a hash function / isEqual for the bricks, then you can't have multiples in a set anymore.
@@ -45,13 +46,19 @@
 			
 	// Output the result
 	NSString *result = [NSString string];
-	
+	int numberOfNewlinesToPrint = (int)[brickDescriptionsAndMultiplicities count] - 1;
 	for (NSString *brickDescription in [brickDescriptionsAndMultiplicities allKeys]) {
 		int count = [[brickDescriptionsAndMultiplicities objectForKey:brickDescription] intValue];
-		result = [result stringByAppendingFormat:@"%dx - %@\n", count, brickDescription];
+		result = [result stringByAppendingFormat:@"%dx - %@", count, brickDescription];
+		
+		if (numberOfNewlinesToPrint > 0) {
+			result = [result stringByAppendingString:@"\n"];
+			numberOfNewlinesToPrint--;
+		}
 	}
 	
-	result = [result stringByAppendingFormat:@"\n%lu bricks total", [bricksToSummarize count]];
+	if (includeTotal)
+		result = [result stringByAppendingFormat:@"\n\n%lu bricks total", [bricksToSummarize count]];
 		
 	return result;
 }

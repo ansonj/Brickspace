@@ -220,7 +220,7 @@
 		}
 		
 		// update the current image summary
-		[thisImageSummary setText:[BKPBrickSetSummarizer niceDescriptionOfBricksInSet:[currentImage bricksFromImage]]];
+		[thisImageSummary setText:[BKPBrickSetSummarizer niceDescriptionOfBricksInSet:[currentImage bricksFromImage] withTotalLine:YES]];
 	});
 }
 
