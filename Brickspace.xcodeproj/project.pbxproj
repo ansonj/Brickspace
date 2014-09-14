@@ -56,8 +56,8 @@
 		A36512CD1975D0DD00340095 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36512C61975D0DD00340095 /* ExternalAccessory.framework */; };
 		A36512CE1975D0DD00340095 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36512C71975D0DD00340095 /* ImageIO.framework */; };
 		A36512CF1975D0DD00340095 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36512C81975D0DD00340095 /* OpenGLES.framework */; };
+		A3B49B3519C6509A00D6E430 /* BKPDetectorParameterInitializer.mm in Sources */ = {isa = PBXBuildFile; fileRef = A3B49B3419C6509A00D6E430 /* BKPDetectorParameterInitializer.mm */; };
 		A3D8F8D91990213700A5BE14 /* BKPBrickSizeGuesser.m in Sources */ = {isa = PBXBuildFile; fileRef = A3D8F8D81990213700A5BE14 /* BKPBrickSizeGuesser.m */; };
-		A3E688D11977266B00FFC463 /* BKPDetectorParameterInitializer.mm in Sources */ = {isa = PBXBuildFile; fileRef = A3642294194215A7000C3B92 /* BKPDetectorParameterInitializer.mm */; };
 		A3FA38CA19C395A4002B2F34 /* BKPBrickSetSummarizer.m in Sources */ = {isa = PBXBuildFile; fileRef = A3FA38C919C395A4002B2F34 /* BKPBrickSetSummarizer.m */; };
 /* End PBXBuildFile section */
 
@@ -101,8 +101,6 @@
 		A3642277194210C9000C3B92 /* BrickspaceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BrickspaceTests.m; sourceTree = "<group>"; };
 		A3642284194215A7000C3B92 /* BKPInstructionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BKPInstructionsViewController.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A3642285194215A7000C3B92 /* BKPInstructionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BKPInstructionsViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		A3642293194215A7000C3B92 /* BKPDetectorParameterInitializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = BKPDetectorParameterInitializer.h; path = "../Fate uncertain/BKPDetectorParameterInitializer.h"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		A3642294194215A7000C3B92 /* BKPDetectorParameterInitializer.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; lineEnding = 0; name = BKPDetectorParameterInitializer.mm; path = "../Fate uncertain/BKPDetectorParameterInitializer.mm"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		A3642295194215A7000C3B92 /* BKPMatrixUIImageConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BKPMatrixUIImageConverter.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A3642296194215A7000C3B92 /* BKPMatrixUIImageConverter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = BKPMatrixUIImageConverter.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A3642298194215A7000C3B92 /* BKPBrick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BKPBrick.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -150,6 +148,8 @@
 		A36512C61975D0DD00340095 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 		A36512C71975D0DD00340095 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		A36512C81975D0DD00340095 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		A3B49B3319C6509A00D6E430 /* BKPDetectorParameterInitializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPDetectorParameterInitializer.h; sourceTree = "<group>"; };
+		A3B49B3419C6509A00D6E430 /* BKPDetectorParameterInitializer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BKPDetectorParameterInitializer.mm; sourceTree = "<group>"; };
 		A3D8F8D71990213700A5BE14 /* BKPBrickSizeGuesser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPBrickSizeGuesser.h; sourceTree = "<group>"; };
 		A3D8F8D81990213700A5BE14 /* BKPBrickSizeGuesser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BKPBrickSizeGuesser.m; sourceTree = "<group>"; };
 		A3FA38C819C395A4002B2F34 /* BKPBrickSetSummarizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPBrickSetSummarizer.h; sourceTree = "<group>"; };
@@ -336,8 +336,8 @@
 				A36512941975B8B300340095 /* BKPKeypointDetectorAndAnalyzer.mm */,
 				A3D8F8D71990213700A5BE14 /* BKPBrickSizeGuesser.h */,
 				A3D8F8D81990213700A5BE14 /* BKPBrickSizeGuesser.m */,
-				A3642293194215A7000C3B92 /* BKPDetectorParameterInitializer.h */,
-				A3642294194215A7000C3B92 /* BKPDetectorParameterInitializer.mm */,
+				A3B49B3319C6509A00D6E430 /* BKPDetectorParameterInitializer.h */,
+				A3B49B3419C6509A00D6E430 /* BKPDetectorParameterInitializer.mm */,
 			);
 			path = "02 Review images";
 			sourceTree = "<group>";
@@ -529,7 +529,6 @@
 			files = (
 				A36512A01975B8C700340095 /* BKPCapturingViewController.m in Sources */,
 				A364229E194215A7000C3B92 /* BKPInstructionsViewController.m in Sources */,
-				A3E688D11977266B00FFC463 /* BKPDetectorParameterInitializer.mm in Sources */,
 				A36512991975B8B300340095 /* BKPScannedImageAndBricks.mm in Sources */,
 				A36512971975B8B300340095 /* BKPKeypointBrickPair.mm in Sources */,
 				A36422B11942219E000C3B92 /* BKPRealizedModel.m in Sources */,
@@ -541,6 +540,7 @@
 				A3642263194210C9000C3B92 /* BKPSplashViewController.m in Sources */,
 				A3FA38CA19C395A4002B2F34 /* BKPBrickSetSummarizer.m in Sources */,
 				A365129F1975B8C700340095 /* BKPCaptureMaster.mm in Sources */,
+				A3B49B3519C6509A00D6E430 /* BKPDetectorParameterInitializer.mm in Sources */,
 				A364225D194210C9000C3B92 /* BKPAppDelegate.m in Sources */,
 				A36422A5194215A7000C3B92 /* BKPMatrixUIImageConverter.mm in Sources */,
 				A36422B619422855000C3B92 /* BKPPlacedBrick.m in Sources */,
