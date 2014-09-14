@@ -13,53 +13,45 @@
 @implementation BKPBrickSetSummarizer
 
 + (NSString *)niceDescriptionOfBricksInSet:(NSSet *)bricks {
-	// Get just the bricks that are in the image
-	NSMutableSet *actualBricks = [NSMutableSet set];
+	/*
+	 I tried making a dictionary of brick keys, with objects being the number of instances of that brick in the set.
+	 But once you define a hash function / isEqual for the bricks, then you can't have multiples in a set anymore.
+	 This breaks everything... so instead of operating on the bricks themselves, I'm going to operate on their descriptions.
+	 Hack * 1000000?
+	 */
+
+	// Extract all brick objects from the set
+	NSMutableSet *bricksToSummarize = [NSMutableSet set];
 	for (id object in bricks) {
 		if ([object isMemberOfClass:[BKPPlacedBrick class]]) {
-			[actualBricks addObject:[object brick]];
+			[bricksToSummarize addObject:[object brick]];
 		} else if ([object isMemberOfClass:[BKPBrick class]]) {
-			[actualBricks addObject:object];
+			[bricksToSummarize addObject:object];
 		}
 	}
 	
 	// Count up multiple bricks of the same type
-	NSMutableDictionary *pieceCount = [NSMutableDictionary dictionary];
-	for (BKPBrick *brick in actualBricks) {
-		BKPBrick *brickInPieceCount = nil;
-		for (BKPBrick *brickSearch in [pieceCount allKeys]) {
-			BOOL bricksAreEqual = ([brick color] == [brickSearch color]);
-			bricksAreEqual = bricksAreEqual && ([brick shortSideLength] == [brickSearch shortSideLength]);
-			bricksAreEqual = bricksAreEqual && ([brick longSideLength] == [brickSearch longSideLength]);
-			bricksAreEqual = bricksAreEqual && ([brick height] == [brickSearch height]);
-			
-			if (bricksAreEqual) {
-				brickInPieceCount = brickSearch;
-				break;
-			}
-		}
-		
-		if (brickInPieceCount) {
-			int currentCount = [[pieceCount objectForKey:brickInPieceCount] intValue];
+	NSMutableDictionary *brickDescriptionsAndMultiplicities = [NSMutableDictionary dictionary];
+	for (BKPBrick *brick in bricksToSummarize) {
+		NSString *brickDescription = [brick description];
+		if ([brickDescriptionsAndMultiplicities objectForKey:brickDescription]) {
+			int currentCount = [[brickDescriptionsAndMultiplicities objectForKey:brickDescription] intValue];
 			NSNumber *newCount = [NSNumber numberWithInt:(currentCount + 1)];
-			[pieceCount setObject:newCount forKey:brickInPieceCount];
+			[brickDescriptionsAndMultiplicities setObject:newCount forKey:brickDescription];
 		} else {
-			[pieceCount setObject:[NSNumber numberWithInt:1] forKey:brick];
+			[brickDescriptionsAndMultiplicities setObject:@1 forKey:brickDescription];
 		}
 	}
-		
+			
 	// Output the result
 	NSString *result = [NSString string];
 	
-	for (BKPBrick *brick in [pieceCount allKeys]) {
-		int count = [[pieceCount objectForKey:brick] intValue];
-		//???: hack -- the NSNumber is sometimes null?!? difficult to reproduce
-		if (!count)
-			count = 1;
-		result = [result stringByAppendingFormat:@"%dx - %@\n", count, brick];
+	for (NSString *brickDescription in [brickDescriptionsAndMultiplicities allKeys]) {
+		int count = [[brickDescriptionsAndMultiplicities objectForKey:brickDescription] intValue];
+		result = [result stringByAppendingFormat:@"%dx - %@\n", count, brickDescription];
 	}
 	
-	result = [result stringByAppendingFormat:@"\n%lu bricks total", [actualBricks count]];
+	result = [result stringByAppendingFormat:@"\n%lu bricks total", [bricksToSummarize count]];
 		
 	return result;
 }
