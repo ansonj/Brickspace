@@ -104,7 +104,6 @@
 		return _processedImage;
 		
 	// If the processed image is ready, return it. Otherwise, return a temporary image.
-	//TODO: draw a temp image using openCV that says "working" or something, sheesh
 	
 	cv::Mat imageInProgress = [BKPMatrixUIImageConverter cvMatFromUIImage:_sourceImage];
 

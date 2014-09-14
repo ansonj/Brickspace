@@ -65,12 +65,10 @@
 	[_captureMaster setDelegate:self];
 	[_captureMaster startPreviewing];
 	
-	//TODO: maybe rm notification for proc image update?
-		// I don't get this comment -- remove it from where? What did I mean?
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUIFromNotification:) name:@"ProcessedImageUpdated" object:nil];
 	
 	// For resuming the stream
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackgroundNotificationReceived) name:UIApplicationDidEnterBackgroundNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackgroundNotificationReceived:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -83,7 +81,7 @@
 	NSLog(@"%@ got a memory warning.", self);
 }
 
-- (void)appDidEnterBackgroundNotificationReceived {
+- (void)appDidEnterBackgroundNotificationReceived:(NSNotification *)notification {
 	[structureSwitch setOn:NO];
 	[self structureSwitchChanged:nil];
 }

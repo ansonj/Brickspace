@@ -72,7 +72,6 @@
 	}
 	
 	// set up bricks for structureBricksLegoView
-	//TODO: put in the actual structure bricks: one of each of 2x3, 2x2, 2x1, and all in the same color (red?)
 	{
 		BKPPlacedBrick *b2x1 = [[BKPPlacedBrick alloc] init];
 		BKPPlacedBrick *b2x2 = [[BKPPlacedBrick alloc] init];

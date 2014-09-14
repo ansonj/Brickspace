@@ -246,12 +246,14 @@ static BOOL includeAfarParams = YES;
 		return pixelRadius <= kpRadius;
 	};
 	
+	/*
 	NSString *(^colorFromVec)(cv::Vec4b) = ^NSString*(cv::Vec4b vector) {
 		unsigned int zero = vector.val[0];
 		unsigned int one = vector.val[1];
 		unsigned int two = vector.val[2];
 		return [NSString stringWithFormat:@"[%3d %3d %3d], # %X%X%X", zero, one, two, zero, one, two];
 	};
+	 */
 	
 	int startX = kp.pt.x - kp.size / 2.;
 	int stopX = startX + kp.size;
@@ -358,12 +360,14 @@ static BOOL includeAfarParams = YES;
 		return ((int)imageY) + -11;
 //		return imageY * depthFrame.height / matrix.size().height;
 	};
+	/*
 	float (^depthAtImageCoords)(float,float) = ^float(float x, float y) {
 		int depthFrameX = depthXfromImageX(x);
 		int depthFrameY = depthYfromImageY(y);
 		
 		return depthFromFrameAt(depthFrameX, depthFrameY);
 	};
+	 */
 	
 	
 	BOOL debugLots = NO;
