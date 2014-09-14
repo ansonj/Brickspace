@@ -12,13 +12,14 @@
 #import "BKP_GDManager.h"
 #import "BKPGenericDesign.h"
 #import "BKPInstructionSet.h"
+#import "BKPBrickSetSummarizer.h"
 
 // For resetting the app back to the beginning
 #import "BKPSplashViewController.h"
 
 @interface BKPInstructionsViewController ()
 @property (weak, nonatomic) IBOutlet UITextView *summaryTextView;
-@property (nonatomic) NSString *summaryText;
+@property (nonatomic) NSMutableString *summaryText;
 @property (weak, nonatomic) IBOutlet BKPLegoView *legoView;
 @property (weak, nonatomic) IBOutlet UISlider *stepSlider;
 @property (weak, nonatomic) IBOutlet UILabel *stepLabel;
@@ -29,7 +30,9 @@
 @property (nonatomic) int currentStepNumber;
 @end
 
-@implementation BKPInstructionsViewController
+@implementation BKPInstructionsViewController {
+	UIAlertView *_resetAlertView;
+}
 
 @synthesize summaryTextView, summaryText;
 @synthesize legoView;
@@ -43,22 +46,26 @@
 - (void)setUpWithCountedBricks:(NSSet *)newSet {
 	countedBrickSet = newSet;
 	
-	// figure out which is the best
-	summaryText = [NSString stringWithFormat:@"A set was created with %lu bricks in it.\n\n",(unsigned long)[countedBrickSet count]];
+	summaryText = [NSMutableString string];
+	
+	[summaryText appendFormat:@"Here are the bricks you have:\n%@\n\n", [BKPBrickSetSummarizer niceDescriptionOfBricksInSet:newSet]];
 	
 	NSArray *availableDesigns = [BKP_GDManager availableDesigns];
+	
+	[summaryText appendFormat:@"Brickspace can currently build %lu different models:\n", [availableDesigns count]];
+	
 	for (id<BKPGenericDesign> design in availableDesigns) {
 		if ([design canBeBuiltFromBricks:countedBrickSet]) {
 			selectedDesign = design;
 			NSString *designName = [design designName];
 			float percentage = [design percentUtilizedIfBuiltWithSet:countedBrickSet];
-			summaryText = [summaryText stringByAppendingFormat:@"You can build a %@ with %.1f%% brick utilization!\n", designName, percentage];
+			[summaryText appendFormat:@"- You can build a %@ with %.1f%% of your bricks.\n", designName, percentage];
 		} else {
-			summaryText = [summaryText stringByAppendingFormat:@"Sorry, but you cannot build a %@ today.\n", [design designName]];
+			[summaryText appendFormat:@"- You don't have enough bricks to build a %@ today.\n", [design designName]];
 		}
 	}
 	
-	summaryText = [summaryText stringByAppendingFormat:@"\n\nToday, you'll be building a %@, which is a %@.", [selectedDesign designName], [selectedDesign designDescription]];
+	[summaryText appendFormat:@"\nThe most interesting model you can build today is the %@, which is %@.\n\n\n", [selectedDesign designName], [selectedDesign designDescription]];
 	
 	BKPRealizedModel *model = [selectedDesign createRealizedModelUsingBricks:countedBrickSet];
 	instructions = [BKPInstructionGenerator instructionsForRealizedModel:model withStyle:BKPInstructionGeneratorStyleBottomUp];
@@ -69,8 +76,7 @@
 	[legoView setDrawBaseplate:YES];
 	[legoView setBaseplateColor:BKPBrickColorBlue andSize:8];
 	
-	// setup should be called first, before it appears, so it should be okay to comment this out
-//	[self initializeUI];
+	[summaryText appendString:@"Use the slider and arrow buttons to step through the building instructions.\n\n\nThank you for trying out Brickspace!"];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -116,8 +122,17 @@
 }
 
 - (IBAction)resetButtonPressed:(id)sender {
-	BKPSplashViewController *splashVC = [[BKPSplashViewController alloc] init];
-	[[[UIApplication sharedApplication] keyWindow] setRootViewController:splashVC];
+	_resetAlertView = [[UIAlertView alloc] initWithTitle:@"Restart Brickspace?" message:@"Are you sure you want to stop building this model and go back to the beginning?" delegate:self cancelButtonTitle:@"No, keep building" otherButtonTitles:@"Yes, go back", nil];
+	[_resetAlertView show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+	if (alertView == _resetAlertView && buttonIndex == 1) {
+		[_resetAlertView dismissWithClickedButtonIndex:buttonIndex animated:NO];
+		
+		BKPSplashViewController *splashVC = [[BKPSplashViewController alloc] init];
+		[[[UIApplication sharedApplication] keyWindow] setRootViewController:splashVC];
+	}
 }
 
 - (void)didReceiveMemoryWarning
@@ -125,16 +140,5 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

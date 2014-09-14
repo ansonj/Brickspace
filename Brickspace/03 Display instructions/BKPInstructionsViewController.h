@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BKPInstructionsViewController : UIViewController
+@interface BKPInstructionsViewController : UIViewController <UIAlertViewDelegate>
 
 - (void)setUpWithCountedBricks:(NSSet *)newSet;
 
