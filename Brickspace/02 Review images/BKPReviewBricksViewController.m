@@ -11,18 +11,14 @@
 #import "BKPLegoView.h"
 #import "BKPScannedImageAndBricks.h"
 #import "BKPBrickSetSummarizer.h"
+#import "BKPCapturingViewController.h"
 
 // For the next VC
 #import "BKPInstructionsViewController.h"
 
 @interface BKPReviewBricksViewController ()
-// Two image views, one temporary since UITableView is not in use yet
-@property (weak, nonatomic) IBOutlet UIImageView *thumbImageView;
+// The big image in the middle
 @property (weak, nonatomic) IBOutlet UIImageView *editingImageView;
-
-// Buttons for adding and removing bricks from processed image
-@property (weak, nonatomic) IBOutlet UIButton *addBrickButton;
-@property (weak, nonatomic) IBOutlet UIButton *removeBrickButton;
 
 // Edit area
 @property (weak, nonatomic) IBOutlet BKPLegoView *currentBrickView;
@@ -36,22 +32,23 @@
 
 // Result summary areas
 @property (weak, nonatomic) IBOutlet UITextView *thisImageSummary;
-@property (weak, nonatomic) IBOutlet UITextView *allImagesSummary;
 
 @end
 
 @implementation BKPReviewBricksViewController {
 	BKPScannedImageCollection *imageCollection;
 	int indexOfCurrentlyActiveImageInCollection;
+	
+	UIAlertView *_resetThisImageAlertView;
+	UIAlertView *_retakePictureAlertView;
 }
 
 #pragma mark - Synthesizers
 
-@synthesize thumbImageView, editingImageView;
-@synthesize addBrickButton, removeBrickButton;
+@synthesize editingImageView;
 @synthesize currentBrickView, brickSizeLabel, brickColorLabel;
 @synthesize shortSideStepper, longSideStepper, colorStepper;
-@synthesize thisImageSummary, allImagesSummary;
+@synthesize thisImageSummary;
 
 #pragma mark - Inits and viewDidThings
 
@@ -77,7 +74,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
 	
-	[colorStepper setMaximumValue:[BKPBrickColorOptions colorCount]-1];
+	// The color stepper will run from -1 to the number above the highest color index.
+	// If the min or max is reached, the stepper will wrap around to the other side.
+	[colorStepper setMinimumValue:-1];
+	[colorStepper setMaximumValue:[BKPBrickColorOptions colorCount]];
+	
+	
 	indexOfCurrentlyActiveImageInCollection = 0;
 }
 
@@ -97,24 +99,38 @@
 	NSLog(@"⚠️ %@ got a memory warning.", self);
 }
 
-#pragma mark - Button handlers
+#pragma mark - UIAlertViewDelegate
 
-- (IBAction)addBrickButtonPressed:(id)sender {
-	//TODO: implement adding a brick by tapping the image
-	NSLog(@"➕ I don't know how to add bricks yet.");
-//	[self updateUI];
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+	if (buttonIndex == 1) {
+		if (alertView == _resetThisImageAlertView) {
+			[[self currentlyActiveImage] resetProcessedImage];
+			[self updateUI];
+		} else if (alertView == _retakePictureAlertView) {
+			// We have to dismiss the alert manually and immediately, because we're about to trash its parent VC
+			[_retakePictureAlertView dismissWithClickedButtonIndex:buttonIndex animated:NO];
+			
+			BKPCapturingViewController *capturingVC = [[BKPCapturingViewController alloc] init];
+			[[[UIApplication sharedApplication] keyWindow] setRootViewController:capturingVC];
+		}
+	}
 }
 
-- (IBAction)removeBrickButtonPressed:(id)sender {
-	//TODO: implement removing a brick by tapping the image
-	NSLog(@"➖ I don't know how to remove bricks yet.");
-//	[self updateUI];
+#pragma mark - Button handlers
+
+- (IBAction)goBackAndRetakePicturePressed:(id)sender {
+	_retakePictureAlertView = [[UIAlertView alloc] initWithTitle:@"Retake picture?" message:@"Are you sure you want to give up on this image and any edits you've made?" delegate:self cancelButtonTitle:@"No, keep editing" otherButtonTitles:@"Yes, retake", nil];
+	[_retakePictureAlertView show];
+}
+
+- (IBAction)deleteThisBrickButtonPressed:(id)sender {
+	[[self currentlyActiveImage] removeCurrentlyHighlightedKeypoint];
+	[self updateUI];
 }
 
 - (IBAction)resetScanningForThisImageButtonPressed:(id)sender {
-	//TODO: use an UIAlertView later
-	[[self currentlyActiveImage] resetProcessedImage];
-	[self updateUI];
+	_resetThisImageAlertView = [[UIAlertView alloc] initWithTitle:@"Reset all bricks?" message:@"Are you sure you want to give up on all your edits and reset? This will redetect any bricks you've deleted." delegate:self cancelButtonTitle:@"No, keep editing" otherButtonTitles:@"Yes, reset", nil];
+	[_resetThisImageAlertView show];
 }
 
 - (IBAction)editPreviousBrickButtonPressed:(id)sender {
@@ -128,6 +144,13 @@
 }
 
 - (IBAction)stepperPressed:(id)sender {
+	// Adjust the color stepper, in case it is wrapping around
+	if ([colorStepper value] == [colorStepper maximumValue])
+		[colorStepper setValue:0];
+	else if ([colorStepper value] == [colorStepper minimumValue])
+		[colorStepper setValue:([colorStepper maximumValue] - 1)];
+	
+	// Set the properties of the brick
 	BKPBrick *currentBrick = [[[self currentlyActiveImage] getCurrentlyHighlightedKeypointPair] brick];
 	
 	[currentBrick setShortSideLength:[shortSideStepper value]];
@@ -173,7 +196,6 @@
 		//	NSLog(@"I'm in \n%@\n looking at \n%@\n", currentImage, currentBrick);
 		
 		// update both image views
-		[thumbImageView setImage:[currentImage thumbnailImage]];
 		[editingImageView setImage:[currentImage processedImage]];
 		
 		if (currentBrick) {
@@ -188,13 +210,17 @@
 			[shortSideStepper setValue:currentBrick.shortSideLength];
 			[longSideStepper setValue:currentBrick.longSideLength];
 			[colorStepper setValue:currentBrick.color];
+		} else {
+			[currentBrickView displayBricks:[NSSet set]];
+			
+			[brickSizeLabel setText:@""];
+			[brickColorLabel setText:@""];
+			
+			// no need to update the steppers; they have no visible values
 		}
 		
 		// update the current image summary
 		[thisImageSummary setText:[BKPBrickSetSummarizer niceDescriptionOfBricksInSet:[currentImage bricksFromImage]]];
-		
-		// update the all images summary
-		[allImagesSummary setText:[BKPBrickSetSummarizer niceDescriptionOfBricksInSet:[imageCollection allBricksFromAllImages]]];
 	});
 }
 

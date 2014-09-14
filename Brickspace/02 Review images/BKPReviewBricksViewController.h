@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BKPReviewBricksViewController : UIViewController
+@interface BKPReviewBricksViewController : UIViewController <UIAlertViewDelegate>
 
 - (void)loadCapturedImages:(NSMutableArray *)arrayOfImages;
 

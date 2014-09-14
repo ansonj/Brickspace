@@ -23,6 +23,7 @@
 
 - (void)addKeypointAtX:(float)x andY:(float)y;
 - (void)removeKeypointNearestToX:(float)x andY:(float)y;
+- (void)removeCurrentlyHighlightedKeypoint;
 
 - (BKPKeypointBrickPair *)getCurrentlyHighlightedKeypointPair;
 - (void)highlightNextKeypoint;

@@ -158,6 +158,13 @@
 		// this will trigger an array bounds check
 }
 
+- (void)removeCurrentlyHighlightedKeypoint {
+	if ([_keypointBrickPairs count] > 1) {
+		[_keypointBrickPairs removeObjectAtIndex:self.currentlyHighlightedKeypointIndex];
+		[self dispatchAsyncUpdateProcessedImage];
+	}
+}
+
 #pragma mark - Keypoints: Editing and highlight manipulation
 
 - (BKPKeypointBrickPair *)getCurrentlyHighlightedKeypointPair {
