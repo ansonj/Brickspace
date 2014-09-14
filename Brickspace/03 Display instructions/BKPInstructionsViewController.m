@@ -73,8 +73,8 @@
 	currentStepNumber = 1;
 	
 	[legoView setDrawAxes:NO];
-	[legoView setDrawBaseplate:YES];
-	[legoView setBaseplateColor:BKPBrickColorBlue andSize:8];
+	[legoView setDrawBaseplate:NO];
+//	[legoView setBaseplateColor:BKPBrickColorBlue andSize:8];
 	
 	[summaryText appendString:@"Use the slider and arrow buttons to step through the building instructions.\n\n\nThank you for trying out Brickspace!"];
 }
