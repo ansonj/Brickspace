@@ -129,22 +129,22 @@
 		if ([_capturedImages count] > 0) {
 			[imagePreviewLabel setHidden:NO];
 			[imagePreviewView setImage:[[_capturedImages lastObject] processedImage]];
-			[forwardButton setEnabled:YES];
+			[forwardButton setHidden:NO];
 		} else {
 			[imagePreviewLabel setHidden:YES];
 			[imagePreviewView setImage:nil];
-			[forwardButton setEnabled:NO];
+			[forwardButton setHidden:YES];
 		}
 		
 		if ([_captureMaster isPreviewing]) {
-			[captureButton setEnabled:YES];
+			[captureButton setHidden:NO];
 			
 			for (id view in structureConnectCollection) {
 				[view setHidden:NO];
 			}
 			[structureSwitch setEnabled:YES];
 		} else {
-			[captureButton setEnabled:NO];
+			[captureButton setHidden:YES];
 			
 			
 			for (id view in structureConnectCollection) {
