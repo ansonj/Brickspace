@@ -187,7 +187,7 @@
 }
 
 - (AVCaptureVideoOrientation)getInterfaceOrientation {
-	return (AVCaptureVideoOrientation)[self interfaceOrientation];
+	return (AVCaptureVideoOrientation)UIDeviceOrientationLandscapeLeft;
 }
 
 - (void)captureMasterDidOutputAVFColorBuffer:(CMSampleBufferRef)buffer {
