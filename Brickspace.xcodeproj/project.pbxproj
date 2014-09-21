@@ -20,7 +20,6 @@
 		A364225D194210C9000C3B92 /* BKPAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A364225C194210C9000C3B92 /* BKPAppDelegate.m */; };
 		A3642263194210C9000C3B92 /* BKPSplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A3642262194210C9000C3B92 /* BKPSplashViewController.m */; };
 		A3642265194210C9000C3B92 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A3642264194210C9000C3B92 /* Images.xcassets */; };
-		A364226C194210C9000C3B92 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A364226B194210C9000C3B92 /* XCTest.framework */; };
 		A364226D194210C9000C3B92 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A364224C194210C9000C3B92 /* Foundation.framework */; };
 		A364226E194210C9000C3B92 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3642250194210C9000C3B92 /* UIKit.framework */; };
 		A3642276194210C9000C3B92 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A3642274194210C9000C3B92 /* InfoPlist.strings */; };
@@ -95,7 +94,6 @@
 		A3642262194210C9000C3B92 /* BKPSplashViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BKPSplashViewController.m; sourceTree = "<group>"; };
 		A3642264194210C9000C3B92 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		A364226A194210C9000C3B92 /* BrickspaceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BrickspaceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A364226B194210C9000C3B92 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		A3642273194210C9000C3B92 /* BrickspaceTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "BrickspaceTests-Info.plist"; sourceTree = "<group>"; };
 		A3642275194210C9000C3B92 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A3642277194210C9000C3B92 /* BrickspaceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BrickspaceTests.m; sourceTree = "<group>"; };
@@ -181,7 +179,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A364226C194210C9000C3B92 /* XCTest.framework in Frameworks */,
 				A364226E194210C9000C3B92 /* UIKit.framework in Frameworks */,
 				A364226D194210C9000C3B92 /* Foundation.framework in Frameworks */,
 			);
@@ -225,7 +222,6 @@
 				A364224C194210C9000C3B92 /* Foundation.framework */,
 				A364224E194210C9000C3B92 /* CoreGraphics.framework */,
 				A3642250194210C9000C3B92 /* UIKit.framework */,
-				A364226B194210C9000C3B92 /* XCTest.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
