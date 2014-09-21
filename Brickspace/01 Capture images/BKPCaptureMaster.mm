@@ -172,23 +172,25 @@ typedef NS_ENUM(NSUInteger, BKPCMStructureStatus) {
 	switch (self.cameraStatus) {
 		case BKPCMCameraStatusUnknown:
 		default:
-			result = [result stringByAppendingString:@"The camera is missing or malfunctioning.\n"];
+			result = [result stringByAppendingString:@"The camera is missing or malfunctioning."];
 			break;
 		case BKPCMCameraStatusStopped:
-			result = [result stringByAppendingString:@"The camera is not running.\n"];
+			result = [result stringByAppendingString:@"The camera is not running."];
 			break;
 		case BKPCMCameraStatusStarting:
-			result = [result stringByAppendingString:@"The camera is starting...\n"];
+			result = [result stringByAppendingString:@"The camera is starting..."];
 			break;
 		case BKPCMCameraStatusStopping:
-			result = [result stringByAppendingString:@"The camera is stopping.\n"];
+			result = [result stringByAppendingString:@"The camera is stopping."];
 			break;
 		case BKPCMCameraStatusPreviewing:
-			result = [result stringByAppendingString:@"The camera is ready.\n"];
+			result = [result stringByAppendingString:@"The camera is ready."];
 			break;
 	}
 	
 	if (self.structureSensorEnabled) {
+		result = [result stringByAppendingString:@"\n"];
+		
 		switch (self.structureStatus) {
 			case BKPCMStructureStatusUnknown:
 			default:
