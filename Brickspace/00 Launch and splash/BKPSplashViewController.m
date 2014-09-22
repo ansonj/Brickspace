@@ -98,7 +98,7 @@
 
 - (IBAction)startButtonPressed:(id)sender {
 	BKPCapturingViewController *capturingVC = [[BKPCapturingViewController alloc] init];
-	[[[UIApplication sharedApplication] keyWindow] setRootViewController:capturingVC];
+	[self presentViewController:capturingVC animated:YES completion:nil];
 }
 
 @end

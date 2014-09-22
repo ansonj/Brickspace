@@ -20,7 +20,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *imagePreviewLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *imagePreviewView;
 
-@property (strong, nonatomic) IBOutletCollection(id) NSArray *structureConnectCollection;
 @property (weak, nonatomic) IBOutlet UISwitch *structureSwitch;
 @property (weak, nonatomic) IBOutlet UILabel *structureStatusLabel;
 @property (weak, nonatomic) IBOutlet UIView *structureAlignmentView;
@@ -41,7 +40,7 @@
 
 @synthesize cameraPreviewView;
 @synthesize imagePreviewLabel, imagePreviewView;
-@synthesize structureConnectCollection, structureSwitch, structureStatusLabel, structureAlignmentView;
+@synthesize structureSwitch, structureStatusLabel, structureAlignmentView;
 @synthesize statusLabel;
 @synthesize captureButton, forwardButton;
 
@@ -53,6 +52,8 @@
     if (self) {
         // Custom initialization
 		_capturedImages = [NSMutableArray array];
+
+//		[self setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
     }
 	
     return self;
@@ -107,12 +108,11 @@
 	if (busyWaitIterations > 0)
 		NSLog(@"⚠️ Busy wait for capturing to finish took %lu iterations.", busyWaitIterations);
 		
-	BKPReviewBricksViewController *newVC = [[BKPReviewBricksViewController alloc] init];
+	BKPReviewBricksViewController *reviewVC = [[BKPReviewBricksViewController alloc] init];
 	
-	[newVC loadCapturedImages:_capturedImages];
-		
-	UIWindow *window = [[UIApplication sharedApplication] keyWindow];
-	[window setRootViewController:newVC];
+	[reviewVC loadCapturedImages:_capturedImages];
+	
+	[self presentViewController:reviewVC animated:YES completion:nil];
 }
 
 - (IBAction)structureSwitchChanged:(id)sender {
@@ -136,18 +136,9 @@
 		
 		if ([_captureMaster isPreviewing]) {
 			[captureButton setHidden:NO];
-			
-			for (id view in structureConnectCollection) {
-				[view setHidden:NO];
-			}
 			[structureSwitch setEnabled:YES];
 		} else {
 			[captureButton setHidden:YES];
-			
-			
-			for (id view in structureConnectCollection) {
-				[view setHidden:YES];
-			}
 			[structureSwitch setEnabled:NO];
 			// Turn off connecting to the Structure if the view is not previewing.
 			[structureSwitch setOn:NO];

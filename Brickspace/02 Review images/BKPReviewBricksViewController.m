@@ -58,6 +58,8 @@
     if (self) {
         // Custom initialization
 		imageCollection = [BKPScannedImageCollection emptyCollection];
+		
+		[self setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
     }
     return self;
 }
@@ -107,11 +109,7 @@
 			[[self currentlyActiveImage] resetProcessedImage];
 			[self updateUI];
 		} else if (alertView == _retakePictureAlertView) {
-			// We have to dismiss the alert manually and immediately, because we're about to trash its parent VC
-			[_retakePictureAlertView dismissWithClickedButtonIndex:buttonIndex animated:NO];
-			
-			BKPCapturingViewController *capturingVC = [[BKPCapturingViewController alloc] init];
-			[[[UIApplication sharedApplication] keyWindow] setRootViewController:capturingVC];
+			[self dismissViewControllerAnimated:YES completion:nil];
 		}
 	}
 }
@@ -177,7 +175,7 @@
 	[instructionsVC setUpWithCountedBricks:allBricks];
 	
 	// and display it
-	[[[UIApplication sharedApplication] keyWindow] setRootViewController:instructionsVC];
+	[self presentViewController:instructionsVC animated:YES completion:nil];
 }
 
 #pragma mark - What image are we currently looking at?

@@ -14,9 +14,6 @@
 #import "BKPInstructionSet.h"
 #import "BKPBrickSetSummarizer.h"
 
-// For resetting the app back to the beginning
-#import "BKPSplashViewController.h"
-
 @interface BKPInstructionsViewController ()
 @property (weak, nonatomic) IBOutlet UITextView *summaryTextView;
 @property (nonatomic) NSMutableString *summaryText;
@@ -42,6 +39,20 @@
 @synthesize selectedDesign;
 @synthesize instructions;
 @synthesize currentStepNumber;
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+	if (self) {
+		[self setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
+		
+		[legoView setDrawAxes:NO];
+		[legoView setDrawBaseplate:NO];
+		//	[legoView setBaseplateColor:BKPBrickColorBlue andSize:8];
+		
+
+	}
+	return self;
+}
 
 - (void)setUpWithCountedBricks:(NSSet *)newSet {
 	countedBrickSet = newSet;
@@ -72,32 +83,27 @@
 	
 	currentStepNumber = 1;
 	
-	[legoView setDrawAxes:NO];
-	[legoView setDrawBaseplate:NO];
-//	[legoView setBaseplateColor:BKPBrickColorBlue andSize:8];
-	
 	[summaryText appendString:@"Use the slider and arrow buttons to step through the building instructions.\n\n\nThank you for trying out Brickspace!"];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-	[self initializeUI];
-}
-
-- (void)initializeUI {
-	[summaryTextView setText:summaryText];
-	
-	[stepSlider setMinimumValue:1];
-	[stepSlider setMaximumValue:[instructions stepCount]];
-	[stepSlider setValue:1 animated:NO];
 	
 	[self updateUI];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+	[self updateUI];
+}
+
 - (void)updateUI {
-	// update slider position
+	// update summary text
+	[summaryTextView setText:summaryText];
+
+	// update slider
+	[stepSlider setMinimumValue:1];
+	[stepSlider setMaximumValue:[instructions stepCount]];
 	[stepSlider setValue:currentStepNumber animated:YES];
+	
 	// update label text
 	[stepLabel setText:[NSString stringWithFormat:@"%d of %d", currentStepNumber, [instructions stepCount]]];
+	
 	// tell legoview the right bricks to draw
 	[legoView displayBricks:[instructions bricksForStepsOneThrough:currentStepNumber]];
 }
@@ -128,10 +134,13 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	if (alertView == _resetAlertView && buttonIndex == 1) {
-		[_resetAlertView dismissWithClickedButtonIndex:buttonIndex animated:NO];
+		// Walk backwards to grab the splash screen
+		id vc_instructions = self;
+		id vc_reviewing = [vc_instructions presentingViewController];
+		id vc_capturing = [vc_reviewing presentingViewController];
+		id vc_splash = [vc_capturing presentingViewController];
 		
-		BKPSplashViewController *splashVC = [[BKPSplashViewController alloc] init];
-		[[[UIApplication sharedApplication] keyWindow] setRootViewController:splashVC];
+		[vc_splash dismissViewControllerAnimated:YES completion:nil];
 	}
 }
 
