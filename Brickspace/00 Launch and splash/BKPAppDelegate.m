@@ -7,7 +7,6 @@
 //
 
 #import "BKPAppDelegate.h"
-
 #import "BKPSplashViewController.h"
 
 // For STWirelessLog

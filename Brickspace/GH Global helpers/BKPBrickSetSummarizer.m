@@ -7,7 +7,6 @@
 //
 
 #import "BKPBrickSetSummarizer.h"
-
 #import "BKPPlacedBrick.h"
 
 @implementation BKPBrickSetSummarizer

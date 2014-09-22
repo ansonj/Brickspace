@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "BKPInstructionGenerator.h"
+#import <Foundation/Foundation.h>
 
 @interface BKPInstructionSet : NSObject
 

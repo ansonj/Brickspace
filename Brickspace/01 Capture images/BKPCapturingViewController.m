@@ -6,13 +6,11 @@
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
 //
 
-#import "BKPCapturingViewController.h"
-
 #import "AppleVideoPreviewView.h"
 #import "BKPCaptureMaster.h"
-#import "BKPScannedImageAndBricks.h"
-
+#import "BKPCapturingViewController.h"
 #import "BKPReviewBricksViewController.h"
+#import "BKPScannedImageAndBricks.h"
 
 @interface BKPCapturingViewController () <CaptureMasterResultsDelegate>
 @property (weak, nonatomic) IBOutlet AppleVideoPreviewView *cameraPreviewView;

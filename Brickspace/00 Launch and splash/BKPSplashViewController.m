@@ -6,10 +6,10 @@
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
 //
 
-#import "BKPSplashViewController.h"
+#import "BKPCapturingViewController.h"
 #import "BKPLegoView.h"
 #import "BKPPlacedBrick.h"
-#import "BKPCapturingViewController.h"
+#import "BKPSplashViewController.h"
 
 @interface BKPSplashViewController ()
 @property (weak, nonatomic) IBOutlet UIScrollView *leftScrollView;

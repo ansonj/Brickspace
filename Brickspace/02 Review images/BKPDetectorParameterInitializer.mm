@@ -6,9 +6,8 @@
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
 //
 
-#import <opencv2/opencv.hpp>
-
 #import "BKPDetectorParameterInitializer.h"
+#import <opencv2/opencv.hpp>
 
 @implementation BKPDetectorParameterInitializer
 

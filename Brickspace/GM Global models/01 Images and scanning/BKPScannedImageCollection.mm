@@ -6,9 +6,8 @@
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
 //
 
-#import "BKPScannedImageCollection.h"
-
 #import "BKPScannedImageAndBricks.h"
+#import "BKPScannedImageCollection.h"
 
 @implementation BKPScannedImageCollection
 

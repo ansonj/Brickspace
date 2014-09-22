@@ -7,7 +7,6 @@
 //
 
 #import "BKPLegoView.h"
-
 #import "BKPPlacedBrick.h"
 
 @implementation BKPLegoView {

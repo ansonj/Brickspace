@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "BKPGenericDesign.h"
+#import <Foundation/Foundation.h>
 
 @interface BKP_GD_FlatPyramid : NSObject <BKPGenericDesign>
 

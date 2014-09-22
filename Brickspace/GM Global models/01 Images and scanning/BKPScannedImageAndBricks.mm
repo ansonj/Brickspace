@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
 //
 
-#import "BKPScannedImageAndBricks.h"
 #import "BKPKeypointDetectorAndAnalyzer.h"
 #import "BKPMatrixUIImageConverter.h"
+#import "BKPScannedImageAndBricks.h"
 
 @interface BKPScannedImageAndBricks () {
 	UIImage *_sourceImage;

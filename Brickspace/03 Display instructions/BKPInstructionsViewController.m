@@ -6,13 +6,12 @@
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
 //
 
-#import "BKPInstructionsViewController.h"
-
-#import "BKPLegoView.h"
-#import "BKP_GDManager.h"
+#import "BKPBrickSetSummarizer.h"
 #import "BKPGenericDesign.h"
 #import "BKPInstructionSet.h"
-#import "BKPBrickSetSummarizer.h"
+#import "BKPInstructionsViewController.h"
+#import "BKPLegoView.h"
+#import "BKP_GDManager.h"
 
 @interface BKPInstructionsViewController ()
 @property (weak, nonatomic) IBOutlet UITextView *summaryTextView;

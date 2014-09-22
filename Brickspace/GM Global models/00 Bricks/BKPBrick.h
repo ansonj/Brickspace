@@ -6,9 +6,8 @@
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-
 #import "BKPBrickColorOptions.h"
+#import <Foundation/Foundation.h>
 
 @interface BKPBrick : NSObject
 

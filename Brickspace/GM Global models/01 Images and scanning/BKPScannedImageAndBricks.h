@@ -6,10 +6,10 @@
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import <AVFoundation/AVFoundation.h>
-#import <Structure/Structure.h>
 #import "BKPKeypointBrickPair.h"
+#import <AVFoundation/AVFoundation.h>
+#import <Foundation/Foundation.h>
+#import <Structure/Structure.h>
 
 @interface BKPScannedImageAndBricks : NSObject
 

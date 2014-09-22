@@ -6,9 +6,8 @@
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-
 #import "BKPBrickColorOptions.h"
+#import <UIKit/UIKit.h>
 
 @interface BKPLegoView : UIView
 

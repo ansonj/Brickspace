@@ -6,8 +6,8 @@
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
 //
 
-#import "BKPCaptureMaster.h"
 #import "AppleVideoPreviewView.h"
+#import "BKPCaptureMaster.h"
 
 typedef NS_ENUM(NSUInteger, BKPCMCameraStatus) {
 	BKPCMCameraStatusUnknown,
