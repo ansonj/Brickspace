@@ -17,7 +17,7 @@
 
 - (void)addPlacedBrick:(BKPPlacedBrick *)brick;
 
-// a set of BKPPlacedBricks
+// Returns a set of BKPPlacedBricks.
 - (NSSet *)brickPlacementData;
 
 @end

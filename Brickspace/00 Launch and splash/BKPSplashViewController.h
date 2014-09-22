@@ -1,5 +1,5 @@
 //
-//  BKPViewController.h
+//  BKPSplashViewController.h
 //  Brickspace
 //
 //  Created by Anson Jablinski on 6/6/14.

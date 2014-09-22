@@ -1,6 +1,6 @@
 //
 //  BKPScannedImageCollection.h
-//  Scanning with Structure
+//  Brickspace
 //
 //  Created by Anson Jablinski on 6/25/14.
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.

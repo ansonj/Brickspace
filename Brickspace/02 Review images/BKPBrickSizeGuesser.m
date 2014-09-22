@@ -4,12 +4,23 @@
 //
 //  Created by Anson Jablinski on 8/4/14.
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
-//	The silliest spaghetti class you ever did see.
 //
 
 #import "BKPBrickSizeGuesser.h"
 
 @implementation BKPBrickSizeGuesser
+
+static BOOL useOldDepthData = NO;
+static double dfPix_avg2x1;
+static double dfPix_avg2x2;
+static double dfPix_avg2x3;
+static double dfPix_avg2x4;
+
+static BOOL useOldVolumeData = NO;
+static double vol_avg2x1;
+static double vol_avg2x2;
+static double vol_avg2x3;
+static double vol_avg2x4;
 
 + (int)brickLongSideLengthIfShortSideIs2AndDepthFrameContainsThisManyPixels:(int)pixelCount {
 	int score2x1, score2x2, score2x3, score2x4;
@@ -26,7 +37,7 @@
 		return 2;
 	else if (bestScore == score2x3)
 		return 3;
-	else // 2x4 will be the default case
+	else // 2x4 will be the default case.
 		return 4;
 }
 
@@ -45,26 +56,23 @@
 		return 2;
 	else if (bestScore == score2x3)
 		return 3;
-	else // 2x4 will be the default case
+	else // 2x4 will be the default case.
 		return 4;
 }
 
 #pragma mark - Generic helpers
 
 + (void)load {
+	// When the class is loaded, calculate the averages from the available data.
 	vol_avg2x1 = [self averageOfNSNumbersInArray:[self vol_data2x1]];
 	vol_avg2x2 = [self averageOfNSNumbersInArray:[self vol_data2x2]];
 	vol_avg2x3 = [self averageOfNSNumbersInArray:[self vol_data2x3]];
 	vol_avg2x4 = [self averageOfNSNumbersInArray:[self vol_data2x4]];
 	
-	//	NSLog(@"Volume:\t2x1 %.0f\t2x2 %.0f\t2x3 %.0f\t2x4 %.0f", vol_avg2x1, vol_avg2x2, vol_avg2x3, vol_avg2x4);
-	
 	dfPix_avg2x1 = [self averageOfNSNumbersInArray:[self dfPix_data2x1]];
 	dfPix_avg2x2 = [self averageOfNSNumbersInArray:[self dfPix_data2x2]];
 	dfPix_avg2x3 = [self averageOfNSNumbersInArray:[self dfPix_data2x3]];
 	dfPix_avg2x4 = [self averageOfNSNumbersInArray:[self dfPix_data2x4]];
-	
-//	NSLog(@"Depth:\t2x1 %.0f\t2x2 %.0f\t2x3 %.0f\t2x4 %.0f", dfPix_avg2x1, dfPix_avg2x2, dfPix_avg2x3, dfPix_avg2x4);
 }
 
 + (double)averageOfNSNumbersInArray:(NSArray *)array {
@@ -82,14 +90,7 @@
 	return result / count;
 }
 
-#pragma mark - Depth frame pixel count method
-
-static BOOL useOldDepthData = NO;
-
-static double dfPix_avg2x1;
-static double dfPix_avg2x2;
-static double dfPix_avg2x3;
-static double dfPix_avg2x4;
+#pragma mark - Data for depth frame pixel count method
 
 + (NSArray *)dfPix_data2x1 {
 	if (useOldDepthData)
@@ -119,14 +120,7 @@ static double dfPix_avg2x4;
 		return @[@267, @267, @287, @291, @291, @308, @324, @332, @332, @335, @351, @365, @391, @398, @410, @420, @422, @439, @447, @450, @457, @469, @477, @478, @484, @488, @489, @504, @506, @510, @511, @536, @539, @546, @548, @553, @561, @570, @574, @582, @586, @587, @588, @596, @600, @604, @608, @613, @618, @619, @632, @640, @642, @648, @650, @654, @655, @655, @666, @673, @679, @696, @701, @714, @717, @719, @729, @729, @736, @740, @740, @744, @748, @757, @758, @758, @764, @764, @767, @768, @768, @768, @776, @781, @784, @784, @786, @788, @789, @791, @793, @813, @826, @832, @843, @843, @849, @876, @884, @891, @921, @923, @944, @953, @997, @1009, @1325, @1597, @1872, @2467, @2566, @3333, @3495, @3631, @3766, @3799, @3802, @3883, @4549, @4794, @4861, @4866, @4884, @4908, @4919, @5051, @5067, @5157, @5232, @5233, @5239, @5458, @5473, @5495, @5630, @5681, @5691, @5844, @5861, @6084, @6166, @6246, @6856, @6929, @7518, @7614, @8265];
 }
 
-# pragma mark - Volume method
-
-static BOOL useOldVolumeData = NO;
-
-static double vol_avg2x1;
-static double vol_avg2x2;
-static double vol_avg2x3;
-static double vol_avg2x4;
+# pragma mark - Data for volume method
 
 + (NSArray *)vol_data2x1 {
 	if (useOldVolumeData)

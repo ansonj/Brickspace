@@ -1,5 +1,5 @@
 //
-//  BKP_GD_BasicTower.m
+//  BKP_GD_SpiralTower.m
 //  Brickspace
 //
 //  Created by Anson Jablinski on 6/6/14.
@@ -31,14 +31,14 @@
 }
 
 + (BKPRealizedModel *)createRealizedModelUsingBricks:(NSSet *)inputBricks {
-	// We want to represent as many colors as possible, given what we have
+	// We want to represent as many colors as possible, given what we have.
 	// This block will pare down the set of input bricks until we have the exact number needed to build a tower
-	// WITHOUT removing the last brick in any present color
+	//	without removing the last brick in any present color.
 	NSMutableSet *bricksToUse = [NSMutableSet setWithSet:[self bricksToBeUsedInModelFromSet:inputBricks]];
 	{
 		int colorCount = [BKPBrickColorOptions colorCount];
 		
-		// This will only work if we have less than 29 colors
+		// This will only work if we have less than 29 colors.
 		assert(colorCount <= 29);
 				
 		NSMutableArray *colorCounts = [[NSMutableArray alloc] initWithCapacity:colorCount];
@@ -63,18 +63,18 @@
 		};
 		
 		while (sumOfNumbersInArray(colorCounts) > numberOfBricksToUse) {
-			// Find the greatest element
+			// Find the greatest element.
 			int indexOfMaxInArray = 0;
 			for (int index = 1; index < colorCount; index++) {
 				if ([colorCounts[index] intValue] > [colorCounts[indexOfMaxInArray] intValue])
 					indexOfMaxInArray = index;
 			}
 			
-			// Subtract one from it
+			// Subtract one from it.
 			colorCounts[indexOfMaxInArray] = [NSNumber numberWithInt:([colorCounts[indexOfMaxInArray] intValue] - 1)];
 		}
 		
-		// remove bricks from bricksToUse until the actual count matches the color count
+		// Remove bricks from bricksToUse until the actual count matches the color count.
 		for (int colorIndex = 0; colorIndex < colorCount; colorIndex++) {
 			int desiredNumberOfBricksWithColor = [colorCounts[colorIndex] intValue];
 			NSSet *bricksWithColor = [bricksToUse objectsPassingTest:^BOOL(id obj, BOOL *stop) {
@@ -90,10 +90,10 @@
 		}
 	}
 		
-	// Now sort the bricks in color order. We want to go from black/blue at the bottom to red at the top
+	// Now sort the bricks in color order. We want to go from black/blue at the bottom to red at the top.
 	NSMutableArray *bricksToUseInOrder = [[NSMutableArray alloc] initWithCapacity:[bricksToUse count]];
 	{
-		// colorCount will give us the number of available colors. We'll use this to run backwards
+		// colorCount will give us the number of available colors. We'll use this to run backwards.
 		int colorCount = [BKPBrickColorOptions colorCount];
 		
 		for (int currentColor = colorCount - 1; currentColor >= 0; currentColor--) {
@@ -106,20 +106,20 @@
 	}
 	
 	
-	// Now bricksToUseInOrder has the bricks in order (left to right) with a good ratio of colors
+	// Now bricksToUseInOrder has the bricks in order (left to right) with a good ratio of colors.
 
 	// We'll build the base first, then the middle layers in sets of four, then the capstone.
 	BKPRealizedModel *model = [[BKPRealizedModel alloc] initWithSourceDesignName:self.designName];
 
 	float zCoord = 0;
 
-	// Base two layers
+	// Two base layers.
 	[self addLayer:1 toModel:model usingBricksFrom:bricksToUseInOrder atZ:zCoord];
 	zCoord += 3;
 	[self addLayer:2 toModel:model usingBricksFrom:bricksToUseInOrder atZ:zCoord];
 	zCoord += 3;
 	
-	// Middle layers, in groups of four
+	// Middle layers, in groups of four.
 	while ([bricksToUseInOrder count] > 5) {
 		[self addLayer:3 toModel:model usingBricksFrom:bricksToUseInOrder atZ:zCoord];
 		zCoord += 3;
@@ -131,7 +131,7 @@
 		zCoord += 3;
 	}
 	
-	// Capstone layers
+	// Capstone layers.
 	BKPPlacedBrick *capBrick1 = [[BKPPlacedBrick alloc] init];
 	BKPPlacedBrick *capBrick2 = [[BKPPlacedBrick alloc] init];
 	BKPPlacedBrick *capBrick3 = [[BKPPlacedBrick alloc] init];
@@ -260,7 +260,6 @@
 	[model addPlacedBrick:brick2];
 	[model addPlacedBrick:brick3];
 	[model addPlacedBrick:brick4];
-
 }
 
 @end

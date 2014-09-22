@@ -22,14 +22,12 @@ static int loggingPort = 4999;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    // Override point for customization after application launch.
-    
+
+	[self startWirelessLogging];
+	
 	BKPSplashViewController *splashVC = [[BKPSplashViewController alloc] init];
 	[[self window] setRootViewController:splashVC];
     
-	[self startWirelessLogging];
-//	NSLog(@"\n\n\nGood morning.\nThese are the captain's logs from run starting at %@.", [NSDate date]);
-	
 	self.window.backgroundColor = [UIColor whiteColor];
 	[self.window makeKeyAndVisible];
 	

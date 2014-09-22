@@ -6,8 +6,10 @@
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
 //
 
-// This class is just a holder for a mutable array, each item of which is a set of bricks that correspond to that step.
-// Steps are zero-indexed here, because of the array, but stepCount and both bricksForStep(s) "undo" the zero-index, so the outside world can perceive the steps as starting at 1.
+// This class is just a holder for a mutable array,
+//	each item of which is a set of bricks that correspond to that step.
+// Steps are zero-indexed here, because we're using an array internally,
+//	but the outside world perceives the steps as starting at 1.
 
 #import "BKPInstructionSet.h"
 
@@ -45,12 +47,12 @@
 		[instructionArray addObject:[NSSet set]];
 	}
 	
-	NSMutableSet *newBricks = [NSMutableSet setWithSet:instructionArray[step]];
+	NSMutableSet *newBricks = [NSMutableSet setWithSet:instructionArray[step-1]];
 	for (id brick in bricks) {
 		[newBricks addObject:brick];
 	}
 	
-	[instructionArray replaceObjectAtIndex:step withObject:newBricks];
+	[instructionArray replaceObjectAtIndex:(step-1) withObject:newBricks];
 }
 
 - (int)stepCount {
@@ -59,8 +61,8 @@
 
 - (NSSet *)bricksForStep:(int)step {
 	// THIS is the method that undoes the zero-indexing.
-	// bricksForStepOneThrough uses THIS
-	// BOTH take one-indexed step numbers as arguments
+	// bricksForStepOneThrough: uses this method.
+	// Both this method and bricksForStepOneThrough: take one-indexed step numbers as arguments.
 	if (step <= [instructionArray count] && step > 0)
 		return instructionArray[step-1];
 	else

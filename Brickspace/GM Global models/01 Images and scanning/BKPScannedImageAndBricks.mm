@@ -1,6 +1,6 @@
 //
 //  BKPScannedImageAndBricks.m
-//  Scanning with Structure
+//  Brickspace
 //
 //  Created by Anson Jablinski on 6/25/14.
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
@@ -38,8 +38,8 @@
 	self = [super init];
 	
 	if (self) {
-		// set up _sourceImage
-		// this is from AVCam, avcVC.m, line 393+
+		// Set up _sourceImage.
+		// This is based on Apple's AVCam sample project, AVCamViewController.m:393
 		assert(buffer);
 		NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:buffer];
 		_sourceImage = [[UIImage alloc] initWithData:imageData];
@@ -61,8 +61,8 @@
 	self = [super init];
 	
 	if (self) {
-		// set up _sourceimage
-		// this code from Structure's Viewer, vc.mm, line 281
+		// Set up _sourceimage.
+		// This code is based on Occipital's Viewer sample code, ViewController.mm:466
 		CVImageBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(buffer);
 		CVPixelBufferLockBaseAddress(pixelBuffer, 0);
 		size_t cols = CVPixelBufferGetWidth(pixelBuffer);
@@ -115,23 +115,6 @@
 	cv::putText(imageInProgress, inProgressText, cv::Point(42, 42), fontFace, fontScale, fontColor);
 	
 	return [BKPMatrixUIImageConverter UIImageFromCVMat:imageInProgress];
-	
-	/*
-	int width = _sourceImage.size.width;
-	int height = _sourceImage.size.height;
-	
-	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
-	CGContextRef context = CGBitmapContextCreate(NULL, width, height, 8, width * 4, colorSpace, kCGImageAlphaNone);
-	
-	CGContextDrawImage(context, CGRectMake(0, 0, width, height), _sourceImage.CGImage);
-
-	CGImageRef grayscaleImage = CGBitmapContextCreateImage(context);
-	
-	CGContextRelease(context);
-	CGColorSpaceRelease(colorSpace);
-	
-	return [UIImage imageWithCGImage:grayscaleImage];
-	 */
 }
 
 - (UIImage *)thumbnailImage {
@@ -141,20 +124,17 @@
 
 #pragma mark - Keypoints: Adding and removing
 
-// ADDING and REMOVING
-// if there's a keypoint nearby, you can toggle it. if not, create a new one
-	// ^^^^^ this is bunk; i don't think you should do it anymore
-// changes to the keypoints dispatch updateprocessedimage, async, to concurrent Q
+// Adding and removing keypoints via tapping the image are on my to-do list.
 
 - (void)addKeypointAtX:(float)x andY:(float)y {
 	//TODO: implement adding keypoint
-	// highlight the new keypoint (the last keypoint, assuming you add at the end)
+	// Highlight the new keypoint (the last keypoint, assuming you add at the end).
 }
 
 - (void)removeKeypointNearestToX:(float)x andY:(float)y {
 	//TODO: implement removing keypoint
-	// highlight the next keypoint: self.currentlyhkpi = self.chkpi
-		// this will trigger an array bounds check
+	// Highlight the next keypoint.
+		// self.currentlyhkpi = self.chkpi will trigger an array bounds check
 }
 
 - (void)removeCurrentlyHighlightedKeypoint {
@@ -167,28 +147,25 @@
 #pragma mark - Keypoints: Editing and highlight manipulation
 
 - (BKPKeypointBrickPair *)getCurrentlyHighlightedKeypointPair {
-	// check for nil array
 	if (!_keypointBrickPairs || [_keypointBrickPairs count] == 0)
 		return nil;
 
-	// shouldn't have to check for index out of bounds
-		// (array index setter/getters take care of this)
+	// We shouldn't have to check for index out of bounds here.
+		// (the array index setter/getters take care of this)
 	return _keypointBrickPairs[self.currentlyHighlightedKeypointIndex];
 }
 
 - (void)highlightNextKeypoint {
 	self.currentlyHighlightedKeypointIndex++;
 
-	// We need to update the processed image immediately.
-//	[self dispatchAsyncUpdateProcessedImage];
+	// Since this method is likely called from the UI, we need to update the processed image immediately.
 	[self updateProcessedImage];
 }
 
 - (void)highlightPreviousKeypoint {
 	self.currentlyHighlightedKeypointIndex--;
 
-	// We need to update the processed image immediately.
-//	[self dispatchAsyncUpdateProcessedImage];
+	// Since this method is likely called from the UI, we need to update the processed image immediately.
 	[self updateProcessedImage];
 }
 
@@ -273,8 +250,6 @@
 	_processedImage = [BKPMatrixUIImageConverter UIImageFromCVMat:imageWithKeypointsDrawn];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"ProcessedImageUpdated" object:self];
-	
-	// http://docs.opencv.org/modules/features2d/doc/common_interfaces_of_feature_detectors.html#keypoint
 }
 
 #pragma mark - At last, get the bricks from the image

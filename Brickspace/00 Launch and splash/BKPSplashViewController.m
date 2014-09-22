@@ -1,5 +1,5 @@
 //
-//  BKPViewController.m
+//  BKPSplashViewController.m
 //  Brickspace
 //
 //  Created by Anson Jablinski on 6/6/14.
@@ -7,12 +7,8 @@
 //
 
 #import "BKPSplashViewController.h"
-
-// For random bricks inside the little LegoView
 #import "BKPLegoView.h"
 #import "BKPPlacedBrick.h"
-
-// For loading the next VC
 #import "BKPCapturingViewController.h"
 
 @interface BKPSplashViewController ()
@@ -28,7 +24,7 @@
 @synthesize basicBricksLegoView, structureBricksLegoView;
 
 - (void)viewDidAppear:(BOOL)animated {
-	// set up bricks for basicBricksLegoView
+	// Set up bricks for basicBricksLegoView.
 	{
 		NSMutableArray *brickSet = [NSMutableArray array];
 		
@@ -42,16 +38,16 @@
 			[brickSet addObject:placedBrick];
 		}
 		
-		// What follows is more complex than it probably needs to be,
-		// but it scales to however many brick colors we have
+		// What follows is more complex (and hacky) than it probably needs to be,
+		// but it scales to however many brick colors we have.
 		
 		// How far apart should we space the bricks?
 		float spacing = 1;
 
-		// Calculate where to start placing the bricks so that they're centered
+		// Calculate where to start placing the bricks so that they're centered.
 		float xPosition = -(6 + spacing);
 		float yPosition = 2 + spacing / 2.0;
-		// Center it a bit better
+		// Center it a bit better.
 		xPosition /= 1.5;
 		yPosition /= 1.5;
 		
@@ -59,10 +55,10 @@
 			[brickSet[brickIndex] setX:xPosition Y:yPosition andZ:0];
 			
 			if (brickIndex % 2 == 0) {
-				// move down
+				// Move down.
 				yPosition -= 2 + spacing;
 			} else {
-				// move up and to the right
+				// Move up and to the right.
 				yPosition += 2 + spacing;
 				xPosition += 4 + spacing;
 			}
@@ -71,7 +67,7 @@
 		[basicBricksLegoView displayBricks:[NSSet setWithArray:brickSet]];
 	}
 	
-	// set up bricks for structureBricksLegoView
+	// Set up bricks for structureBricksLegoView.
 	{
 		BKPPlacedBrick *b2x1 = [[BKPPlacedBrick alloc] init];
 		BKPPlacedBrick *b2x2 = [[BKPPlacedBrick alloc] init];
@@ -89,7 +85,7 @@
 		[structureBricksLegoView displayBricks:[NSSet setWithArray:@[b2x1, b2x2, b2x3]]];
 	}
 	
-	// set up scrollview
+	// Set up scrollView with introductory text.
 	UIView *introTextView = [[[NSBundle mainBundle] loadNibNamed:@"BKPIntroTextView" owner:self options:nil] objectAtIndex:0];
 	[leftScrollView addSubview:introTextView];
 	[leftScrollView setContentSize:[introTextView frame].size];

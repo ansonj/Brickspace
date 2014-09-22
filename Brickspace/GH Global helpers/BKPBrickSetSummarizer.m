@@ -15,13 +15,13 @@
 + (NSString *)niceDescriptionOfBricksInSet:(NSSet *)bricks
 							 withTotalLine:(BOOL)includeTotal {
 	/*
-	 I tried making a dictionary of brick keys, with objects being the number of instances of that brick in the set.
-	 But once you define a hash function / isEqual for the bricks, then you can't have multiples in a set anymore.
-	 This breaks everything... so instead of operating on the bricks themselves, I'm going to operate on their descriptions.
-	 Hack * 1000000?
+	 The rest of Brickspace considers two instances of BKPBricks with the same properties to be unequal.
+	 In other words, two bricks with the exact same properties can both be in the same NSSet.
+	 This makes it difficult to build a dictionary where each brick is a key for an NSNumber that counts its multiplicity in a set.
+	 So, the dictionary I build here uses the bricks' descriptions as keys, which are identical for BKPBricks with identical properties.
 	 */
 
-	// Extract all brick objects from the set
+	// Extract all brick objects from the set.
 	NSMutableSet *bricksToSummarize = [NSMutableSet set];
 	for (id object in bricks) {
 		if ([object isMemberOfClass:[BKPPlacedBrick class]]) {
@@ -31,7 +31,7 @@
 		}
 	}
 	
-	// Count up multiple bricks of the same type
+	// Count up multiple bricks of the same type.
 	NSMutableDictionary *brickDescriptionsAndMultiplicities = [NSMutableDictionary dictionary];
 	for (BKPBrick *brick in bricksToSummarize) {
 		NSString *brickDescription = [brick description];
@@ -44,7 +44,7 @@
 		}
 	}
 			
-	// Output the result
+	// Output the result.
 	NSString *result = [NSString string];
 	int numberOfNewlinesToPrint = (int)[brickDescriptionsAndMultiplicities count] - 1;
 	for (NSString *brickDescription in [brickDescriptionsAndMultiplicities allKeys]) {
@@ -58,7 +58,7 @@
 	}
 	
 	if (includeTotal)
-		result = [result stringByAppendingFormat:@"\n\n%lu bricks total", [bricksToSummarize count]];
+		result = [result stringByAppendingFormat:@"\n\n%lu bricks total", (unsigned long)[bricksToSummarize count]];
 		
 	return result;
 }

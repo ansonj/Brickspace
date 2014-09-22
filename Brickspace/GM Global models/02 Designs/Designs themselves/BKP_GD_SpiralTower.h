@@ -1,5 +1,5 @@
 //
-//  BKP_GD_BasicTower.h
+//  BKP_GD_SpiralTower.h
 //  Brickspace
 //
 //  Created by Anson Jablinski on 6/6/14.

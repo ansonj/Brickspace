@@ -1,12 +1,10 @@
 //
 //  BKPLegoView.m
-//  Lego Viewer
+//  Brickspace
 //
 //  Created by Anson Jablinski on 6/9/14.
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
 //
-
-// This implementation is a pile of hacks and should be rewritten at some point
 
 #import "BKPLegoView.h"
 
@@ -60,6 +58,7 @@
 - (void)displayBricks:(NSSet *)bricks {
 	// We need to go through the set. If they're PlacedBricks, just add them.
 	// If they're only Bricks, then we can wrap them in a dummy PlacedBrick.
+	// If they're not a brick, then don't try to draw it.
 	NSMutableSet *placedBricksReadyForDisplay = [NSMutableSet set];
 	
 	for (id brickObject in bricks) {
@@ -73,7 +72,6 @@
 			
 			[placedBricksReadyForDisplay addObject:newPlacedBrick];
 		}
-		// This also makes sure we don't try to draw anything except bricks!
 	}
 		
 	bricksToDisplay = [NSSet setWithSet:placedBricksReadyForDisplay];
@@ -81,12 +79,12 @@
 }
 
 - (void)drawRect:(CGRect)rect {
-	// Save current context into instance variable for easy access
+	// Save current context into instance variable for easy access.
 	context = UIGraphicsGetCurrentContext();
 
-	// Scale the context once, based on the size of the things you're trying to draw in it
+	// Scale the context once, based on the size of the things you're trying to draw in it.
 	{
-		// Find the largest 3D bounding box for all the bricks
+		// Find the largest 3D bounding box for all the bricks.
 		float minX = FLT_MAX, minY = FLT_MAX, maxX = FLT_MIN, maxY = FLT_MIN;
 		for (BKPPlacedBrick *brick in bricksToDisplay) {
 			int xLength = (brick.isRotated?brick.brick.shortSideLength:brick.brick.longSideLength);
@@ -100,7 +98,7 @@
 			float brickMaxX = [self pointFrom3Dx:(x + xLength / 2.0) y:(y - yLength / 2.0) andZ:(z)].x;
 			
 			// Y coordinates grow from the top of the screen, not the bottom or center...
-			// This is still a bit of voodoo going on right here.
+			// This is a bit of voodoo going on right here.
 			float brickMinY = [self pointFrom3Dx:(x + xLength / 2.0) y:(y + yLength / 2.0) andZ:(z + height)].y;
 			float brickMaxY = [self pointFrom3Dx:(x - xLength / 2.0) y:(y - yLength / 2.0) andZ:(z)].y;
 			
@@ -110,7 +108,7 @@
 			maxY = MAX(maxY, brickMaxY);
 		}
 
-		// Compare with the visible self.bounds to determine the best scale factor
+		// Compare with the visible self.bounds to determine the best scale factor.
 		float desiredFillPercentage = 0.95;
 		
 		float scaleFromMinX = desiredFillPercentage * self.bounds.size.width / (2.0 * ABS(minX));
@@ -120,13 +118,13 @@
 		
 		float finalScale = MIN(MIN(scaleFromMinX, scaleFromMinY), MIN(scaleFromMaxX, scaleFromMaxY));
 		
-		// Center the origin
+		// Center the origin.
 		CGContextTranslateCTM(context, self.bounds.size.width / 2.0, self.bounds.size.height / 2.0);
-		// Scale by the determined factor
+		// Scale by the determined factor.
 		CGContextScaleCTM(context, finalScale, finalScale);
 	}
 
-	// Draw baseplate and axes, if requested
+	// Draw baseplate and axes, if requested.
 	if (_drawBaseplate)
 		[self drawTheBaseplate];
 	
@@ -138,10 +136,10 @@
 		return;
 	
 	
-	// Draw all the bricks in bricksToDisplay
+	// Draw all the bricks in bricksToDisplay.
 	
-	// First, put them into drawing order
-		// Lowest z coordinate is first; if z==z then highest sum of x and y is first (b/c it's furthest)
+	// First, put them into drawing order.
+		// Lowest z coordinate is first; if z == z then highest sum of x and y is first (b/c it's furthest).
 	NSMutableArray *drawingOrder = [NSMutableArray arrayWithCapacity:[bricksToDisplay count]];
 	for (BKPPlacedBrick *brick in bricksToDisplay) {
 		[drawingOrder addObject:brick];
@@ -159,13 +157,10 @@
 			return NSOrderedSame;
 	}];
 	
-	// Draw bricks one at a time
+	// Draw bricks one at a time.
 	for (BKPPlacedBrick *brick in drawingOrder) {
 		[self drawPlacedBrick:brick];
 	}
-	
-	// Done!
-	
 }
 
 
@@ -189,7 +184,7 @@
 	int yLength = (brick.isRotated?brick.brick.longSideLength:brick.brick.shortSideLength);
 	int height = brick.brick.height;
 	// These x, y, z are the coordinates of the "center" of the brick,
-	//		defined as the center of the bottom plane of the brick.
+	//	defined as the center of the bottom plane of the brick.
 	float x = brick.x;
 	float y = brick.y;
 	float z = brick.z;
@@ -212,7 +207,7 @@
 	CGPoint bottomLeft = [self	pointFrom3Dx:xOfLeftAndFront y:yOfLeftAndBack	andZ:zOfBottom];
 	
 	UIBezierPath *path = [UIBezierPath bezierPath];
-	// Draw outline first
+	// Draw the outline first.
 	[path moveToPoint:topLeft];
 	[path addLineToPoint:topBack];
 	[path addLineToPoint:topRight];
@@ -222,7 +217,7 @@
 	[path closePath];
 	[path stroke];
 	[path fill];
-	// Draw inner 3 lines
+	// Draw inner 3 lines.
 	[path setLineWidth:0.5];
 	[path removeAllPoints];
 	[path moveToPoint:topLeft];
@@ -233,7 +228,7 @@
 	[path closePath];
 	[path stroke];
 	
-	// Studs
+	// Draw the studs on top of the brick.
 	for (int xStud = 0; xStud < xLength; xStud++) {
 		for (int yStud = 0; yStud < yLength; yStud++) {
 			CGRect studRect = CGRectZero;
@@ -297,16 +292,19 @@
 	float newX = 0;
 	float newY = 0;
 	
-	// Input x
+	// These adjustments are based on measurements I made of a real sheet of Lego instructions.
+	// Each stud in the x, y, and z directions in the 3D model space correspond to
+	//	x and y distances in the plane of the paper.
+	// This is a decent, but imprecise way to transform 3D coordinates to 2D.
 	newX += x * 24;
 	newY += x * 9;
-	// Input y
+
 	newX += y * -13;
 	newY += y * 15;
-	// Input z
-	newY += z * 34.0 / 3; // because we are using 3 = full height, 1 = plate, AND the number 34 comes from a full-height brick
+
+	newY += z * 34.0 / 3; // 3 = full height brick, 1 = plate.
 	
-	// Flip y
+	// Flip y.
 	newY *= -1;
 	
 	return CGPointMake(newX, newY);

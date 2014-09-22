@@ -1,6 +1,6 @@
 //
 //  BKPScannedImageCollection.m
-//  Scanning with Structure
+//  Brickspace
 //
 //  Created by Anson Jablinski on 6/25/14.
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
@@ -47,9 +47,3 @@
 }
 
 @end
-
-/*
- BKPScannedImageCollection
- // holds a mutable array of scannedimages
- // 	is the table view's data source
-*/

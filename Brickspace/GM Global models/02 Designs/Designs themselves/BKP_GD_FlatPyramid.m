@@ -35,7 +35,7 @@
 	
 	NSMutableSet *bricksToUse = [NSMutableSet setWithSet:[self bricksToBeUsedInModelFromSet:inputBricks]];
 	
-	// assign bricks (you have the perfect number) to the realized model
+	// Assign bricks (you have the perfect number) to the realized model.
 	int bricksUsedSoFar = 0;
 	int totalBricksToUse = (int)[bricksToUse count];
 	int currentX = 3.0 - sqrtf(1 + 8 * totalBricksToUse);
@@ -60,7 +60,7 @@
 		if (currentRowCount == targetRowCount) {
 			currentDirection *= -1;
 			currentX += currentDirection * 2;
-			currentZ += 3; // remember, a full-height brick is 3 units high
+			currentZ += 3; // Remember, a full-height brick is 3 units high.
 			currentRowCount = 0;
 			targetRowCount--;
 		} else {

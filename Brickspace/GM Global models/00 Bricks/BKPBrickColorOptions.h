@@ -17,8 +17,7 @@ typedef NS_ENUM(NSUInteger, BKPBrickColor) {
 	BKPBrickColorGreen,
 	BKPBrickColorBlue,
 	BKPBrickColorBlack
-	// Keep these in rainbow order
-	// And update the color count when adding colors
+	// Keep these in rainbow order and update the color count when adding colors.
 };
 
 + (BKPBrickColor)randomColor;

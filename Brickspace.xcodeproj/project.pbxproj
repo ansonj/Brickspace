@@ -229,6 +229,7 @@
 		A3642252194210C9000C3B92 /* Brickspace */ = {
 			isa = PBXGroup;
 			children = (
+				A3642264194210C9000C3B92 /* Images.xcassets */,
 				A36512AE1975C75A00340095 /* 00 Launch and splash */,
 				A36512AF1975C7FB00340095 /* 01 Capture images */,
 				A36512B01975C80900340095 /* 02 Review images */,
@@ -236,7 +237,6 @@
 				A36512B21975C90B00340095 /* GM Global models */,
 				A36512B31975C92800340095 /* GH Global helpers */,
 				A36512B41975C92F00340095 /* GV Global views */,
-				A3642264194210C9000C3B92 /* Images.xcassets */,
 				A3642253194210C9000C3B92 /* Supporting Files */,
 			);
 			path = Brickspace;

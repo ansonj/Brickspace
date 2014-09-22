@@ -26,8 +26,10 @@
 - (void)addBricks:(NSSet *)bricks
 		   toStep:(int)step;
 
-
 #pragma mark - Getting instruction information
+
+// All methods in this class take 1-indexed step numbers as arguments,
+//	including the above addBricks:toStep:.
 
 - (int)stepCount;
 

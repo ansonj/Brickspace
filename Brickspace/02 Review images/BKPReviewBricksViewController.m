@@ -1,38 +1,31 @@
 //
 //  BKPReviewBricksViewController.m
-//  Scanning Final
+//  Brickspace
 //
 //  Created by Anson Jablinski on 7/3/14.
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
 //
 
-#import "BKPReviewBricksViewController.h"
-#import "BKPScannedImageCollection.h"
-#import "BKPLegoView.h"
-#import "BKPScannedImageAndBricks.h"
 #import "BKPBrickSetSummarizer.h"
 #import "BKPCapturingViewController.h"
-
-// For the next VC
 #import "BKPInstructionsViewController.h"
+#import "BKPLegoView.h"
+#import "BKPReviewBricksViewController.h"
+#import "BKPScannedImageAndBricks.h"
+#import "BKPScannedImageCollection.h"
 
 @interface BKPReviewBricksViewController ()
-// The big image in the middle
 @property (weak, nonatomic) IBOutlet UIImageView *editingImageView;
 
-// Edit area
 @property (weak, nonatomic) IBOutlet BKPLegoView *currentBrickView;
 @property (weak, nonatomic) IBOutlet UILabel *brickSizeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *brickColorLabel;
 
-// Edit area steppers
 @property (weak, nonatomic) IBOutlet UIStepper *shortSideStepper;
 @property (weak, nonatomic) IBOutlet UIStepper *longSideStepper;
 @property (weak, nonatomic) IBOutlet UIStepper *colorStepper;
 
-// Result summary areas
 @property (weak, nonatomic) IBOutlet UITextView *thisImageSummary;
-
 @end
 
 @implementation BKPReviewBricksViewController {
@@ -56,7 +49,6 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
 		imageCollection = [BKPScannedImageCollection emptyCollection];
 		
 		[self setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
@@ -81,7 +73,6 @@
 	[colorStepper setMinimumValue:-1];
 	[colorStepper setMaximumValue:[BKPBrickColorOptions colorCount]];
 	
-	
 	indexOfCurrentlyActiveImageInCollection = 0;
 }
 
@@ -97,7 +88,7 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+
 	NSLog(@"⚠️ %@ got a memory warning.", self);
 }
 
@@ -142,13 +133,13 @@
 }
 
 - (IBAction)stepperPressed:(id)sender {
-	// Adjust the color stepper, in case it is wrapping around
+	// Adjust the color stepper, in case it needs to wrap around.
 	if ([colorStepper value] == [colorStepper maximumValue])
 		[colorStepper setValue:0];
 	else if ([colorStepper value] == [colorStepper minimumValue])
 		[colorStepper setValue:([colorStepper maximumValue] - 1)];
 	
-	// Set the properties of the brick
+	// Set the properties of the brick.
 	BKPBrick *currentBrick = [[[self currentlyActiveImage] getCurrentlyHighlightedKeypointPair] brick];
 	
 	[currentBrick setShortSideLength:[shortSideStepper value]];
@@ -161,7 +152,7 @@
 - (IBAction)buildButtonPressed:(id)sender {
 	NSSet *allBricks = [imageCollection allBricksFromAllImages];
 	
-	// make sure each brick's short and long sides are short and long
+	// Make sure each brick's short side is shorter than its long side.
 	for (BKPBrick *brick in allBricks) {
 		if ([brick shortSideLength] > [brick longSideLength]) {
 			int tempSideLength = brick.shortSideLength;
@@ -170,11 +161,9 @@
 		}
 	}
 	
-	// now create the new VC
 	BKPInstructionsViewController *instructionsVC = [[BKPInstructionsViewController alloc] init];
 	[instructionsVC setUpWithCountedBricks:allBricks];
 	
-	// and display it
 	[self presentViewController:instructionsVC animated:YES completion:nil];
 }
 
@@ -191,20 +180,18 @@
 		BKPScannedImageAndBricks *currentImage = [self currentlyActiveImage];
 		BKPBrick *currentBrick = [[currentImage getCurrentlyHighlightedKeypointPair] brick];
 		
-		//	NSLog(@"I'm in \n%@\n looking at \n%@\n", currentImage, currentBrick);
-		
-		// update both image views
+		// Update both image views.
 		[editingImageView setImage:[currentImage processedImage]];
 		
 		if (currentBrick) {
-			// update the brick display
+			// Update the brick display.
 			[currentBrickView displayBricks:[NSSet setWithObject:currentBrick]];
 			
-			// update the short, long side lengths, and color
+			// Update the short, long side lengths, and color.
 			[brickSizeLabel setText:[NSString stringWithFormat:@"%d x %d", currentBrick.shortSideLength, currentBrick.longSideLength]];
 			[brickColorLabel setText:[BKPBrickColorOptions stringForColor:currentBrick.color]];
 			
-			// you also have to update the steppers
+			// You also have to update the steppers.
 			[shortSideStepper setValue:currentBrick.shortSideLength];
 			[longSideStepper setValue:currentBrick.longSideLength];
 			[colorStepper setValue:currentBrick.color];
@@ -214,10 +201,11 @@
 			[brickSizeLabel setText:@""];
 			[brickColorLabel setText:@""];
 			
-			// no need to update the steppers; they have no visible values
+			// No need to update the steppers here.
+			// We don't have a brick selected, so the steppers have nothing to do.
 		}
 		
-		// update the current image summary
+		// Update the current image summary.
 		[thisImageSummary setText:[BKPBrickSetSummarizer niceDescriptionOfBricksInSet:[currentImage bricksFromImage] withTotalLine:YES]];
 	});
 }

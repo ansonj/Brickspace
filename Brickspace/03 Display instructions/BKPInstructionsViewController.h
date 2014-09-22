@@ -1,5 +1,5 @@
 //
-//  BKPDoneViewController.h
+//  BKPInstructionsViewController.h
 //  Brickspace
 //
 //  Created by Anson Jablinski on 6/4/14.

@@ -1,5 +1,5 @@
 //
-//  BKPDoneViewController.m
+//  BKPInstructionsViewController.m
 //  Brickspace
 //
 //  Created by Anson Jablinski on 6/4/14.
@@ -47,9 +47,6 @@
 		
 		[legoView setDrawAxes:NO];
 		[legoView setDrawBaseplate:NO];
-		//	[legoView setBaseplateColor:BKPBrickColorBlue andSize:8];
-		
-
 	}
 	return self;
 }
@@ -59,11 +56,11 @@
 	
 	summaryText = [NSMutableString string];
 	
-	[summaryText appendFormat:@"Here are the %lu bricks you have:\n%@\n\n", [newSet count], [BKPBrickSetSummarizer niceDescriptionOfBricksInSet:newSet withTotalLine:NO]];
+	[summaryText appendFormat:@"Here are the %lu bricks you have:\n%@\n\n", (unsigned long)[newSet count], [BKPBrickSetSummarizer niceDescriptionOfBricksInSet:newSet withTotalLine:NO]];
 	
 	NSArray *availableDesigns = [BKP_GDManager availableDesigns];
 	
-	[summaryText appendFormat:@"Brickspace can currently build %lu different models:\n", [availableDesigns count]];
+	[summaryText appendFormat:@"Brickspace can currently build %lu different models:\n", (unsigned long)[availableDesigns count]];
 	
 	for (id<BKPGenericDesign> design in availableDesigns) {
 		if ([design canBeBuiltFromBricks:countedBrickSet]) {
@@ -93,18 +90,18 @@
 }
 
 - (void)updateUI {
-	// update summary text
+	// Update summary text.
 	[summaryTextView setText:summaryText];
 
-	// update slider
+	// Update slider.
 	[stepSlider setMinimumValue:1];
 	[stepSlider setMaximumValue:[instructions stepCount]];
 	[stepSlider setValue:currentStepNumber animated:YES];
 	
-	// update label text
+	// Update label text.
 	[stepLabel setText:[NSString stringWithFormat:@"%d of %d", currentStepNumber, [instructions stepCount]]];
 	
-	// tell legoview the right bricks to draw
+	// Tell legoview the right bricks to draw.
 	[legoView displayBricks:[instructions bricksForStepsOneThrough:currentStepNumber]];
 }
 
@@ -134,7 +131,7 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
 	if (alertView == _resetAlertView && buttonIndex == 1) {
-		// Walk backwards to grab the splash screen
+		// Walk backwards to grab the splash screen.
 		id vc_instructions = self;
 		id vc_reviewing = [vc_instructions presentingViewController];
 		id vc_capturing = [vc_reviewing presentingViewController];
@@ -142,12 +139,6 @@
 		
 		[vc_splash dismissViewControllerAnimated:YES completion:nil];
 	}
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end

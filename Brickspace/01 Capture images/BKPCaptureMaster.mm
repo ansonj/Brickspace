@@ -1,6 +1,6 @@
 //
 //  BKPCaptureMaster.m
-//  Scanning Final
+//  Brickspace
 //
 //  Created by Anson Jablinski on 7/2/14.
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
@@ -128,15 +128,15 @@ typedef NS_ENUM(NSUInteger, BKPCMStructureStatus) {
 - (NSString *)structureStatusString {
 	if (!_sensorController)
 		return @"❌❌";
-	// here, just check STSensorController methods
+	// Here, just check STSensorController methods.
 
 	NSString *result = [NSString string];
 	
 	if ([_sensorController isConnected]) {
-		// connected symbol
+		// Connected symbol.
 		result = [result stringByAppendingString:@"✅\n"];
 		
-		// name and serial
+		// Name and serial.
 		{
 			NSString *name = [_sensorController getName];
 			NSString *serial = [_sensorController getSerialNumber];
@@ -144,7 +144,7 @@ typedef NS_ENUM(NSUInteger, BKPCMStructureStatus) {
 				result = [result stringByAppendingFormat:@"%@\n(serial %@)\n", name, serial];
 		}
 		
-		// battery info
+		// Battery info.
 		{
 			int batteryPercentage = [_sensorController getBatteryChargePercentage];
 			if ([_sensorController isLowPower])
@@ -158,14 +158,11 @@ typedef NS_ENUM(NSUInteger, BKPCMStructureStatus) {
 		result = [result stringByAppendingString:@"❌\n"];
 	}
 	
-	
-//	❔❗️‼️
-	
 	return result;
 }
 
 - (NSString *)captureMasterStatusString {
-	// here, check my enum'd ivars
+	// Here, check my enum'd ivars.
 	
 	NSString *result = [NSString string];
 	
@@ -248,9 +245,9 @@ typedef NS_ENUM(NSUInteger, BKPCMStructureStatus) {
 	[_avSession beginConfiguration];
 	
 	[_avSession setSessionPreset:AVCaptureSessionPreset640x480];
+
 	
-	
-	////////// VIDEO INPUT
+	// Video input.
 	AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
 	
 	NSError *error;
@@ -287,15 +284,15 @@ typedef NS_ENUM(NSUInteger, BKPCMStructureStatus) {
 	
 	[[(AVCaptureVideoPreviewLayer *)[[self cameraPreviewView] layer] connection] setVideoOrientation:[delegate getInterfaceOrientation]];
 	
-	////////// STILL IMAGE OUTPUT
+	// Still image output.
 	_stillImageOutput = [[AVCaptureStillImageOutput alloc] init];
 	if ([_avSession canAddOutput:_stillImageOutput]) {
 		[_stillImageOutput setOutputSettings:@{AVVideoCodecKey: AVVideoCodecJPEG}];
 		[_avSession addOutput:_stillImageOutput];
 	}
 	
-	////////// SET SELF AS DELEGATE TO RECEIVE VIDEO FRAMES
-	// from Viewer, vc, 365
+	// Set self as the delegate to receive video frames.
+	// These few lines are from Occipital's Viewer sample code, ViewController.mm:549.
 	AVCaptureVideoDataOutput *frameOutput = [[AVCaptureVideoDataOutput alloc] init];
 	[frameOutput setAlwaysDiscardsLateVideoFrames:YES];
 	[frameOutput setVideoSettings:@{(id)kCVPixelBufferPixelFormatTypeKey: [NSNumber numberWithInt:kCVPixelFormatType_32BGRA]}];
@@ -307,7 +304,7 @@ typedef NS_ENUM(NSUInteger, BKPCMStructureStatus) {
 	[_avSession startRunning];
 	
 	
-	////////// DONE
+	// Done.
 	[self setCameraStatus:BKPCMCameraStatusPreviewing];
 	
 	[delegate previewingDidStart];
@@ -350,7 +347,7 @@ typedef NS_ENUM(NSUInteger, BKPCMStructureStatus) {
 }
 
 - (void)structureConnectionTimerFired:(NSTimer *)timer {
-	// if looking, spawn connection attempt
+	// If looking, spawn connection attempt.
 	if (self.structureSensorEnabled) {
 		if (self.structureStatus == BKPCMStructureStatusLookingForSensor ||
 			self.structureStatus == BKPCMStructureStatusUnknown) {

@@ -1,34 +1,27 @@
 //
 //  BKPKeypointDetectorAndAnalyzer.m
-//  Scanning with Structure
+//  Brickspace
 //
 //  Created by Anson Jablinski on 6/25/14.
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
 //
 
-#import "BKPKeypointDetectorAndAnalyzer.h"
-
-#import <opencv2/opencv.hpp>
-#import "BKPMatrixUIImageConverter.h"
-
-#import "BKPKeypointBrickPair.h"
-
-// For parameter sets for the detector
-#import "BKPDetectorParameterInitializer.h"
-
-// For accessing depth data
-#import <Structure/Structure.h>
-
-// For estimating brick size
 #import "BKPBrickSizeGuesser.h"
+#import "BKPDetectorParameterInitializer.h"
+#import "BKPKeypointBrickPair.h"
+#import "BKPKeypointDetectorAndAnalyzer.h"
+#import "BKPMatrixUIImageConverter.h"
+#import <Structure/Structure.h>
+#import <opencv2/opencv.hpp>
 
+// Any debug options?
 static BOOL printKeypointSearchDebug = NO;
 static BOOL printColorDebug = NO;
 static BOOL addDuplicatesIntentionally = NO;
 static BOOL addBunchOfRandomKeypoints = NO;
 static int addThisManyRandomKeypoints = 100;
 
-// Which parameters to use?
+// Which parameter sets to use?
 static BOOL includeUpCloseParams = NO;
 static BOOL includeAfarParams = YES;
 
@@ -37,7 +30,7 @@ static BOOL includeAfarParams = YES;
 + (void)detectKeypoints:(NSMutableArray *)keypoints inImage:(UIImage *)image {
 	[keypoints removeAllObjects];
 	
-	// convert the image to how we need it
+	// Convert the image to the Mat[rix] format.
 	cv::Mat imageForDetector;
 	{
 		cv::Mat sourceImage = [BKPMatrixUIImageConverter cvMatFromUIImage:image];
@@ -46,7 +39,7 @@ static BOOL includeAfarParams = YES;
 		imageGray.convertTo(imageForDetector, CV_8UC1);
 	}
 	
-	// put together the list of parameter sets we want to use
+	// Put together the list of parameter sets we want to use.
 	NSArray *allParameterSetsToUse = [NSArray array];
 	{
 		NSMutableArray *buildingParameterList = [NSMutableArray array];
@@ -63,7 +56,7 @@ static BOOL includeAfarParams = YES;
 	if (printKeypointSearchDebug)
 		NSLog(@"\n\nBeginning keypoint search.");
 	
-	// run the detection for each parameter set
+	// Run the detection for each parameter set.
 	for (NSValue *parameterSet in allParameterSetsToUse) {
 		cv::SimpleBlobDetector::Params parameters;
 		[parameterSet getValue:&parameters];
@@ -74,7 +67,7 @@ static BOOL includeAfarParams = YES;
 		
 		blobDetector->detect(imageForDetector, cvKeypoints);
 		
-		// stick all the keypoints into the array you were passed
+		// Add all the keypoints to the array you were passed.
 		unsigned long keypointCount = cvKeypoints.size();
 		for (int k = 0; k < keypointCount; k++) {
 			BKPKeypointBrickPair *newKpBPair = [[BKPKeypointBrickPair alloc] initWithKeypoint:cvKeypoints[k]];
@@ -86,7 +79,7 @@ static BOOL includeAfarParams = YES;
 	}
 	
 	if (addDuplicatesIntentionally) {
-		// Create some keypoints that are right on top, to test the duplicate remover
+		// Create some keypoints that are right on top, to test the duplicate remover.
 		
 		cv::KeyPoint dupe1, dupe2;
 		
@@ -110,7 +103,7 @@ static BOOL includeAfarParams = YES;
 	}
 	
 	if (addBunchOfRandomKeypoints) {
-		// Create a bunch of random keypoints, to have things to build
+		// Create a bunch of random keypoints, to test building models that need lots of bricks.
 		for (int count = 0; count < addThisManyRandomKeypoints; count++) {
 			cv::KeyPoint randomKp;
 			randomKp.pt.x = arc4random_uniform(image.size.width);
@@ -126,7 +119,7 @@ static BOOL includeAfarParams = YES;
 			NSLog(@"Added %d random keypoints, so now we have %lu keypoints.", addThisManyRandomKeypoints, (unsigned long)[keypoints count]);
 	}
 	
-	// go ahead and sort the keypoints so you can scroll through them in a sensible order
+	// Go ahead and sort the keypoints so you can scroll through them in a sensible order.
 	[keypoints sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
 		cv::KeyPoint kp1 = [(BKPKeypointBrickPair *)obj1 keypoint];
 		cv::KeyPoint kp2 = [(BKPKeypointBrickPair *)obj2 keypoint];
@@ -143,7 +136,7 @@ static BOOL includeAfarParams = YES;
 			return NSOrderedSame;
 	}];
 	
-	// Remove any keypoints that are right on top of each other
+	// Remove any keypoints that are right on top of each other.
 	if ([keypoints count] > 0) {
 		int minimumDistanceBetweenKeypoints = 5;
 		float (^distanceBetweenKeypoints)(BKPKeypointBrickPair*,BKPKeypointBrickPair*) = ^float(BKPKeypointBrickPair *kpbp1, BKPKeypointBrickPair *kpbp2) {
@@ -187,22 +180,22 @@ static BOOL includeAfarParams = YES;
 					  fromImage:(UIImage *)image
 				 withDepthFrame:(STFloatDepthFrame *)depthFrame
 {
-	// Create empty bricks, so we can have something to concurrently modify
+	// Create empty bricks, so we can have something to modify.
 	for (BKPKeypointBrickPair *pair in keypoints) {
+		// This is where the default brick size comes from.
 		BKPBrick *plainBrick = [BKPBrick brickWithColor:BKPBrickColorBlack shortSide:2 longSide:4 andHeight:3];
-		//!!!: This is where the default brick size comes from
 		[pair setBrick:plainBrick];
 	}
 	
 	
-	// Set up the concurrent queue and group that will keep track of the assignments
+	// Set up the concurrent queue and group that will keep track of the assignments.
 	dispatch_queue_t brickAssignmentQueue = dispatch_queue_create("com.ansonjablinski.brickAssignmentQueue", DISPATCH_QUEUE_CONCURRENT);
 	dispatch_group_t brickAssignmentGroup = dispatch_group_create();
 	
 
-	// Create the image as a matrix, for use in the color assignment
+	// Create the image as a matrix, for use in the color assignment.
 	cv::Mat imageMatrix = [BKPMatrixUIImageConverter cvMatFromUIImage:image];
-	// Assign colors to bricks
+	// Assign colors to bricks.
 	for (BKPKeypointBrickPair *keypoint in keypoints) {
 		dispatch_group_async(brickAssignmentGroup, brickAssignmentQueue, ^{
 			[self async_assignColorToBrickInKeypoint:keypoint inImageMatrix:imageMatrix];
@@ -225,17 +218,13 @@ static BOOL includeAfarParams = YES;
 
 #pragma mark - Asynchronous helpers
 
+// For the given keypoint, average the pixel intensities and find the nearest color.
 + (void)async_assignColorToBrickInKeypoint:(BKPKeypointBrickPair *)keypoint
 							 inImageMatrix:(cv::Mat)matrix
 {
-	// random colors for now
-//	[[keypoint brick] setColor:[BKPBrickColorOptions randomColor]];
-//	return;
-	
-	// Official method 1: average pixel intensities, compute nearest color
 	cv::KeyPoint kp = keypoint.keypoint;
 	
-	// average pixel intensities for each color channel across entire keypoint circle
+	// Average pixel intensities for each color channel across entire keypoint circle.
 	BOOL (^pixelIsInKeypointCircle)(int,int) = ^BOOL(int x, int y) {
 		int kpCenterX = kp.pt.x;
 		int kpCenterY = kp.pt.y;
@@ -245,15 +234,6 @@ static BOOL includeAfarParams = YES;
 		
 		return pixelRadius <= kpRadius;
 	};
-	
-	/*
-	NSString *(^colorFromVec)(cv::Vec4b) = ^NSString*(cv::Vec4b vector) {
-		unsigned int zero = vector.val[0];
-		unsigned int one = vector.val[1];
-		unsigned int two = vector.val[2];
-		return [NSString stringWithFormat:@"[%3d %3d %3d], # %X%X%X", zero, one, two, zero, one, two];
-	};
-	 */
 	
 	int startX = kp.pt.x - kp.size / 2.;
 	int stopX = startX + kp.size;
@@ -265,9 +245,6 @@ static BOOL includeAfarParams = YES;
 	double sumOfBlue = 0;
 	int numberOfPixels = 0;
 	
-//	NSLog(@"The keypoint is at (%f, %f) with size %f.", kp.pt.x, kp.pt.y, kp.size);
-//	NSLog(@"I'll be searching X:%d-%d and Y:%d-%d.", startX, stopX, startY, stopY);
-//	NSLog(@"That's %d pixels in total.", (stopX-startX)*(stopY-startY));
 	for (int currentX = startX; currentX <= stopX; currentX++) {
 		for (int currentY = startY; currentY <= stopY; currentY++) {
 			if (pixelIsInKeypointCircle(currentX, currentY)) {
@@ -275,8 +252,6 @@ static BOOL includeAfarParams = YES;
 				sumOfRed += pixelIntensity.val[0];
 				sumOfGreen += pixelIntensity.val[1];
 				sumOfBlue += pixelIntensity.val[2];
-				
-//				NSLog(@"Pixel %5d at (%3d, %3d) has color %@", numberOfPixels, currentX, currentY, colorFromVec(pixelIntensity));
 				
 				numberOfPixels++;
 			}
@@ -288,19 +263,21 @@ static BOOL includeAfarParams = YES;
 	double averageBlue = sumOfBlue / numberOfPixels;
 	
 	if (printColorDebug) {
-		////// DEBUG
-		//	NSLog(@"After adding up %d pixels,", numberOfPixels);
-		//	NSLog(@"I found a brick with (R %f) (G %f) (B %f)", averageRed, averageGreen, averageBlue);
+		NSLog(@"After adding up %d pixels,", numberOfPixels);
+		NSLog(@"I found a brick with (R %f) (G %f) (B %f)", averageRed, averageGreen, averageBlue);
 		NSLog(@"%p: That's a rounded color of [%3d %3d %3d]", keypoint, (int)averageRed, (int)averageGreen, (int)averageBlue);
 		NSLog(@"%p: That's a hex color of # %X %X %X", keypoint, (unsigned int)averageRed, (unsigned int)averageGreen, (unsigned int)averageBlue);
 		
-		//	cv::Vec4b centerIntensity = matrix.at<Vec4b>(kp.pt.y, kp.pt.x);
-		//	NSLog(@"The center of the keypoint is %@", colorFromVec(centerIntensity));
-		////// END DEBUG
+		cv::Vec4b centerIntensity = matrix.at<Vec4b>(kp.pt.y, kp.pt.x);
+		unsigned int zero = centerIntensity.val[0];
+		unsigned int one = centerIntensity.val[1];
+		unsigned int two = centerIntensity.val[2];
+		NSLog(@"The center of the keypoint is [%3d %3d %3d], # %X%X%X", zero, one, two, zero, one, two);
 	}
 	
 	
-	// compute distance from this avg vector to each color vector, as programmatically generated from the available color options
+	// Compute distance from this average vector to each color vector,
+	// as programmatically generated from the available color options.
 	NSMutableArray *colorDistances = [NSMutableArray array];
 	{
 		double detectedRed = averageRed / 255.;
@@ -322,7 +299,7 @@ static BOOL includeAfarParams = YES;
 	if (printColorDebug)
 		NSLog(@"%p: %@", keypoint, colorDistances);
 	
-	// assign the color with the shortest distance
+	// Assign the color with the shortest distance.
 	NSUInteger closestColor = 0;
 	{
 		assert([colorDistances count] > 0);
@@ -332,8 +309,10 @@ static BOOL includeAfarParams = YES;
 				closestColor = currentIndex;
 		}
 	}
+	
 	if (printColorDebug)
-		NSLog(@"%p: A winrar is %lu", keypoint, (unsigned long)closestColor);
+		NSLog(@"%p: best guess for color is %lu", keypoint, (unsigned long)closestColor);
+	
 	[[keypoint brick] setColor:(BKPBrickColor)closestColor];
 }
 
@@ -344,42 +323,32 @@ static BOOL includeAfarParams = YES;
 	// This method is only entered if we have a depth frame.
 	// If there is no depth frame, the default brick sizes, set in assignBricksToKeypoints, are unchanged.
 	
-	// Prepare to grab depth data
+	// Prepare to grab depth data.
 	const float *depthData = [depthFrame depthAsMillimeters];
+
 	float (^depthFromFrameAt)(int,int) = ^float(int x, int y) {
 		return depthData[x + depthFrame.width * y];
 	};
+
+	// Here are two hard-coded offsets. The Structure data was always off-center a bit.
+	// Using these offsets roughly compensates for the camera intrinsics.
 	int (^depthXfromImageX)(float) = ^int(float imageX) {
-		//!!!: here are the hard-coded offsets
-		// they are in these two blocks because we need to use them for the camera intrinsics math
 		return ((int)imageX) + -62;
-		// don't need this anymore b/c the image and df are same size (VGA)
-//		return imageX * depthFrame.width / matrix.size().width;
 	};
 	int (^depthYfromImageY)(float) = ^int(float imageY) {
 		return ((int)imageY) + -11;
-//		return imageY * depthFrame.height / matrix.size().height;
 	};
-	/*
-	float (^depthAtImageCoords)(float,float) = ^float(float x, float y) {
-		int depthFrameX = depthXfromImageX(x);
-		int depthFrameY = depthYfromImageY(y);
-		
-		return depthFromFrameAt(depthFrameX, depthFrameY);
-	};
-	 */
 	
 	
 	BOOL debugLots = NO;
-	BOOL debugSummary = YES;
 	BOOL debugFrameData = NO;
 		
-	// Get the basic info from the keypoint
+	// Get the basic info from the keypoint.
 	float kp_x = keypoint.keypoint.pt.x;
 	float kp_y = keypoint.keypoint.pt.y;
 	float kp_size = keypoint.keypoint.size;
 	
-	// Pick the bounds for the area of interest around the brick
+	// Pick the bounds for the area of interest around the brick.
 	int df_xMin, df_xMax, df_yMin, df_yMax;
 	{
 		int areaOfInterestPadding = 25;
@@ -388,9 +357,9 @@ static BOOL includeAfarParams = YES;
 		df_yMin = depthYfromImageY(kp_y - kp_size) - areaOfInterestPadding;
 		df_yMax = depthYfromImageY(kp_y + kp_size) + areaOfInterestPadding;
 		
-		// Don't try to go out of bounds
+		// Don't try to go out of bounds.
 		df_xMin = MAX(df_xMin, 0);
-		df_xMax = MIN(df_xMax, depthFrame.width - 1); // minus 1 just in case
+		df_xMax = MIN(df_xMax, depthFrame.width - 1); // Minus 1 just in case.
 		df_yMin = MAX(df_yMin, 0);
 		df_yMax = MIN(df_yMax, depthFrame.height - 1);
 	}
@@ -399,10 +368,9 @@ static BOOL includeAfarParams = YES;
 		NSLog(@"The center of the depth frame is at (%d, %d).", (df_xMin+df_xMax)/2, (df_yMin+df_yMax)/2);
 	}
 	
-	// Find the threshold, between the table depths and the brick depths
+	// Find the threshold, the boundary between the table depths and the brick depths.
 	float thresholdDepth;
 	{
-		// Find the min and max
 		float minDepth = FLT_MAX;
 		float maxDepth = FLT_MIN;
 		for (int current_df_x = df_xMin; current_df_x <= df_xMax; current_df_x++) {
@@ -415,120 +383,11 @@ static BOOL includeAfarParams = YES;
 			}
 		}
 		
-		// The threshold is the midpoint between the min and max, or the average if you like.
+		// The threshold is the midpoint between the min and max, or the average of the two.
 		thresholdDepth = (minDepth + maxDepth) / 2.;
 	}
 	if (debugLots)
 		NSLog(@"The threshold sits at %.2f mm.", thresholdDepth);
-	
-	// Find the height of the brick, in millimeters
-	float brickHeight;
-	{
-		double sumOfTableDepths = 0;
-		double sumOfBrickDepths = 0;
-		int countOfTableDepths = 0;
-		int countOfBrickDepths = 0;
-		
-		// Fill in the above values
-		for (int current_df_x = df_xMin; current_df_x <= df_xMax; current_df_x++) {
-			for (int current_df_y = df_yMin; current_df_y <= df_yMax; current_df_y++) {
-				
-				float depth = depthFromFrameAt(current_df_x, current_df_y);
-				
-				if (!isnan(depth)) {
-					if (depth > thresholdDepth) {
-						sumOfTableDepths += depth;
-						countOfTableDepths++;
-					} else {
-						sumOfBrickDepths += depth;
-						countOfBrickDepths++;
-					}
-				}
-			}
-		}
-		
-		// Compute the averages
-		double averageTableDepth = sumOfTableDepths / countOfTableDepths;
-		double averageBrickDepth = sumOfBrickDepths / countOfBrickDepths;
-		
-		// The brick height is the difference
-		brickHeight = averageTableDepth - averageBrickDepth;
-		
-		if (false) {
-			NSLog(@"Brick height calculation:");
-			NSLog(@"\tI counted %d points in the table for a sum of %f.", countOfTableDepths, sumOfTableDepths);
-			NSLog(@"\tI counted %d points in the brick for a sum of %f.", countOfBrickDepths, sumOfBrickDepths);
-			NSLog(@"\tThe average table depth is thus %f mm.", averageTableDepth);
-			NSLog(@"\tThe average brick depth is thus %f mm.", averageBrickDepth);
-			NSLog(@"\tThe difference of these two is %f mm.", brickHeight);
-		}
-	}
-	if (debugLots)
-		NSLog(@"Looks like the brick is %.2f mm high.", brickHeight);
-	
-	// Figure out how far apart each depth pixel is in the real world
-	// Or, figure out the real-world volume that each depth pixel represents
-	float rw_xDist, rw_yDist;
-	{
-		// This stuff comes from ScanDepthRender
-		float QVGA_COLS = 320;
-		float QVGA_ROWS = 240;
-		float QVGA_F_X = 305.73;
-		float QVGA_F_Y = 305.62;
-		float QVGA_C_X = 159.69;
-		float QVGA_C_Y = 119.86;
-		float cols = 640;
-		float rows = 480;
-		float _fx = QVGA_F_X/QVGA_COLS*cols;
-		float _fy = QVGA_F_Y/QVGA_ROWS*rows;
-		float _cx = QVGA_C_X/QVGA_COLS*cols;
-		float _cy = QVGA_C_Y/QVGA_ROWS*rows;
-		
-		// Middle of keypoint, in depth frame
-		// This is where we are going to calculate the depth pixel area
-		int df_x0 = (df_xMin + df_xMax) / 2.;
-		int df_y0 = (df_yMin + df_yMax) / 2.;
-		int df_x1 = df_x0 + 1;
-		int df_y1 = df_y0 + 1;
-		// Get the depths for (0,0) (1,0) and (0,1)
-		float depth_0_0 = depthFromFrameAt(df_x0, df_y0);
-		float depth_1_0 = depthFromFrameAt(df_x1, df_y0);
-		float depth_0_1 = depthFromFrameAt(df_x0, df_y1);
-		// If any of these depths are NaN, we need to try a different spot.
-		while (isnan(depth_0_0) || isnan(depth_0_1) || isnan(depth_1_0)) {
-			// Hopefully, we won't be moving too far away from the center of the brick.
-			df_x0++;
-			df_y0++;
-			df_x1++;
-			df_y1++;
-			depth_0_0 = depthFromFrameAt(df_x0, df_y0);
-			depth_1_0 = depthFromFrameAt(df_x1, df_y0);
-			depth_0_1 = depthFromFrameAt(df_x0, df_y1);
-		}
-				
-		// Calculate some real-world coordinates
-		// This is some of my stuff plus some of his stuff
-		float rw_x0 = depth_0_0 * (df_x0	- _cx	) / _fx;
-		float rw_x1 = depth_1_0 * (df_x1	- _cx	) / _fx;
-		float rw_y0 = depth_0_0 * (_cy		- df_y0	) / _fy;
-		float rw_y1 = depth_0_1 * (_cy		- df_y1	) / _fy;
-		
-		/*
-		// FIX THIS:
-		// you need to pull 0,0 and 1,0 and 0,1
-		// right now you are testing against the diagonal, which is probably inflating sizes!!!!!!
-		// also NaN lol
-		float x0 = centerDepth0 * (df_x0		- _cx) / _fx;
-		float x1 = centerDepth1 * (df_x0 + 1	- _cx) / _fx;
-		float y0 = centerDepth0 * (_cy - df_y0		) / _fy;
-		float y1 = centerDepth1 * (_cy - df_y0 + 1	) / _fy;
-		 */
-		
-		rw_xDist = ABS(rw_x1 - rw_x0);
-		rw_yDist = ABS(rw_y1 - rw_y0);
-	}
-	if (debugLots)
-		NSLog(@"Each depth pixel spans %.2f x %.2f mm, or %.2f mm^2.", rw_xDist, rw_yDist, rw_xDist*rw_yDist);
 	
 	// Count the number of depth frame pixels that are below the threshold (in the brick)
 	int countOfBrickDepthPixels = 0;
@@ -544,17 +403,6 @@ static BOOL includeAfarParams = YES;
 	}
 	if (debugLots)
 		NSLog(@"There are %d depth pixels below the threshold (in the brick).", countOfBrickDepthPixels);
-	
-	// Calculate the volume of the brick
-	float brickVolume = brickHeight * rw_xDist * rw_yDist * countOfBrickDepthPixels;
-	if (debugLots)
-		NSLog(@"The brick volume is approximately %f mm^3.", brickVolume);
-	
-//	NSLog(@"Wikipedia says it should be %f mm^3.", (9.6*7.8*7.8*2*4));
-		
-	if (debugSummary) {
-		NSLog(@"%.2f mm high, %.2f x %.2f mm, %d pixels in depth = %.2f mm^3 volume", brickHeight, rw_xDist, rw_yDist, countOfBrickDepthPixels, brickVolume);
-	}
 	
 	if (debugFrameData) {
 		int resultXmin = INT_MAX;
@@ -573,7 +421,7 @@ static BOOL includeAfarParams = YES;
 				
 				NSLog(@"(x, y, depth): %d\t%d\t%f", x, y, depthVal);
 				
-				// update min, max
+				// Update min and max, which we will examine just for debugging purposes.
 				{
 					resultXmin = MIN(resultXmin, x);
 					resultXmax = MAX(resultXmax, x);
@@ -588,15 +436,11 @@ static BOOL includeAfarParams = YES;
 		
 	}
 	
-//	NSLog(@"df pix count = %d", countOfBrickDepthPixels);
-	
+	// Done.
 	BKPBrick *brick = [keypoint brick];
 	[brick setShortSideLength:2];
-//	[brick setLongSideLength:[BKPBrickSizeGuesser brickLongSideLengthIfShortSideIs2AndVolumeIs:brickVolume]];
 	[brick setLongSideLength:[BKPBrickSizeGuesser brickLongSideLengthIfShortSideIs2AndDepthFrameContainsThisManyPixels:countOfBrickDepthPixels]];
 	[brick setHeight:3];
 }
 
 @end
-
-// http://docs.opencv.org/modules/features2d/doc/common_interfaces_of_feature_detectors.html#keypoint

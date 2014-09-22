@@ -1,6 +1,6 @@
 //
 //  BKPCapturingViewController.m
-//  Scanning Final
+//  Brickspace
 //
 //  Created by Anson Jablinski on 7/2/14.
 //  Copyright (c) 2014 Anson Jablinski. All rights reserved.
@@ -50,10 +50,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
 		_capturedImages = [NSMutableArray array];
-
-//		[self setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
     }
 	
     return self;
@@ -68,7 +65,7 @@
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUIFromNotification:) name:@"ProcessedImageUpdated" object:nil];
 	
-	// For resuming the stream
+	// For resuming the stream.
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackgroundNotificationReceived:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 }
 
@@ -78,7 +75,7 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+
 	NSLog(@"%@ got a memory warning.", self);
 }
 
@@ -102,7 +99,7 @@
 
 	unsigned long busyWaitIterations = 0;
 	while ([_captureMaster isPreviewing]) {
-		// perform h4x
+		// Perform h4x.
 		busyWaitIterations++;
 	}
 	if (busyWaitIterations > 0)
@@ -123,7 +120,6 @@
 
 - (void)updateUI {
 	dispatch_async(dispatch_get_main_queue(), ^{
-		/// gotta do it on the main thread
 		if ([_capturedImages count] > 0) {
 			[imagePreviewLabel setHidden:NO];
 			[imagePreviewView setImage:[[_capturedImages lastObject] processedImage]];
@@ -194,7 +190,7 @@
 }
 
 - (void)addAndDisplayCapturedImage:(BKPScannedImageAndBricks *)image {
-	// Custom override point when you are capturing multiple images. This is the end of the line.
+	// Custom override point when you are capturing multiple images.
 //	if (image)
 //		[_capturedImages addObject:image];
 	
