@@ -89,19 +89,21 @@
 }
 
 - (void)updateUI {
-	// Update summary text.
-	[summaryTextView setText:summaryText];
-
-	// Update slider.
-	[stepSlider setMinimumValue:1];
-	[stepSlider setMaximumValue:[instructions stepCount]];
-	[stepSlider setValue:currentStepNumber animated:YES];
-	
-	// Update label text.
-	[stepLabel setText:[NSString stringWithFormat:@"%d of %d", currentStepNumber, [instructions stepCount]]];
-	
-	// Tell legoview the right bricks to draw.
-	[legoView displayBricks:[instructions bricksForStepsOneThrough:currentStepNumber]];
+	dispatch_async(dispatch_get_main_queue(), ^{
+		// Update summary text.
+		[summaryTextView setText:summaryText];
+		
+		// Update slider.
+		[stepSlider setMinimumValue:1];
+		[stepSlider setMaximumValue:[instructions stepCount]];
+		[stepSlider setValue:currentStepNumber animated:YES];
+		
+		// Update label text.
+		[stepLabel setText:[NSString stringWithFormat:@"%d of %d", currentStepNumber, [instructions stepCount]]];
+		
+		// Tell legoview the right bricks to draw.
+		[legoView displayBricks:[instructions bricksForStepsOneThrough:currentStepNumber]];
+	});
 }
 
 - (IBAction)sliderMoved:(UISlider *)sender {
