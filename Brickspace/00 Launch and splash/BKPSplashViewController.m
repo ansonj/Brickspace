@@ -24,6 +24,8 @@
 @synthesize basicBricksLegoView, structureBricksLegoView;
 
 - (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
+	
 	// Set up bricks for basicBricksLegoView.
 	{
 		NSMutableArray *brickSet = [NSMutableArray array];

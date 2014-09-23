@@ -77,6 +77,8 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUI) name:@"ProcessedImageUpdated" object:nil];
 
 	[self updateUI];
@@ -84,6 +86,8 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	
+	[super viewDidDisappear:animated];
 }
 
 - (void)didReceiveMemoryWarning {

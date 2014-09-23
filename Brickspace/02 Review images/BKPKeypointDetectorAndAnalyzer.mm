@@ -40,7 +40,7 @@ static BOOL includeAfarParams = YES;
 	}
 	
 	// Put together the list of parameter sets we want to use.
-	NSArray *allParameterSetsToUse = [NSArray array];
+	NSArray *allParameterSetsToUse;
 	{
 		NSMutableArray *buildingParameterList = [NSMutableArray array];
 		

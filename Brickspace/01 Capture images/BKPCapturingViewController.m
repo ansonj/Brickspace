@@ -55,6 +55,8 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
+	
 	[self updateUI];
 	
 	_captureMaster = [[BKPCaptureMaster alloc] initWithCameraPreviewView:cameraPreviewView];
@@ -69,6 +71,8 @@
 
 - (void)viewDidDisappear:(BOOL)animated {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	
+	[super viewDidDisappear:animated];
 }
 
 - (void)didReceiveMemoryWarning {

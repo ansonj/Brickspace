@@ -87,6 +87,10 @@
 		[self setCurrentlyHighlightedKeypointIndex:-1];
 		
 		[self dispatchAsyncUpdateProcessedImage];
+		
+		CGColorSpaceRelease(colorSpace);
+		CGDataProviderRelease(provider);
+		CGImageRelease(imageRef);
 	}
 	
 	return self;
