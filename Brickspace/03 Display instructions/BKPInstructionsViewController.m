@@ -55,7 +55,7 @@
 	
 	summaryText = [NSMutableString string];
 	
-	[summaryText appendFormat:@"Here are the %lu bricks you have:\n%@\n\n", (unsigned long)[newSet count], [BKPBrickSetSummarizer niceDescriptionOfBricksInSet:newSet withTotalLine:NO]];
+	[summaryText appendFormat:@"Here are the %lu bricks that you have:\n%@\n\n", (unsigned long)[newSet count], [BKPBrickSetSummarizer niceDescriptionOfBricksInSet:newSet withTotalLine:NO]];
 	
 	NSArray *availableDesigns = [BKP_GDManager availableDesigns];
 	
