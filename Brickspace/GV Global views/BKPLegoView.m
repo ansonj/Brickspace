@@ -10,8 +10,8 @@
 #import "BKPPlacedBrick.h"
 
 @implementation BKPLegoView {
-	NSSet *bricksToDisplay;
-	CGContextRef context;
+	NSSet *_bricksToDisplay;
+	CGContextRef _context;
 }
 
 #pragma mark - Main functions
@@ -24,8 +24,8 @@
 	self = [super initWithCoder:aDecoder];
 	
 	if (self) {
-		bricksToDisplay = nil;
-		context = nil;
+		_bricksToDisplay = nil;
+		_context = nil;
 		_drawAxes = NO;
 		_drawBaseplate = NO;
 		baseplateColor = BKPBrickColorGreen;
@@ -73,19 +73,19 @@
 		}
 	}
 		
-	bricksToDisplay = [NSSet setWithSet:placedBricksReadyForDisplay];
+	_bricksToDisplay = [NSSet setWithSet:placedBricksReadyForDisplay];
 	[self setNeedsDisplay];
 }
 
 - (void)drawRect:(CGRect)rect {
 	// Save current context into instance variable for easy access.
-	context = UIGraphicsGetCurrentContext();
+	_context = UIGraphicsGetCurrentContext();
 
 	// Scale the context once, based on the size of the things you're trying to draw in it.
 	{
 		// Find the largest 3D bounding box for all the bricks.
 		float minX = FLT_MAX, minY = FLT_MAX, maxX = FLT_MIN, maxY = FLT_MIN;
-		for (BKPPlacedBrick *brick in bricksToDisplay) {
+		for (BKPPlacedBrick *brick in _bricksToDisplay) {
 			int xLength = (brick.isRotated?brick.brick.shortSideLength:brick.brick.longSideLength);
 			int yLength = (brick.isRotated?brick.brick.longSideLength:brick.brick.shortSideLength);
 			int height = brick.brick.height;
@@ -118,9 +118,9 @@
 		float finalScale = MIN(MIN(scaleFromMinX, scaleFromMinY), MIN(scaleFromMaxX, scaleFromMaxY));
 		
 		// Center the origin.
-		CGContextTranslateCTM(context, self.bounds.size.width / 2.0, self.bounds.size.height / 2.0);
+		CGContextTranslateCTM(_context, self.bounds.size.width / 2.0, self.bounds.size.height / 2.0);
 		// Scale by the determined factor.
-		CGContextScaleCTM(context, finalScale, finalScale);
+		CGContextScaleCTM(_context, finalScale, finalScale);
 	}
 
 	// Draw baseplate and axes, if requested.
@@ -131,7 +131,7 @@
 		[self drawTheAxes];
 	
 	// Got any bricks to draw?
-	if (!bricksToDisplay || [bricksToDisplay count] == 0)
+	if (!_bricksToDisplay || [_bricksToDisplay count] == 0)
 		return;
 	
 	
@@ -139,8 +139,8 @@
 	
 	// First, put them into drawing order.
 		// Lowest z coordinate is first; if z == z then highest sum of x and y is first (b/c it's furthest).
-	NSMutableArray *drawingOrder = [NSMutableArray arrayWithCapacity:[bricksToDisplay count]];
-	for (BKPPlacedBrick *brick in bricksToDisplay) {
+	NSMutableArray *drawingOrder = [NSMutableArray arrayWithCapacity:[_bricksToDisplay count]];
+	for (BKPPlacedBrick *brick in _bricksToDisplay) {
 		[drawingOrder addObject:brick];
 	}
 	[drawingOrder sortUsingComparator:^NSComparisonResult(BKPPlacedBrick *obj1, BKPPlacedBrick *obj2) {

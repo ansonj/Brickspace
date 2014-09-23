@@ -14,7 +14,7 @@
 #import "BKPInstructionSet.h"
 
 @implementation BKPInstructionSet {
-	NSMutableArray *instructionArray;
+	NSMutableArray *_instructionArray;
 }
 
 @synthesize sourceDesignName = _sourceDesignName;
@@ -32,39 +32,39 @@
 	if (self) {
 		_sourceDesignName = newName;
 		_style = newStyle;
-		instructionArray = [NSMutableArray array];
+		_instructionArray = [NSMutableArray array];
 	}
 	
 	return self;
 }
 
 - (void)addBricksToNextStep:(NSSet *)bricks {
-	[instructionArray addObject:bricks];
+	[_instructionArray addObject:bricks];
 }
 
 - (void)addBricks:(NSSet *)bricks toStep:(int)step {
-	while (step >= [instructionArray count]) {
-		[instructionArray addObject:[NSSet set]];
+	while (step >= [_instructionArray count]) {
+		[_instructionArray addObject:[NSSet set]];
 	}
 	
-	NSMutableSet *newBricks = [NSMutableSet setWithSet:instructionArray[step-1]];
+	NSMutableSet *newBricks = [NSMutableSet setWithSet:_instructionArray[step-1]];
 	for (id brick in bricks) {
 		[newBricks addObject:brick];
 	}
 	
-	[instructionArray replaceObjectAtIndex:(step-1) withObject:newBricks];
+	[_instructionArray replaceObjectAtIndex:(step-1) withObject:newBricks];
 }
 
 - (int)stepCount {
-	return (int)[instructionArray count];
+	return (int)[_instructionArray count];
 }
 
 - (NSSet *)bricksForStep:(int)step {
 	// THIS is the method that undoes the zero-indexing.
 	// bricksForStepOneThrough: uses this method.
 	// Both this method and bricksForStepOneThrough: take one-indexed step numbers as arguments.
-	if (step <= [instructionArray count] && step > 0)
-		return instructionArray[step-1];
+	if (step <= [_instructionArray count] && step > 0)
+		return _instructionArray[step-1];
 	else
 		return [NSSet set];
 }

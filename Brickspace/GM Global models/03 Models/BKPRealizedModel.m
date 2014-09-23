@@ -9,7 +9,7 @@
 #import "BKPRealizedModel.h"
 
 @implementation BKPRealizedModel {
-	NSMutableSet *setOfPlacedBricks;
+	NSMutableSet *_setOfPlacedBricks;
 }
 
 @synthesize sourceDesignName;
@@ -23,24 +23,24 @@
 	
 	if (self) {
 		self.sourceDesignName = name;
-		setOfPlacedBricks = [NSMutableSet set];
+		_setOfPlacedBricks = [NSMutableSet set];
 	}
 	
 	return self;
 }
 
 - (void)addPlacedBrick:(BKPPlacedBrick *)brick {
-	[setOfPlacedBricks addObject:brick];
+	[_setOfPlacedBricks addObject:brick];
 }
 
 - (NSSet *)brickPlacementData {
-	return [NSSet setWithSet:setOfPlacedBricks];
+	return [NSSet setWithSet:_setOfPlacedBricks];
 }
 
 - (NSString *)description {
-	NSString *result = [NSString stringWithFormat:@"A RealizedModel of a %@ with %lu bricks:\n", [self sourceDesignName], (unsigned long)[setOfPlacedBricks count]];
+	NSString *result = [NSString stringWithFormat:@"A RealizedModel of a %@ with %lu bricks:\n", [self sourceDesignName], (unsigned long)[_setOfPlacedBricks count]];
 	
-	for (BKPBrick *brick in setOfPlacedBricks) {
+	for (BKPBrick *brick in _setOfPlacedBricks) {
 		result = [result stringByAppendingFormat:@"%@\n",brick];
 	}
 	

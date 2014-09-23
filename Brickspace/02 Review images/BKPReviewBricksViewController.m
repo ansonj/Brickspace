@@ -29,8 +29,8 @@
 @end
 
 @implementation BKPReviewBricksViewController {
-	BKPScannedImageCollection *imageCollection;
-	int indexOfCurrentlyActiveImageInCollection;
+	BKPScannedImageCollection *_imageCollection;
+	int _indexOfCurrentlyActiveImageInCollection;
 	
 	UIAlertView *_resetThisImageAlertView;
 	UIAlertView *_retakePictureAlertView;
@@ -49,7 +49,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-		imageCollection = [BKPScannedImageCollection emptyCollection];
+		_imageCollection = [BKPScannedImageCollection emptyCollection];
 		
 		[self setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
     }
@@ -57,11 +57,11 @@
 }
 
 - (void)loadCapturedImages:(NSMutableArray *)arrayOfImages {
-	assert(imageCollection);
+	assert(_imageCollection);
 	assert(arrayOfImages);
 	
 	if ([arrayOfImages count] > 0)
-		[[imageCollection imageCollection] addObjectsFromArray:arrayOfImages];
+		[[_imageCollection imageCollection] addObjectsFromArray:arrayOfImages];
 }
 
 - (void)viewDidLoad {
@@ -73,7 +73,7 @@
 	[colorStepper setMinimumValue:-1];
 	[colorStepper setMaximumValue:[BKPBrickColorOptions colorCount]];
 	
-	indexOfCurrentlyActiveImageInCollection = 0;
+	_indexOfCurrentlyActiveImageInCollection = 0;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -150,7 +150,7 @@
 }
 
 - (IBAction)buildButtonPressed:(id)sender {
-	NSSet *allBricks = [imageCollection allBricksFromAllImages];
+	NSSet *allBricks = [_imageCollection allBricksFromAllImages];
 	
 	// Make sure each brick's short side is shorter than its long side.
 	for (BKPBrick *brick in allBricks) {
@@ -170,7 +170,7 @@
 #pragma mark - What image are we currently looking at?
 
 - (BKPScannedImageAndBricks *)currentlyActiveImage {
-	return [[imageCollection imageCollection] objectAtIndex:indexOfCurrentlyActiveImageInCollection];
+	return [[_imageCollection imageCollection] objectAtIndex:_indexOfCurrentlyActiveImageInCollection];
 }
 
 #pragma mark - Update UI
