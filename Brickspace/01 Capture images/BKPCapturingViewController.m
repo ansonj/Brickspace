@@ -74,7 +74,7 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 
-	NSLog(@"%@ got a memory warning.", self);
+	NSLog(@"⚠️ %@ got a memory warning.", self);
 }
 
 - (void)appDidEnterBackgroundNotificationReceived:(NSNotification *)notification {
