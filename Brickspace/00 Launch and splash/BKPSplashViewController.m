@@ -91,6 +91,7 @@
 	UIView *introTextView = [[[NSBundle mainBundle] loadNibNamed:@"BKPIntroTextView" owner:self options:nil] objectAtIndex:0];
 	[leftScrollView addSubview:introTextView];
 	[leftScrollView setContentSize:[introTextView frame].size];
+	[leftScrollView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
 	[leftScrollView flashScrollIndicators];
 }
 
