@@ -55,6 +55,7 @@
 		A36512CD1975D0DD00340095 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36512C61975D0DD00340095 /* ExternalAccessory.framework */; };
 		A36512CE1975D0DD00340095 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36512C71975D0DD00340095 /* ImageIO.framework */; };
 		A36512CF1975D0DD00340095 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36512C81975D0DD00340095 /* OpenGLES.framework */; };
+		A3AD2C8E19D217230099D155 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A3AD2C8D19D217230099D155 /* Launch Screen.xib */; };
 		A3B49B3519C6509A00D6E430 /* BKPDetectorParameterInitializer.mm in Sources */ = {isa = PBXBuildFile; fileRef = A3B49B3419C6509A00D6E430 /* BKPDetectorParameterInitializer.mm */; };
 		A3D8F8D91990213700A5BE14 /* BKPBrickSizeGuesser.m in Sources */ = {isa = PBXBuildFile; fileRef = A3D8F8D81990213700A5BE14 /* BKPBrickSizeGuesser.m */; };
 		A3FA38CA19C395A4002B2F34 /* BKPBrickSetSummarizer.m in Sources */ = {isa = PBXBuildFile; fileRef = A3FA38C919C395A4002B2F34 /* BKPBrickSetSummarizer.m */; };
@@ -146,6 +147,7 @@
 		A36512C61975D0DD00340095 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 		A36512C71975D0DD00340095 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		A36512C81975D0DD00340095 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		A3AD2C8D19D217230099D155 /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
 		A3B49B3319C6509A00D6E430 /* BKPDetectorParameterInitializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPDetectorParameterInitializer.h; sourceTree = "<group>"; };
 		A3B49B3419C6509A00D6E430 /* BKPDetectorParameterInitializer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BKPDetectorParameterInitializer.mm; sourceTree = "<group>"; };
 		A3D8F8D71990213700A5BE14 /* BKPBrickSizeGuesser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPBrickSizeGuesser.h; sourceTree = "<group>"; };
@@ -230,6 +232,7 @@
 			isa = PBXGroup;
 			children = (
 				A3642264194210C9000C3B92 /* Images.xcassets */,
+				A3AD2C8D19D217230099D155 /* Launch Screen.xib */,
 				A36512AE1975C75A00340095 /* 00 Launch and splash */,
 				A36512AF1975C7FB00340095 /* 01 Capture images */,
 				A36512B01975C80900340095 /* 02 Review images */,
@@ -503,6 +506,7 @@
 				A32F5F1B19BA2C0F00FDC151 /* BKPIntroTextView.xib in Resources */,
 				A36512AB1975BCFF00340095 /* BKPSplashViewController.xib in Resources */,
 				A36512A11975B8C700340095 /* BKPCapturingViewController.xib in Resources */,
+				A3AD2C8E19D217230099D155 /* Launch Screen.xib in Resources */,
 				A36512A61975B8D900340095 /* BKPReviewBricksViewController.xib in Resources */,
 				A36512AD1975C54300340095 /* BKPInstructionsViewController.xib in Resources */,
 			);
@@ -667,7 +671,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -689,7 +692,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
