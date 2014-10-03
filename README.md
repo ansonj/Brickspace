@@ -6,6 +6,8 @@ By [Anson Jablinski](http://ansonj.org). Created for the [University of Houston]
 
 Detailed information about the app is available at [the project website](http://ansonj.org/brickspace).
 
+The [OpenCV](http://opencv.org) framework for iOS (not included) is required to build Brickspace. OpenCV is used to detect bricks in the captured image and estimate their color.
+
 ## Class diagram
 
 ![Class diagram](classdiagram.png "Class diagram")
