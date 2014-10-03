@@ -8,7 +8,6 @@
 
 #import <AVFoundation/AVFoundation.h>
 #import <Foundation/Foundation.h>
-#import <Structure/Structure.h>
 
 @class AppleVideoPreviewView;
 
@@ -23,10 +22,8 @@
 
 - (void)captureMasterDidOutputAVFColorBuffer:(CMSampleBufferRef)buffer;
 
-- (void)captureMasterDidOutputSTColorBuffer:(CMSampleBufferRef)buffer
-						andDepthFrame:(STDepthFrame *)depthFrame;
-
 @end
+
 
 @interface BKPCaptureMaster : NSObject
 
@@ -38,9 +35,7 @@
 - (void)startPreviewing;
 - (void)stopPreviewing;
 - (BOOL)isPreviewing;
-@property (nonatomic) BOOL structureSensorEnabled;
 
-- (NSString *)structureStatusString;
 - (NSString *)captureMasterStatusString;
 
 - (void)performCapture;

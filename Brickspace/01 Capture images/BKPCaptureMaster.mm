@@ -17,22 +17,11 @@ typedef NS_ENUM(NSUInteger, BKPCMCameraStatus) {
 	BKPCMCameraStatusStopping
 };
 
-typedef NS_ENUM(NSUInteger, BKPCMStructureStatus) {
-	BKPCMStructureStatusUnknown,
-	BKPCMStructureStatusLookingForSensor,
-	BKPCMStructureStatusSensorNeedsCharging,
-	BKPCMStructureStatusStreaming
-};
-
-@interface BKPCaptureMaster () <AVCaptureVideoDataOutputSampleBufferDelegate, STSensorControllerDelegate>
+@interface BKPCaptureMaster () <AVCaptureVideoDataOutputSampleBufferDelegate>
 @property (nonatomic) BKPCMCameraStatus cameraStatus;
-@property (nonatomic) BKPCMStructureStatus structureStatus;
 @end
 
 @implementation BKPCaptureMaster {
-	NSTimer *_structureConnectionTimer;
-	
-	STSensorController *_sensorController;
 	BOOL _delegateIsWaitingForCapture;
 		
 	AVCaptureSession *_avSession;
@@ -41,9 +30,7 @@ typedef NS_ENUM(NSUInteger, BKPCMStructureStatus) {
 
 @synthesize delegate;
 @synthesize cameraPreviewView;
-@synthesize structureSensorEnabled = _structureSensorEnabled;
 @synthesize cameraStatus = _cameraStatus;
-@synthesize structureStatus = _structureStatus;
 
 #pragma mark - Public initialization
 
@@ -58,26 +45,14 @@ typedef NS_ENUM(NSUInteger, BKPCMStructureStatus) {
 		[self setCameraPreviewView:view];
 		
 		[self setCameraStatus:BKPCMCameraStatusUnknown];
-		[self setStructureStatus:BKPCMStructureStatusUnknown];
-		
-		_structureConnectionTimer = nil;
-		
-		[self setStructureSensorEnabled:NO];
 		
 		_delegateIsWaitingForCapture = NO;
-
-		_sensorController = [STSensorController sharedController];
-		[_sensorController setDelegate:self];
 	}
 	
 	return self;
 }
 
 - (void)dealloc {
-	if (_structureConnectionTimer)
-		[_structureConnectionTimer invalidate];
-	
-	[_sensorController setDelegate:nil];
 	[self setDelegate:nil];
 }
 
@@ -101,64 +76,6 @@ typedef NS_ENUM(NSUInteger, BKPCMStructureStatus) {
 
 - (BOOL)isPreviewing {
 	return (self.cameraStatus == BKPCMCameraStatusPreviewing);
-}
-
-- (void)setStructureSensorEnabled:(BOOL)structureSensorEnabled {
-	if (_structureSensorEnabled == structureSensorEnabled)
-		return;
-	
-	_structureSensorEnabled = structureSensorEnabled;
-
-	if (_structureSensorEnabled && self.structureStatus == BKPCMStructureStatusUnknown) {
-		[self setStructureStatus:BKPCMStructureStatusLookingForSensor];
-		
-		if (!_structureConnectionTimer)
-			_structureConnectionTimer = [NSTimer scheduledTimerWithTimeInterval:1.5 target:self selector:@selector(structureConnectionTimerFired:) userInfo:nil repeats:YES];
-	} else if (!_structureSensorEnabled) {
-		[_sensorController stopStreaming];
-		[self setStructureStatus:BKPCMStructureStatusUnknown];
-		
-		if (_structureConnectionTimer)
-			[_structureConnectionTimer invalidate];
-		
-		_structureConnectionTimer = nil;
-	}
-}
-
-- (NSString *)structureStatusString {
-	if (!_sensorController)
-		return @"❌❌";
-	// Here, just check STSensorController methods.
-
-	NSString *result = [NSString string];
-	
-	if ([_sensorController isConnected]) {
-		// Connected symbol.
-		result = [result stringByAppendingString:@"✅\n"];
-		
-		// Name and serial.
-		{
-			NSString *name = [_sensorController getName];
-			NSString *serial = [_sensorController getSerialNumber];
-			if (name && serial)
-				result = [result stringByAppendingFormat:@"%@\n(serial %@)\n", name, serial];
-		}
-		
-		// Battery info.
-		{
-			int batteryPercentage = [_sensorController getBatteryChargePercentage];
-			if ([_sensorController isLowPower])
-				result = [result stringByAppendingFormat:@"%d%% 🔋❗️", batteryPercentage];
-			else if (batteryPercentage < 20)
-				result = [result stringByAppendingFormat:@"%d%% 🔋⚠️", batteryPercentage];
-			else
-				result = [result stringByAppendingFormat:@"%d%% 🔋", batteryPercentage];
-		}
-	} else {
-		result = [result stringByAppendingString:@"❌\n"];
-	}
-	
-	return result;
 }
 
 - (NSString *)captureMasterStatusString {
@@ -185,34 +102,11 @@ typedef NS_ENUM(NSUInteger, BKPCMStructureStatus) {
 			break;
 	}
 	
-	if (self.structureSensorEnabled) {
-		result = [result stringByAppendingString:@"\n"];
-		
-		switch (self.structureStatus) {
-			case BKPCMStructureStatusUnknown:
-			default:
-				result = [result stringByAppendingString:@"The Structure Sensor is missing or malfunctioning."];
-				break;
-			case BKPCMStructureStatusLookingForSensor:
-				result = [result stringByAppendingString:@"Searching for the Structure Sensor..."];
-				break;
-			case BKPCMStructureStatusSensorNeedsCharging:
-				result = [result stringByAppendingString:@"[❗️] The Structure Sensor needs charging."];
-				break;
-			case BKPCMStructureStatusStreaming:
-				result = [result stringByAppendingString:@"The Structure Sensor is ready."];
-		}
-	}
-	
 	return result;
 }
 
 - (void)performCapture {
-	if (self.cameraStatus == BKPCMCameraStatusPreviewing && self.structureStatus == BKPCMStructureStatusStreaming) {
-		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-			[self async_initiateDepthAndColorImageCapture];
-		});
-	} else if (self.cameraStatus == BKPCMCameraStatusPreviewing) {
+	if (self.cameraStatus == BKPCMCameraStatusPreviewing) {
 		dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 			[self async_initiateColorImageCapture];
 		});
@@ -225,12 +119,6 @@ typedef NS_ENUM(NSUInteger, BKPCMStructureStatus) {
 
 - (void)setCameraStatus:(BKPCMCameraStatus)cameraStatus {
 	_cameraStatus = cameraStatus;
-	
-	[delegate captureMasterStatusChanged];
-}
-
-- (void)setStructureStatus:(BKPCMStructureStatus)structureStatus {
-	_structureStatus = structureStatus;
 	
 	[delegate captureMasterStatusChanged];
 }
@@ -312,10 +200,8 @@ typedef NS_ENUM(NSUInteger, BKPCMStructureStatus) {
 
 - (void)async_stopPreviewing {
 	[self setCameraStatus:BKPCMCameraStatusStopped];
-	[self setStructureStatus:BKPCMStructureStatusUnknown];
 	
 	[_avSession stopRunning];
-	[_sensorController stopStreaming];
 	
 	[delegate previewingDidStop];
 	// We have to tell the delegate LAST, or else some calls to zombies might take place.
@@ -340,161 +226,27 @@ typedef NS_ENUM(NSUInteger, BKPCMStructureStatus) {
 	[delegate captureMasterDidOutputAVFColorBuffer:buffer];
 }
 
-#pragma mark - Structure Sensor - Starting streaming and capturing delegate methods
-
-- (void)async_initiateDepthAndColorImageCapture {
-	_delegateIsWaitingForCapture = YES;
-}
-
-- (void)structureConnectionTimerFired:(NSTimer *)timer {
-	// If looking, spawn connection attempt.
-	if (self.structureSensorEnabled) {
-		if (self.structureStatus == BKPCMStructureStatusLookingForSensor ||
-			self.structureStatus == BKPCMStructureStatusUnknown) {
-			[self tryToConnectToStructure];
-		}
-	}
-}
-
 - (void)debug_printValues {
-	NSString *summary = @"structureSensorEnabled ";
-	
-	if (self.structureSensorEnabled)
-		summary = [summary stringByAppendingString:@"true, "];
-	else
-		summary = [summary stringByAppendingString:@"FALSE, "];
-	
-	NSString *camera;
 	switch (self.cameraStatus) {
 		case BKPCMCameraStatusPreviewing:
-			camera = @"BKPCMCameraStatusPreviewing";
+			NSLog(@"BKPCMCameraStatusPreviewing");
 			break;
 		case BKPCMCameraStatusStarting:
-			camera = @"BKPCMCameraStatusStarting";
+			NSLog(@"BKPCMCameraStatusStarting");
 			break;
 		case BKPCMCameraStatusStopped:
-			camera = @"BKPCMCameraStatusStopped";
+			NSLog(@"BKPCMCameraStatusStopped");
 			break;
 		case BKPCMCameraStatusStopping:
-			camera = @"BKPCMCameraStatusStopping";
+			NSLog(@"BKPCMCameraStatusStopping");
 			break;
 		case BKPCMCameraStatusUnknown:
-			camera = @"BKPCMCameraStatusUnknown";
+			NSLog(@"BKPCMCameraStatusUnknown");
 			break;
 		default:
-			camera = @"BKPCMCameraStatus ???";
+			NSLog(@"BKPCMCameraStatus ???");
 			break;
 	}
-		
-	NSString *structure;
-	switch (self.structureStatus) {
-		case BKPCMStructureStatusLookingForSensor:
-			structure = @"BKPCMStructureStatusLookingForSensor";
-			break;
-		case BKPCMStructureStatusSensorNeedsCharging:
-			structure = @"BKPCMStructureStatusSensorNeedsCharging";
-			break;
-		case BKPCMStructureStatusStreaming:
-			structure = @"BKPCMStructureStatusStreaming";
-			break;
-		case BKPCMStructureStatusUnknown:
-			structure = @"BKPCMStructureStatusUnknown";
-			break;
-		default:
-			structure = @"BKPCMStructureStatus ???";
-			break;
-	}
-		
-	summary = [summary stringByAppendingFormat:@"%@, %@, timer %@", camera, structure, _structureConnectionTimer];
-	
-	NSLog(@"%@", summary);
 }
-
-- (void)tryToConnectToStructure {
-	if (!self.structureSensorEnabled || self.structureStatus == BKPCMStructureStatusStreaming)
-		return;
-	
-	STSensorControllerInitStatus result = [_sensorController initializeSensorConnection];
-	BOOL connectionEstablished = (result == STSensorControllerInitStatusSuccess || result == STSensorControllerInitStatusAlreadyInitialized);
-	
-	[_sensorController setFrameSyncConfig:FRAME_SYNC_DEPTH_AND_RGB];
-	
-	if (connectionEstablished) {
-		NSLog(@"✅ Stream says it was a success.");
-		[_sensorController startStreamingWithConfig:CONFIG_VGA_DEPTH];
-		[self setStructureStatus:BKPCMStructureStatusStreaming];
-	} else {
-		NSString *badResult = @"❌ Stream appears to have failed: ";
-		switch (result) {
-			case STSensorControllerInitStatusSensorNotFound:
-				badResult = [badResult stringByAppendingString:@"Sensor not found."];
-				break;
-			case STSensorControllerInitStatusOpenFailed:
-				badResult = [badResult stringByAppendingString:@"Sensor open failed."];
-				break;
-			case STSensorControllerInitStatusSensorIsWakingUp:
-				badResult = [badResult stringByAppendingString:@"Sensor is slowly awakening."];
-				break;
-			default:
-				badResult = [badResult stringByAppendingFormat:@"Unknown err-or (%d).", (int)result];
-				break;
-		}
-		NSLog(@"%@", badResult);
-	}
-}
-
-- (void)structureBadThingHappened {
-	[_sensorController stopStreaming];
-	[self setStructureStatus:BKPCMStructureStatusUnknown];
-}
-
-- (void)sensorDidOutputSynchronizedDepthFrame:(STDepthFrame *)depthFrame
-								andColorFrame:(CMSampleBufferRef)sampleBuffer
-{
-	if (_delegateIsWaitingForCapture) {
-		[delegate captureMasterDidOutputSTColorBuffer:sampleBuffer andDepthFrame:depthFrame];
-		_delegateIsWaitingForCapture = NO;
-	}
-}
-
-- (void)captureOutput:(AVCaptureOutput *)captureOutput
-didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
-	   fromConnection:(AVCaptureConnection *)connection
-{
-	if ([_sensorController isConnected])
-		[_sensorController frameSyncNewColorImage:sampleBuffer];
-}
-
-#pragma mark - Structure Sensor - Six required delegate methods
-
-- (void)sensorDidConnect {
-	NSLog(@"🌐 Sensor connected.");
-}
-
-- (void)sensorDidDisconnect {
-	NSLog(@"🌐 Sensor disconnected.");
-	[self structureBadThingHappened];
-}
-
-- (void)sensorDidStopStreaming:(STSensorControllerDidStopStreamingReason)reason {
-	NSLog(@"🌐 Sensor stopped streaming.");
-	[self structureBadThingHappened];
-}
-
-- (void)sensorDidEnterLowPowerMode {
-	NSLog(@"🌐 Sensor has entered low power mode. Please charge.");
-	[self setStructureStatus:BKPCMStructureStatusSensorNeedsCharging];
-}
-
-- (void)sensorDidLeaveLowPowerMode {
-	NSLog(@"🌐 Sensor has left low power mode.");
-	[self setStructureStatus:BKPCMStructureStatusUnknown];
-}
-
-- (void)sensorBatteryNeedsCharging {
-	NSLog(@"🌐 Sensor battery needs charging.");
-	[self setStructureStatus:BKPCMStructureStatusSensorNeedsCharging];
-}
-
 
 @end

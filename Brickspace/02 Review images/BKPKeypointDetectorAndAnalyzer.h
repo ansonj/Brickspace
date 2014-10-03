@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@class STFloatDepthFrame;
-
 @interface BKPKeypointDetectorAndAnalyzer : NSObject
 
 + (void)detectKeypoints:(NSMutableArray *)keypoints
@@ -17,9 +15,5 @@
 
 + (void)assignBricksToKeypoints:(NSMutableArray *)keypoints
 					  fromImage:(UIImage *)image;
-
-+ (void)assignBricksToKeypoints:(NSMutableArray *)keypoints
-					  fromImage:(UIImage *)image
-				 withDepthFrame:(STFloatDepthFrame *)depthFrame;
 
 @end

@@ -46,13 +46,11 @@
 		A36512AB1975BCFF00340095 /* BKPSplashViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A36512AA1975BCFF00340095 /* BKPSplashViewController.xib */; };
 		A36512AD1975C54300340095 /* BKPInstructionsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A36512AC1975C54300340095 /* BKPInstructionsViewController.xib */; };
 		A36512B71975C96000340095 /* AppleVideoPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = A36512B61975C96000340095 /* AppleVideoPreviewView.m */; };
-		A36512BF1975D0BB00340095 /* Structure.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36512BE1975D0BB00340095 /* Structure.framework */; };
 		A36512C11975D0C100340095 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36512C01975D0C100340095 /* Accelerate.framework */; };
 		A36512C91975D0DD00340095 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36512C21975D0DC00340095 /* AVFoundation.framework */; };
 		A36512CA1975D0DD00340095 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36512C31975D0DC00340095 /* CoreImage.framework */; };
 		A36512CB1975D0DD00340095 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36512C41975D0DC00340095 /* CoreMedia.framework */; };
 		A36512CC1975D0DD00340095 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36512C51975D0DC00340095 /* CoreVideo.framework */; };
-		A36512CD1975D0DD00340095 /* ExternalAccessory.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36512C61975D0DD00340095 /* ExternalAccessory.framework */; };
 		A36512CE1975D0DD00340095 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36512C71975D0DD00340095 /* ImageIO.framework */; };
 		A36512CF1975D0DD00340095 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A36512C81975D0DD00340095 /* OpenGLES.framework */; };
 		A3AD2C8E19D217230099D155 /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A3AD2C8D19D217230099D155 /* Launch Screen.xib */; };
@@ -121,8 +119,8 @@
 		A36512911975B8B300340095 /* BKPKeypointBrickPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPKeypointBrickPair.h; sourceTree = "<group>"; };
 		A36512921975B8B300340095 /* BKPKeypointBrickPair.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BKPKeypointBrickPair.mm; sourceTree = "<group>"; };
 		A36512931975B8B300340095 /* BKPKeypointDetectorAndAnalyzer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPKeypointDetectorAndAnalyzer.h; sourceTree = "<group>"; };
-		A36512941975B8B300340095 /* BKPKeypointDetectorAndAnalyzer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BKPKeypointDetectorAndAnalyzer.mm; sourceTree = "<group>"; };
-		A36512951975B8B300340095 /* BKPScannedImageAndBricks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BKPScannedImageAndBricks.h; sourceTree = "<group>"; };
+		A36512941975B8B300340095 /* BKPKeypointDetectorAndAnalyzer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; path = BKPKeypointDetectorAndAnalyzer.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		A36512951975B8B300340095 /* BKPScannedImageAndBricks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BKPScannedImageAndBricks.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A36512961975B8B300340095 /* BKPScannedImageAndBricks.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BKPScannedImageAndBricks.mm; sourceTree = "<group>"; };
 		A365129A1975B8C700340095 /* BKPCaptureMaster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BKPCaptureMaster.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		A365129B1975B8C700340095 /* BKPCaptureMaster.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; lineEnding = 0; path = BKPCaptureMaster.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -138,13 +136,11 @@
 		A36512AC1975C54300340095 /* BKPInstructionsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BKPInstructionsViewController.xib; sourceTree = "<group>"; };
 		A36512B51975C96000340095 /* AppleVideoPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleVideoPreviewView.h; sourceTree = "<group>"; };
 		A36512B61975C96000340095 /* AppleVideoPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppleVideoPreviewView.m; sourceTree = "<group>"; };
-		A36512BE1975D0BB00340095 /* Structure.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Structure.framework; path = ../../Frameworks/Structure/Frameworks/Structure.framework; sourceTree = "<group>"; };
 		A36512C01975D0C100340095 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		A36512C21975D0DC00340095 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		A36512C31975D0DC00340095 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		A36512C41975D0DC00340095 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		A36512C51975D0DC00340095 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
-		A36512C61975D0DD00340095 /* ExternalAccessory.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ExternalAccessory.framework; path = System/Library/Frameworks/ExternalAccessory.framework; sourceTree = SDKROOT; };
 		A36512C71975D0DD00340095 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		A36512C81975D0DD00340095 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		A3AD2C8D19D217230099D155 /* Launch Screen.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "Launch Screen.xib"; sourceTree = "<group>"; };
@@ -161,14 +157,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A36512BF1975D0BB00340095 /* Structure.framework in Frameworks */,
 				A365128C1975B77B00340095 /* opencv2.framework in Frameworks */,
 				A36512C11975D0C100340095 /* Accelerate.framework in Frameworks */,
 				A36512C91975D0DD00340095 /* AVFoundation.framework in Frameworks */,
 				A36512CA1975D0DD00340095 /* CoreImage.framework in Frameworks */,
 				A36512CB1975D0DD00340095 /* CoreMedia.framework in Frameworks */,
 				A36512CC1975D0DD00340095 /* CoreVideo.framework in Frameworks */,
-				A36512CD1975D0DD00340095 /* ExternalAccessory.framework in Frameworks */,
 				A36512CE1975D0DD00340095 /* ImageIO.framework in Frameworks */,
 				A36512CF1975D0DD00340095 /* OpenGLES.framework in Frameworks */,
 				A364224F194210C9000C3B92 /* CoreGraphics.framework in Frameworks */,
@@ -215,11 +209,9 @@
 				A36512C31975D0DC00340095 /* CoreImage.framework */,
 				A36512C41975D0DC00340095 /* CoreMedia.framework */,
 				A36512C51975D0DC00340095 /* CoreVideo.framework */,
-				A36512C61975D0DD00340095 /* ExternalAccessory.framework */,
 				A36512C71975D0DD00340095 /* ImageIO.framework */,
 				A36512C81975D0DD00340095 /* OpenGLES.framework */,
 				A36512C01975D0C100340095 /* Accelerate.framework */,
-				A36512BE1975D0BB00340095 /* Structure.framework */,
 				A365128B1975B77B00340095 /* opencv2.framework */,
 				A364224C194210C9000C3B92 /* Foundation.framework */,
 				A364224E194210C9000C3B92 /* CoreGraphics.framework */,

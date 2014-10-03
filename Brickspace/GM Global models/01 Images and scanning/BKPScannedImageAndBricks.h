@@ -9,13 +9,10 @@
 #import "BKPKeypointBrickPair.h"
 #import <AVFoundation/AVFoundation.h>
 #import <Foundation/Foundation.h>
-#import <Structure/Structure.h>
 
 @interface BKPScannedImageAndBricks : NSObject
 
 - (id)initWithAVFColorBuffer:(CMSampleBufferRef)buffer;
-- (id)initWithSTColorBuffer:(CMSampleBufferRef)buffer
-			  andDepthFrame:(STDepthFrame *)depthFrame;
 
 - (UIImage *)sourceImage;
 - (UIImage *)processedImage;

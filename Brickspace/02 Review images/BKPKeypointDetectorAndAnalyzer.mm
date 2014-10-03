@@ -11,7 +11,6 @@
 #import "BKPKeypointBrickPair.h"
 #import "BKPKeypointDetectorAndAnalyzer.h"
 #import "BKPMatrixUIImageConverter.h"
-#import <Structure/Structure.h>
 #import <opencv2/opencv.hpp>
 
 // Any debug options?
@@ -173,13 +172,6 @@ static BOOL includeAfarParams = YES;
 + (void)assignBricksToKeypoints:(NSMutableArray *)keypoints
 					  fromImage:(UIImage *)image
 {
-	[self assignBricksToKeypoints:keypoints fromImage:image withDepthFrame:nil];
-}
-
-+ (void)assignBricksToKeypoints:(NSMutableArray *)keypoints
-					  fromImage:(UIImage *)image
-				 withDepthFrame:(STFloatDepthFrame *)depthFrame
-{
 	// Create empty bricks, so we can have something to modify.
 	for (BKPKeypointBrickPair *pair in keypoints) {
 		// This is where the default brick size comes from.
@@ -200,16 +192,6 @@ static BOOL includeAfarParams = YES;
 		dispatch_group_async(brickAssignmentGroup, brickAssignmentQueue, ^{
 			[self async_assignColorToBrickInKeypoint:keypoint inImageMatrix:imageMatrix];
 		});
-	}
-	
-	
-	// We may or may not have a depth frame.
-	if (depthFrame) {
-		for (BKPKeypointBrickPair *keypoint in keypoints) {
-			dispatch_group_async(brickAssignmentGroup, brickAssignmentQueue, ^{
-				[self async_assignSizeToBrickInKeypoint:keypoint inImageMatrix:imageMatrix withDepthFrame:depthFrame];
-			});
-		}
 	}
 		
 	
@@ -314,133 +296,6 @@ static BOOL includeAfarParams = YES;
 		NSLog(@"%p: best guess for color is %lu", keypoint, (unsigned long)closestColor);
 	
 	[[keypoint brick] setColor:(BKPBrickColor)closestColor];
-}
-
-+ (void)async_assignSizeToBrickInKeypoint:(BKPKeypointBrickPair *)keypoint
-							inImageMatrix:(cv::Mat)matrix
-						   withDepthFrame:(STFloatDepthFrame *)depthFrame
-{
-	// This method is only entered if we have a depth frame.
-	// If there is no depth frame, the default brick sizes, set in assignBricksToKeypoints, are unchanged.
-	
-	// Prepare to grab depth data.
-	const float *depthData = [depthFrame depthAsMillimeters];
-
-	float (^depthFromFrameAt)(int,int) = ^float(int x, int y) {
-		return depthData[x + depthFrame.width * y];
-	};
-
-	// Here are two hard-coded offsets. The Structure data was always off-center a bit.
-	// Using these offsets roughly compensates for the camera intrinsics.
-	int (^depthXfromImageX)(float) = ^int(float imageX) {
-		return ((int)imageX) + -62;
-	};
-	int (^depthYfromImageY)(float) = ^int(float imageY) {
-		return ((int)imageY) + -11;
-	};
-	
-	
-	BOOL debugLots = NO;
-	BOOL debugFrameData = NO;
-		
-	// Get the basic info from the keypoint.
-	float kp_x = keypoint.keypoint.pt.x;
-	float kp_y = keypoint.keypoint.pt.y;
-	float kp_size = keypoint.keypoint.size;
-	
-	// Pick the bounds for the area of interest around the brick.
-	int df_xMin, df_xMax, df_yMin, df_yMax;
-	{
-		int areaOfInterestPadding = 25;
-		df_xMin = depthXfromImageX(kp_x - kp_size) - areaOfInterestPadding;
-		df_xMax = depthXfromImageX(kp_x + kp_size) + areaOfInterestPadding;
-		df_yMin = depthYfromImageY(kp_y - kp_size) - areaOfInterestPadding;
-		df_yMax = depthYfromImageY(kp_y + kp_size) + areaOfInterestPadding;
-		
-		// Don't try to go out of bounds.
-		df_xMin = MAX(df_xMin, 0);
-		df_xMax = MIN(df_xMax, depthFrame.width - 1); // Minus 1 just in case.
-		df_yMin = MAX(df_yMin, 0);
-		df_yMax = MIN(df_yMax, depthFrame.height - 1);
-	}
-	if (debugLots) {
-		NSLog(@"\nI'm examining the depth frame from X(%d - %d) Y(%d - %d).", df_xMin, df_xMax, df_yMin, df_yMax);
-		NSLog(@"The center of the depth frame is at (%d, %d).", (df_xMin+df_xMax)/2, (df_yMin+df_yMax)/2);
-	}
-	
-	// Find the threshold, the boundary between the table depths and the brick depths.
-	float thresholdDepth;
-	{
-		float minDepth = FLT_MAX;
-		float maxDepth = FLT_MIN;
-		for (int current_df_x = df_xMin; current_df_x <= df_xMax; current_df_x++) {
-			for (int current_df_y = df_yMin; current_df_y <= df_yMax; current_df_y++) {
-				float depth = depthFromFrameAt(current_df_x, current_df_y);
-				if (!isnan(depth)) {
-					minDepth = MIN(minDepth, depth);
-					maxDepth = MAX(maxDepth, depth);
-				}
-			}
-		}
-		
-		// The threshold is the midpoint between the min and max, or the average of the two.
-		thresholdDepth = (minDepth + maxDepth) / 2.;
-	}
-	if (debugLots)
-		NSLog(@"The threshold sits at %.2f mm.", thresholdDepth);
-	
-	// Count the number of depth frame pixels that are below the threshold (in the brick)
-	int countOfBrickDepthPixels = 0;
-	{
-		for (int current_df_x = df_xMin; current_df_x <= df_xMax; current_df_x++) {
-			for (int current_df_y = df_yMin; current_df_y <= df_yMax; current_df_y++) {
-				float depth = depthFromFrameAt(current_df_x, current_df_y);
-				
-				if (!isnan(depth) && depth < thresholdDepth)
-					countOfBrickDepthPixels++;
-			}
-		}
-	}
-	if (debugLots)
-		NSLog(@"There are %d depth pixels below the threshold (in the brick).", countOfBrickDepthPixels);
-	
-	if (debugFrameData) {
-		int resultXmin = INT_MAX;
-		int resultXmax = INT_MIN;
-		int resultYmin = resultXmin;
-		int resultYmax = resultXmax;
-		float resultZmin = FLT_MAX;
-		float resultZmax = FLT_MIN;
-		
-		for (int x = df_xMin; x <= df_xMax; x++) {
-			for (int y = df_yMin; y <= df_yMax; y++) {
-				float depthVal = depthFromFrameAt(x, y);
-
-				if (isnan(depthVal))
-					continue;
-				
-				NSLog(@"(x, y, depth): %d\t%d\t%f", x, y, depthVal);
-				
-				// Update min and max, which we will examine just for debugging purposes.
-				{
-					resultXmin = MIN(resultXmin, x);
-					resultXmax = MAX(resultXmax, x);
-					resultYmin = MIN(resultYmin, y);
-					resultYmax = MAX(resultYmax, y);
-					resultZmin = MIN(resultZmin, depthVal);
-					resultZmax = MAX(resultZmax, depthVal);
-				}
-			}
-		}
-		NSLog(@"X(%d - %d) Y(%d - %d) Z(%.1f - %.1f)", resultXmin, resultXmax, resultYmin, resultYmax, resultZmin, resultZmax);
-		
-	}
-	
-	// Done.
-	BKPBrick *brick = [keypoint brick];
-	[brick setShortSideLength:2];
-	[brick setLongSideLength:[BKPBrickSizeGuesser brickLongSideLengthIfShortSideIs2AndDepthFrameContainsThisManyPixels:countOfBrickDepthPixels]];
-	[brick setHeight:3];
 }
 
 @end

@@ -12,7 +12,6 @@
 
 @interface BKPScannedImageAndBricks () {
 	UIImage *_sourceImage;
-	STFloatDepthFrame *_depthFrame;
 	UIImage *_processedImage;
 	
 	NSMutableArray *_keypointBrickPairs;
@@ -23,8 +22,6 @@
 @property (nonatomic) int currentlyHighlightedKeypointIndex;
 
 @end
-
-
 
 @implementation BKPScannedImageAndBricks
 
@@ -44,7 +41,6 @@
 		NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:buffer];
 		_sourceImage = [[UIImage alloc] initWithData:imageData];
 		
-		_depthFrame = nil;
 		_processedImage = nil;
 		_keypointBrickPairs = nil;
 		
@@ -55,47 +51,6 @@
 	
 	return self;
 }
-
-- (id)initWithSTColorBuffer:(CMSampleBufferRef)buffer
-			  andDepthFrame:(STDepthFrame *)depthFrame {
-	self = [super init];
-	
-	if (self) {
-		// Set up _sourceimage.
-		// This code is based on Occipital's Viewer sample code, ViewController.mm:466
-		CVImageBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(buffer);
-		CVPixelBufferLockBaseAddress(pixelBuffer, 0);
-		size_t cols = CVPixelBufferGetWidth(pixelBuffer);
-		size_t rows = CVPixelBufferGetHeight(pixelBuffer);
-		unsigned char *ptr = (unsigned char*) CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
-		NSData *data = [[NSData alloc] initWithBytes:ptr length:rows*cols*4];
-		CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
-		
-		CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-		CGDataProviderRef provider = CGDataProviderCreateWithCFData((CFDataRef) data);
-		CGImageRef imageRef = CGImageCreate(cols, rows, 8, 8 * 4, cols * 4, colorSpace, kCGImageAlphaNoneSkipFirst | kCGBitmapByteOrder32Little, provider, NULL, NO, kCGRenderingIntentDefault);
-		
-		_sourceImage = [[UIImage alloc] initWithCGImage:imageRef];
-		
-		_depthFrame = [[STFloatDepthFrame alloc] init];
-		[_depthFrame updateFromDepthFrame:depthFrame];
-		
-		_processedImage = nil;
-		
-		_keypointBrickPairs = nil;
-		
-		[self setCurrentlyHighlightedKeypointIndex:-1];
-		
-		[self dispatchAsyncUpdateProcessedImage];
-		
-		CGColorSpaceRelease(colorSpace);
-		CGDataProviderRelease(provider);
-		CGImageRelease(imageRef);
-	}
-	
-	return self;
-}
-
 
 #pragma mark - Getting UIImage(s)
 
@@ -231,10 +186,7 @@
 		_keypointBrickPairs = [NSMutableArray array];
 		[BKPKeypointDetectorAndAnalyzer detectKeypoints:_keypointBrickPairs inImage:_sourceImage];
 		
-		if (_depthFrame)
-			[BKPKeypointDetectorAndAnalyzer assignBricksToKeypoints:_keypointBrickPairs fromImage:_sourceImage withDepthFrame:_depthFrame];
-		else
-			[BKPKeypointDetectorAndAnalyzer assignBricksToKeypoints:_keypointBrickPairs fromImage:_sourceImage];
+		[BKPKeypointDetectorAndAnalyzer assignBricksToKeypoints:_keypointBrickPairs fromImage:_sourceImage];
 	}
 	
 	cv::Mat sourceImageData = [BKPMatrixUIImageConverter cvMatFromUIImage:_sourceImage];

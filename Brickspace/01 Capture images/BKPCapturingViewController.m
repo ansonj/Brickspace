@@ -18,10 +18,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *imagePreviewLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *imagePreviewView;
 
-@property (weak, nonatomic) IBOutlet UISwitch *structureSwitch;
-@property (weak, nonatomic) IBOutlet UILabel *structureStatusLabel;
-@property (weak, nonatomic) IBOutlet UIView *structureAlignmentView;
-
 @property (weak, nonatomic) IBOutlet UILabel *statusLabel;
 
 @property (weak, nonatomic) IBOutlet UIButton *captureButton;
@@ -38,7 +34,6 @@
 
 @synthesize cameraPreviewView;
 @synthesize imagePreviewLabel, imagePreviewView;
-@synthesize structureSwitch, structureStatusLabel, structureAlignmentView;
 @synthesize statusLabel;
 @synthesize captureButton, forwardButton;
 
@@ -64,9 +59,6 @@
 	[_captureMaster startPreviewing];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUIFromNotification:) name:@"ProcessedImageUpdated" object:nil];
-	
-	// For resuming the stream.
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidEnterBackgroundNotificationReceived:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -79,11 +71,6 @@
     [super didReceiveMemoryWarning];
 
 	NSLog(@"⚠️ %@ got a memory warning.", self);
-}
-
-- (void)appDidEnterBackgroundNotificationReceived:(NSNotification *)notification {
-	[structureSwitch setOn:NO];
-	[self structureSwitchChanged:nil];
 }
 
 #pragma mark - Button and switch handlers
@@ -114,10 +101,6 @@
 	[self presentViewController:reviewVC animated:YES completion:nil];
 }
 
-- (IBAction)structureSwitchChanged:(id)sender {
-	[_captureMaster setStructureSensorEnabled:[structureSwitch isOn]];
-}
-
 #pragma mark - Update that UI!
 
 - (void)updateUI {
@@ -134,23 +117,8 @@
 		
 		if ([_captureMaster isPreviewing]) {
 			[captureButton setHidden:NO];
-			[structureSwitch setEnabled:YES];
 		} else {
 			[captureButton setHidden:YES];
-			[structureSwitch setEnabled:NO];
-			// Turn off connecting to the Structure if the view is not previewing.
-			[structureSwitch setOn:NO];
-			[self structureSwitchChanged:structureSwitch];
-		}
-		
-		if ([structureSwitch isOn]) {
-			[structureStatusLabel setHidden:NO];
-			[structureStatusLabel setText:[_captureMaster structureStatusString]];
-			[structureAlignmentView setHidden:NO];
-		} else {
-			[structureStatusLabel setHidden:YES];
-			[structureStatusLabel setText:@""];
-			[structureAlignmentView setHidden:YES];
 		}
 		
 		[statusLabel setText:[_captureMaster captureMasterStatusString]];
@@ -181,13 +149,6 @@
 
 - (void)captureMasterDidOutputAVFColorBuffer:(CMSampleBufferRef)buffer {
 	BKPScannedImageAndBricks *newImage = [[BKPScannedImageAndBricks alloc] initWithAVFColorBuffer:buffer];
-	[self addAndDisplayCapturedImage:newImage];
-}
-
-- (void)captureMasterDidOutputSTColorBuffer:(CMSampleBufferRef)buffer
-							  andDepthFrame:(STDepthFrame *)depthFrame
-{
-	BKPScannedImageAndBricks *newImage = [[BKPScannedImageAndBricks alloc] initWithSTColorBuffer:buffer andDepthFrame:depthFrame];
 	[self addAndDisplayCapturedImage:newImage];
 }
 
