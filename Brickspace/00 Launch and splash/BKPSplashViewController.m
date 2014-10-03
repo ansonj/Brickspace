@@ -15,13 +15,12 @@
 @property (weak, nonatomic) IBOutlet UIScrollView *leftScrollView;
 
 @property (weak, nonatomic) IBOutlet BKPLegoView *basicBricksLegoView;
-@property (weak, nonatomic) IBOutlet BKPLegoView *structureBricksLegoView;
 @end
 
 @implementation BKPSplashViewController
 
 @synthesize leftScrollView;
-@synthesize basicBricksLegoView, structureBricksLegoView;
+@synthesize basicBricksLegoView;
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
@@ -44,47 +43,26 @@
 		// but it scales to however many brick colors we have.
 		
 		// How far apart should we space the bricks?
-		float spacing = 1;
+		float spacing = 2;
 
 		// Calculate where to start placing the bricks so that they're centered.
-		float xPosition = -(6 + spacing);
-		float yPosition = 2 + spacing / 2.0;
-		// Center it a bit better.
-		xPosition /= 1.5;
-		yPosition /= 1.5;
+		float xPosition = -(2 + spacing);
+		float yPosition = (3 * numberOfColors / 4. - 3. / 2) + spacing / 2.0;
 		
 		for (int brickIndex = 0; brickIndex < numberOfColors; brickIndex++) {
 			[brickSet[brickIndex] setX:xPosition Y:yPosition andZ:0];
 			
 			if (brickIndex % 2 == 0) {
-				// Move down.
-				yPosition -= 2 + spacing;
-			} else {
-				// Move up and to the right.
-				yPosition += 2 + spacing;
+				// Move to the right.
 				xPosition += 4 + spacing;
+			} else {
+				// Move down and to the left.
+				yPosition -= 2 + spacing;
+				xPosition -= 4 + spacing;
 			}
 		}
 		
 		[basicBricksLegoView displayBricks:[NSSet setWithArray:brickSet]];
-	}
-	
-	// Set up bricks for structureBricksLegoView.
-	{
-		BKPPlacedBrick *b2x1 = [[BKPPlacedBrick alloc] init];
-		BKPPlacedBrick *b2x2 = [[BKPPlacedBrick alloc] init];
-		BKPPlacedBrick *b2x3 = [[BKPPlacedBrick alloc] init];
-		
-		[b2x1 setBrick:[BKPBrick brickWithColor:BKPBrickColorRed shortSide:1 longSide:2 andHeight:3]];
-		[b2x2 setBrick:[BKPBrick brickWithColor:BKPBrickColorRed shortSide:2 longSide:2 andHeight:3]];
-		[b2x3 setBrick:[BKPBrick brickWithColor:BKPBrickColorRed shortSide:2 longSide:3 andHeight:3]];
-		
-		float spacing = 2;
-		[b2x1 setX:-(2 + spacing) Y:-0.5 andZ:0];
-		[b2x2 setX:0 Y:0 andZ:0];
-		[b2x3 setX:(2 + spacing) Y:0 andZ:0];
-		
-		[structureBricksLegoView displayBricks:[NSSet setWithArray:@[b2x1, b2x2, b2x3]]];
 	}
 	
 	// Set up scrollView with introductory text.
