@@ -2,7 +2,7 @@
 
 ## with Structure Sensor support
 
-The version on this branch includes support for the [Structure Sensor](http://structure.io) from Occipital.
+The version on this branch includes support for the [Structure Sensor](http://structure.io) from Occipital. If you're interested, you can [read more about how this works](http://ansonj.org/blog/2014/10/2/brickspace-and-the-structure-sensor) on my blog.
 
 - The sensor is optional. With the sensor plugged in, the app will attempt to detect the size of bricks and assign one of the four supported sizes (2x1, 2x2, 2x3, 2x4).
 - The app bundle has been renamed to `com.ansonjablinski.BrickspaceStructure` to distinguish it from the App Store version (`com.ansonjablinski.Brickspace`).
