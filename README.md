@@ -16,6 +16,8 @@ By [Anson Jablinski](http://ansonj.org). Created for the [University of Houston]
 
 Detailed information about the app is available at [the project website](http://ansonj.org/brickspace).
 
+A [public version without Structure Sensor support](https://github.com/ansonj/Brickspace/tree/master) is available as a [free download from the iOS App Store](https://itunes.apple.com/us/app/brickspace/id922275889?ls=1&mt=8).
+
 ## Class diagram
 
 ![Class diagram](classdiagram.png "Class diagram")
