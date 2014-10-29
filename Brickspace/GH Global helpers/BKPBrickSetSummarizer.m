@@ -12,7 +12,7 @@
 @implementation BKPBrickSetSummarizer
 
 + (NSString *)niceDescriptionOfBricksInSet:(NSSet *)bricks
-							 withTotalLine:(BOOL)includeTotal {
+                             withTotalLine:(BOOL)includeTotal {
 	/*
 	 The rest of Brickspace considers two instances of BKPBricks with the same properties to be unequal.
 	 In other words, two bricks with the exact same properties can both be in the same NSSet.

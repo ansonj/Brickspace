@@ -11,9 +11,9 @@
 @interface BKPKeypointDetectorAndAnalyzer : NSObject
 
 + (void)detectKeypoints:(NSMutableArray *)keypoints
-				inImage:(UIImage *)image;
+                inImage:(UIImage *)image;
 
 + (void)assignBricksToKeypoints:(NSMutableArray *)keypoints
-					  fromImage:(UIImage *)image;
+                      fromImage:(UIImage *)image;
 
 @end

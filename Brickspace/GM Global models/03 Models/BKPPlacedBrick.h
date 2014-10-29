@@ -18,7 +18,7 @@
 @property (nonatomic) float z;
 
 - (void)setX:(float)newX
-		   Y:(float)newY
-		andZ:(float)newZ;
+           Y:(float)newY
+        andZ:(float)newZ;
 
 @end

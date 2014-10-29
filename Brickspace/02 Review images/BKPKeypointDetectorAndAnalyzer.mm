@@ -170,7 +170,7 @@ static BOOL includeAfarParams = YES;
 }
 
 + (void)assignBricksToKeypoints:(NSMutableArray *)keypoints
-					  fromImage:(UIImage *)image
+                      fromImage:(UIImage *)image
 {
 	// Create empty bricks, so we can have something to modify.
 	for (BKPKeypointBrickPair *pair in keypoints) {
@@ -202,7 +202,7 @@ static BOOL includeAfarParams = YES;
 
 // For the given keypoint, average the pixel intensities and find the nearest color.
 + (void)async_assignColorToBrickInKeypoint:(BKPKeypointBrickPair *)keypoint
-							 inImageMatrix:(cv::Mat)matrix
+                             inImageMatrix:(cv::Mat)matrix
 {
 	cv::KeyPoint kp = keypoint.keypoint;
 	

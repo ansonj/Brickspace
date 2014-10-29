@@ -11,6 +11,6 @@
 @interface BKPBrickSetSummarizer : NSObject
 
 + (NSString *)niceDescriptionOfBricksInSet:(NSSet *)bricks
-							 withTotalLine:(BOOL)includeTotal;
+                             withTotalLine:(BOOL)includeTotal;
 
 @end

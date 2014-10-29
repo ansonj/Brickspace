@@ -18,6 +18,6 @@ typedef NS_ENUM(NSUInteger, BKPInstructionGeneratorStyle) {
 };
 
 + (BKPInstructionSet *)instructionsForRealizedModel:(BKPRealizedModel *)model
-										  withStyle:(BKPInstructionGeneratorStyle)style;
+                                          withStyle:(BKPInstructionGeneratorStyle)style;
 
 @end

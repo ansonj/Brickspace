@@ -26,7 +26,7 @@
 }
 
 - (id)initWithDesignName:(NSString *)newName
-				andStyle:(BKPInstructionGeneratorStyle)newStyle {
+                andStyle:(BKPInstructionGeneratorStyle)newStyle {
 	self = [super init];
 	
 	if (self) {

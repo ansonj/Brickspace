@@ -17,14 +17,14 @@
 #pragma mark - Setting up the instructions
 
 - (id)initWithDesignName:(NSString *)newName
-				andStyle:(BKPInstructionGeneratorStyle)newStyle;
+                andStyle:(BKPInstructionGeneratorStyle)newStyle;
 
 - (void)addBricksToNextStep:(NSSet *)bricks;
 
 // addBricksToNextStep is preferred.
 // Use addBricks:toStep: with caution!
 - (void)addBricks:(NSSet *)bricks
-		   toStep:(int)step;
+           toStep:(int)step;
 
 #pragma mark - Getting instruction information
 

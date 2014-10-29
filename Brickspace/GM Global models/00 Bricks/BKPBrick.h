@@ -17,8 +17,8 @@
 @property (nonatomic) int height;
 
 + (BKPBrick *)brickWithColor:(BKPBrickColor)newColor
-				   shortSide:(int)newShortSideLength
-					longSide:(int)newLongSideLength
-				   andHeight:(int)newHeight;
+                   shortSide:(int)newShortSideLength
+                    longSide:(int)newLongSideLength
+                   andHeight:(int)newHeight;
 
 @end

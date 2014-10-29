@@ -14,7 +14,11 @@
 @synthesize shortSideLength, longSideLength;
 @synthesize height;
 
-+ (BKPBrick *)brickWithColor:(BKPBrickColor)newColor shortSide:(int)newShortSideLength longSide:(int)newLongSideLength andHeight:(int)newHeight {
++ (BKPBrick *)brickWithColor:(BKPBrickColor)newColor
+                   shortSide:(int)newShortSideLength
+                    longSide:(int)newLongSideLength
+                   andHeight:(int)newHeight
+{
 	BKPBrick *newBrick = [[BKPBrick alloc] init];
 	
 	if (newBrick) {

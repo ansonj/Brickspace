@@ -18,6 +18,6 @@
 - (id)initWithKeypoint:(cv::KeyPoint)keypoint;
 
 - (id)initWithKeypoint:(cv::KeyPoint)keypoint
-			  andBrick:(BKPBrick *)brick;
+              andBrick:(BKPBrick *)brick;
 
 @end
